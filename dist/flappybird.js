@@ -656,9 +656,9 @@ function startGame() {
  * @param {KeyboardEvent} event - The keyboard event object.
  */
 function restartGame(event) {
-  if (event.type === "mouseup") {
+  if (event.type === "mousedown") {
     // Remove the event listener
-    document.removeEventListener("mouseup", restartGame);
+    document.removeEventListener("mousedown", restartGame);
 
     // Reset game variables and state
     isMovingUp = false;
@@ -850,14 +850,14 @@ var buttonEnabled = false;
 setTimeout(function() {
   buttonEnabled = true;
   document.removeEventListener("mousedown", moveUp)
-  document.addEventListener("mouseup", restartGame); // Press to continue to main menu
+  document.addEventListener("mousedown", restartGame); // Press to continue to main menu
   ctx.font = "bolder 70px Helvetica";
   ctx.fillStyle = "white";
   ctx.strokeStyle = "black"; // Set the border color
   ctx.lineWidth = 8; // Set the border width
   ctx.strokeText("continue ", canvas.width / 2 - 140, canvas.height / 2 + 400);
   ctx.fillText("continue ", canvas.width / 2 - 140, canvas.height / 2 + 400);
-}, 700); // Change the duration (in milliseconds) to your desired delay 
+}, 300); // Change the duration (in milliseconds) to your desired delay 
 
 }
 
