@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dist/store.css">
+  <title>Store</title>
+</head>
+<body>
+    <canvas id="storeCanvas" width="2560" height="1080"></canvas>
+    <img id="backgroundImage" src="assets/black-image.jpg" alt="Black Image">
+    <video id="storeVideo" autoplay muted loop></video>
+    <button id="backButton">Home</button>
+    
+      <img src="assets/coin-box.png" alt="Coin Box" id="coinBox">
+      <span id="coinCount">0</span>
+    
+    <div class="skins-container">
+      <div class="skin">
+        <img src="assets/birdUp.png" alt="Default" id="bird-up">
+        <p>$0</p>
+        <button class="purchase-button">Buy</button>
+      </div>
+      <div class="skin">
+        <img src="assets/storeAssets/birdUpCap.png" alt="Baseball Cap" id="bird-up-cap">
+        <p>$100</p>
+        <button class="purchase-button">Buy</button>
+      </div>
+      <div class="skin">
+        <img src="assets/storeAssets/birdUpSunglasses.png" alt="Sunglasses" id="bird-up-sunglasses">
+        <p>$500</p>
+        <button class="purchase-button">Buy</button>
+      </div>
+      <div class="skin">
+        <img src="assets/storeAssets/birdUpViking.png" alt="Viking" id="bird-up-viking">
+        <p>$750</p>
+        <button class="purchase-button">Buy</button>
+      </div>
+      <div class="skin">
+        <img src="assets/storeAssets/birdUpNinja.png" alt="Ninja" id="bird-up-ninja">
+        <p>$1000</p>
+        <button class="purchase-button">Buy</button>
+      </div>
+      <div class="skin">
+        <img src="assets/storeAssets/birdUpSir.png" alt="Sir" id="bird-up-sir">
+        <p>$2000</p>
+        <button class="purchase-button">Buy</button>
+      </div>
+      <div class="skin">
+        <img src="assets/storeAssets/birdUpRasta.png" alt="Rasta" id="bird-up-rasta">
+        <p>$3000</p>
+        <button class="purchase-button">Buy</button>
+      </div>
+      <div class="skin">
+        <img src="assets/storeAssets/birdUpBaller.png" alt="Baller" id="bird-up-baller">
+        <p>$10000</p>
+        <button class="purchase-button">Buy</button>
+      </div>
+    </div>
+    
+    <div id="alertContainer"></div>
+
+    <script src="../dist/store.js"></script>
+</body>
+</html>
