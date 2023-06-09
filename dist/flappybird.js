@@ -562,6 +562,7 @@ function drawReadyMessage() {
 }
 
 function drawGoMessage() {
+  if (!isGameOver){
   ctx.fillStyle = "white";
   ctx.strokeStyle = "black";
   ctx.lineWidth = 6;
@@ -570,7 +571,7 @@ function drawGoMessage() {
   ctx.textBaseline = "middle";
   ctx.fillText("GO", canvas.width / 2 - 155, canvas.height / 2 - 200);
   ctx.strokeText("GO", canvas.width / 2 - 155, canvas.height / 2 - 200);
-  
+  }
 }
 
 var enableVerticalMovement = false;
@@ -684,6 +685,22 @@ function restartGame(event) {
   }
 }
 
+let isBirdFalling = true;
+
+// Draw the animated bird based on up or down position
+function drawDeathAnimation() {
+  let birdImage = isBirdFalling ? birdUpImg : birdDownImg;
+  ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
+}
+
+// Function to switch between the two bird images
+function switchDeathAnimationImages() {
+  isBirdFalling = !isBirdFalling;
+}
+
+// Call switchDeathAnimationImages function every 150 milliseconds
+setInterval(switchDeathAnimationImages, 100);
+
 /**
  * Checks collision between the bird and pipes.
  * @returns {boolean} True if collision detected, false otherwise.
@@ -703,6 +720,7 @@ function checkCollision() {
         GROUND_SPEED = 0.55;
         skyboxSpeed = 0.25;
         JUMP = -1.6;
+        isBirdFalling = true;
         return true; // Collision detected
       }
     }
@@ -756,11 +774,11 @@ function drawSkybox() {
 // Draws the bird based on up or down position
 function drawBird() {
   clearTimeout(drawTimeout); // Clear any previously scheduled draw
-    if (isMovingUp && bird.y > 0) {
-      ctx.drawImage(birdUpImg, birdUp.x, birdUp.y, birdUp.width, birdUp.height);
-    } else {
-      ctx.drawImage(birdDownImg, birdDown.x, birdDown.y, birdDown.width, birdDown.height);
-    }
+  if (isMovingUp && bird.y > 0) {
+    ctx.drawImage(birdUpImg, birdUp.x, birdUp.y, birdUp.width, birdUp.height);
+  } else if (!isMovingUp && bird.y <= canvas.height - bird.height) {
+    ctx.drawImage(birdDownImg, birdDown.x, birdDown.y, birdDown.width, birdDown.height);
+  }
 }
 
 let isBirdUp = true;
@@ -788,24 +806,6 @@ function switchBirdImages() {
 
 // Call switchBirdImages function every 200 milliseconds
 setInterval(switchBirdImages, 350);
-
-// // Draw the animated bird based on up or down position
-// function drawDeathAnimation() {
-//   let birdImage = isBirdUp ? birdUpImg : birdDownImg;
-//   ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
-// }
-
-// // Function to switch between the two bird images
-// function switchDeathBird() {
-//   isBirdUp = !isBirdUp;
-//   if (enableVerticalMovement && isGameOver){
-//   playFlapSound();
-//   }
-// }
-// drawDeathAnimation();
-
-// Call switchBirdImages function every 200 milliseconds
-// setInterval(switchDeathBird, 150);
 
 /**
  * Handles the game over state.
@@ -857,7 +857,7 @@ setTimeout(function() {
   ctx.lineWidth = 8; // Set the border width
   ctx.strokeText("continue ", canvas.width / 2 - 140, canvas.height / 2 + 400);
   ctx.fillText("continue ", canvas.width / 2 - 140, canvas.height / 2 + 400);
-}, 400); // Change the duration (in milliseconds) to your desired delay 
+}, 700); // Change the duration (in milliseconds) to your desired delay 
 
 }
 
@@ -917,17 +917,27 @@ if (skybox.x <= -skybox.width) {
   skybox.x -= skyboxSpeed;
 
   // Check for collision with top or bottom border
-  if (bird.y < 20 || bird.y + bird.height > canvas.height +40) {
+  if (bird.y < 20) {
+    isGameOver = true; // Set the game over state
+    gameOver(); // Call the game over function
+    JUMP = -1.6
+    GRAVITY = 1.6
+    document.removeEventListener("mousedown", moveUp)
+  }
+  
+  // Check for collision with bottom border
+  if (bird.y + bird.height > canvas.height + 40) {
     isGameOver = true; // Set the game over state
     gameOver(); // Call the game over function
     return;
   }
-  
+
   // Check for collision with pipes
   if (checkCollision()) {
     deathSound.play()
     backgroundMusic.pause()
     isGameOver = true; // Set the game over state
+
 }  
 
    // Clear canvas before drawing new elements each frame
@@ -990,6 +1000,10 @@ if (skybox.x <= -skybox.width) {
   drawGoMessage();
   }
 
+  if (isBirdFalling && isGameOver) {
+    drawDeathAnimation(); // Call the drawing function when collision is detected
+  }
+
   // Check if bird passes pipe and add score
   checkScore();
 
@@ -1029,8 +1043,10 @@ if (skybox.x <= -skybox.width) {
   }
 
   // Draw Bird
-  if (enableVerticalMovement){
-  drawBird();
+  if (enableVerticalMovement && !isGameOver) 
+    drawBird();
+  if (isGameOver) {
+    drawDeathAnimation(); // Call the drawing function when collision is detected
   }
 
   requestAnimationFrame(update);
