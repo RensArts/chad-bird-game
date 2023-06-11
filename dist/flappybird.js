@@ -42,11 +42,11 @@ var collectedCoins = 0; // Variable to keep track of collected coins
 var matchCoins = 0; // Variable to keep track of coins collected in single match
 var groundSpeed = 0; // Track the speed of the ground movement
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
-var minStarSpawn = 8000; // Minimum spawn rate in milliseconds (20 seconds)
+var minStarSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxStarSpawn = 24000; // Maximum spawn rate in milliseconds (40 seconds)
 var speedMultiplier = 1; // Initial speed multiplier
 var isInvincible = false; // Initial invincibility state
-var powerUpDuration = 5000; // Duration of power-ups in milliseconds (10 seconds)
+var powerUpDuration = 3000; // Duration of power-ups in milliseconds (10 seconds)
 var powerUpEndTime = 0; // Time when the current power-up will end
 var powerUpCoinSpawnRate = 250; // Spawn rate of coins during power-up (in milliseconds)
 var pipeStartSkip = 24; // amount of pipes that won't be rendered at the start (2 = 1 pipe)
@@ -320,7 +320,7 @@ function addStar() {
 
 // Updates the coin spawning, coin collecting and hitbox
 function updateCoins() {
-  for (var i = 1; i < coins.length; i++) {
+  for (var i = 2; i < coins.length; i++) {
     var coin = coins[i];
     coin.x -= PIPE_SPEED * (speed + COIN_SPEED); // Move the coin with the pipes
 
