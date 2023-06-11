@@ -1,3 +1,4 @@
+
 // Constants
 const PIPE_PASSED = 200; // distance through pipe before counting as point
 const PIPE_WIDTH = 80; // Adjust this value to control the width of the spawn pipes
@@ -1310,3 +1311,4 @@ startGame();
 
 
 
+=======
