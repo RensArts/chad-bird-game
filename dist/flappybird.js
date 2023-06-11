@@ -44,16 +44,16 @@ var collectedCoins = 0; // Variable to keep track of collected coins
 var matchCoins = 0; // Variable to keep track of coins collected in single match
 var groundSpeed = 0; // Track the speed of the ground movement
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
-var minStarSpawn = 3000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxStarSpawn = 14000; // Maximum spawn rate in milliseconds (40 seconds)
-var minGhostSpawn = 3000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxGhostSpawn = 14000; // Maximum spawn rate in milliseconds (40 seconds)
+var minStarSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxStarSpawn = 20000; // Maximum spawn rate in milliseconds (40 seconds)
+var minGhostSpawn = 8000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxGhostSpawn = 16000; // Maximum spawn rate in milliseconds (40 seconds)
 var starSpeedMultiplier = 1; // Initial speed multiplier
 var ghostSpeedMultiplier = 1;
 var isInvincible = false; // Initial invincibility state
 var isGhost = false; // Initial ghost state
-var starPowerUpDuration = 3000; // Duration of power-ups in milliseconds 
-var ghostPowerUpDuration = 4000;  // Duration of power-ups in milliseconds
+var starPowerUpDuration = 2200; // Duration of power-ups in milliseconds 
+var ghostPowerUpDuration = 3200;  // Duration of power-ups in milliseconds
 var starPowerUpEndTime = 0; // Time when the current power-up will end
 var ghostPowerUpEndTime = 0; // Time when the current power-up will end
 var powerUpCoinSpawnRate = 250; // Spawn rate of coins during power-up (in milliseconds)
@@ -68,8 +68,8 @@ var framesPerPipe = 0; // set default value for pipe update interval 1ps/75fps
 var minFramesPerPipe = 0.1; // set minimum spawn time for the pipes 200ms/30fps
 var pipeSpawnRate = 0.3; // set spawn rate for the pipes (higher = more pipes)
 var minimumFpsValue = 3; // if framerate drops below 30fps, it will register as 30fps
-var pipeSpawnNormal = 0.28; // set this value if changing the pipespawnrate of hard difficulty in function
-var pipeSpawnHard = 0.42; // set this value if changing the pipe spawn rate of normal difficulty in function
+var pipeSpawnNormal = 0.22; // set this value if changing the pipespawnrate of hard difficulty in function
+var pipeSpawnHard = 0.38; // set this value if changing the pipe spawn rate of normal difficulty in function
 
 // to adjust game speed based on frames per 0.1 seconds (in update)
 var speed = 8; // Variable to increment speed in function Update();
@@ -417,7 +417,7 @@ function updateGhosts() {
         bird.y < COIN_HITBOX + ghost.y + ghost.radius) {
       ghosts.splice(i, 1); // Remove the collected coin from the array
       isGhost = true;
-      ghostSpeedMultiplier = 1.1;
+      ghostSpeedMultiplier = 1.05;
       ghostPowerUpEndTime = Date.now() + ghostPowerUpDuration;
       // Apply power-up effects
       ghostSound.play();
@@ -1307,8 +1307,3 @@ resizeVideo();
 
 // Start the game
 startGame();
-
-
-
-
-=======
