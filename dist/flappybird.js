@@ -47,12 +47,12 @@ var collectedCoins = 0; // Variable to keep track of collected coins
 var matchCoins = 0; // Variable to keep track of coins collected in single match
 var groundSpeed = 0; // Track the speed of the ground movement
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
-var minStarSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxStarSpawn = 24000; // Maximum spawn rate in milliseconds (40 seconds)
-var minGhostSpawn = 8000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxGhostSpawn = 20000; // Maximum spawn rate in milliseconds (40 seconds)
-var minSizeSpawn = 6000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxSizeSpawn = 22000; // Maximum spawn rate in milliseconds (40 seconds)
+var minStarSpawn = 2000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxStarSpawn = 40000; // Maximum spawn rate in milliseconds (40 seconds)
+var minGhostSpawn = 2000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxGhostSpawn = 40000; // Maximum spawn rate in milliseconds (40 seconds)
+var minSizeSpawn = 2000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxSizeSpawn = 40000; // Maximum spawn rate in milliseconds (40 seconds)
 var starSpeedMultiplier = 1; // Initial speed multiplier
 var ghostSpeedMultiplier = 1;
 var isInvincible = false; // Initial invincibility state
@@ -645,6 +645,7 @@ function createSfxButton() {
       starSound.volume = 0;
       buttonSound.volume = 0;
       ghostSound.volume = 0;
+      sizeSound.volume - 0;
     } else {
       // Enable the SFX
       isSfxOn = true;
@@ -663,6 +664,7 @@ function createSfxButton() {
       starSound.volume = 1;
       buttonSound.volume = 1;
       ghostSound.volume = 1;
+      sizeSound.volume = 1;
     }
   });
   // Append the button to the body element
@@ -1170,7 +1172,7 @@ if (skybox.x <= -skybox.width) {
   // Move the skybox
   skybox.x -= skyboxSpeed;
 
-  // Check for collision with top or bottom border
+  // Check for collision with top border
   if (bird.y < 20) {
     isGameOver = true; // Set the game over state
     drawBird();
@@ -1354,20 +1356,6 @@ if (skybox.x <= -skybox.width) {
     drawDeathAnimation(); // Call the drawing function when collision is detected
   }
 
-  // var coinSpawnCounter = 0;
-  // var framesPerCoin = Math.ceil(AMOUNT_OF_COINS / (1000 / (1 / fps))); // Calculate frames per coin
-  
-  // // Check if it's time to add a new coin
-  // if (coinSpawnCounter >= framesPerCoin) {
-  //   addCoin();
-  //   coinSpawnCounter = 0; // Reset the coin spawn counter
-  // }
-  
-  // // Inside the update loop or function
-  // coinSpawnCounter++; // Increment the coin spawn counter
-  
-  
-
   requestAnimationFrame(update);
 }
 
@@ -1394,17 +1382,6 @@ function adjustPipeSpawnRate() {
   // Assign the adjusted frame rate value to the pipeSpawnRate variable
   pipeSpawnRate = adjustedFrameRate;
 }
-
-// function adjustCoinSpawnRate() {
-//   var targetFPS = 7.5; // Define your target FPS
-//   var minFPS = minimumFpsValue; // Minimum FPS value
-
-//   // Calculate the adjusted frame rate based on the current FPS
-//   var adjustedCoinSpawnRate = AMOUNT_OF_COINS * (targetFPS / Math.max(fps, minFPS));
-
-//   // Assign the adjusted frame rate value to the AMOUNT_OF_COINS variable
-//   AMOUNT_OF_COINS = adjustedCoinSpawnRate;
-// }
 
 // Resize the video element
 resizeVideo();
