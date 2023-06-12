@@ -4,11 +4,11 @@ const PIPE_PASSED = 200; // distance through pipe before counting as point
 const PIPE_WIDTH = 80; // Adjust this value to control the width of the spawn pipes
 const PIPE_COLOR_TOP = "#000000"; //Adjust the color of the top pipe
 const PIPE_COLOR_BOTTOM = "#00000"; //Adjust the color of the bottom pipe
-const HITBOX_RIGHT = -40; // Adjust the right side hitbox of the bird
-const HITBOX_TOP = -60; // Adjust the top side hitbox of the bird
-const HITBOX_BOTTOM = 0; // Adjust the bottom side hitbox of the bird
-const HITBOX_LEFT = 140; // Adjust the left side hitbox of the bird
-const COIN_HITBOX = 50; // Adjust the radius for collecting coins
+var HITBOX_RIGHT = -40; // Adjust the right side hitbox of the bird
+var HITBOX_TOP = -60; // Adjust the top side hitbox of the bird
+var HITBOX_BOTTOM = 0; // Adjust the bottom side hitbox of the bird
+var HITBOX_LEFT = 140; // Adjust the left side hitbox of the bird
+var COIN_HITBOX = 40; // Adjust the radius for collecting coins
 const COIN_SIZE = 2.5; // Adjust the size of the coin
 const COIN_SPEED = 2.5; // Adjust the speed of the coin
 const STAR_SPEED = 3; // Adjust the speed of the stars
@@ -18,6 +18,7 @@ let coinIntervalId;
 let powerUpCoinIntervalId;
 let starIntervalId;
 let ghostIntervalId;
+let sizeIntervalId;
 
 // Set up event listeners
 document.addEventListener("mouseup", moveDown);
@@ -30,6 +31,8 @@ var coins = [];
 var pipes = [];
 var stars = [];
 var ghosts = [];
+var sizes = [];
+
 
 // Variables
 var PIPE_SPEED = 2; //Adjust the speed of the pipes
@@ -45,18 +48,23 @@ var matchCoins = 0; // Variable to keep track of coins collected in single match
 var groundSpeed = 0; // Track the speed of the ground movement
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
 var minStarSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxStarSpawn = 20000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxStarSpawn = 24000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 8000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxGhostSpawn = 16000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxGhostSpawn = 20000; // Maximum spawn rate in milliseconds (40 seconds)
+var minSizeSpawn = 6000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxSizeSpawn = 22000; // Maximum spawn rate in milliseconds (40 seconds)
 var starSpeedMultiplier = 1; // Initial speed multiplier
 var ghostSpeedMultiplier = 1;
 var isInvincible = false; // Initial invincibility state
 var isGhost = false; // Initial ghost state
+var isSize = false; // Initial size state
 var starPowerUpDuration = 2200; // Duration of power-ups in milliseconds 
 var ghostPowerUpDuration = 3200;  // Duration of power-ups in milliseconds
+var sizePowerUpDuration = 5000; // Duration of power-ups in milliseconds
 var starPowerUpEndTime = 0; // Time when the current power-up will end
 var ghostPowerUpEndTime = 0; // Time when the current power-up will end
-var powerUpCoinSpawnRate = 250; // Spawn rate of coins during power-up (in milliseconds)
+var sizePowerUpEndTime = 0; // Time when the current power-up will end
+var powerUpCoinSpawnRate = 200; // Spawn rate of coins during power-up (in milliseconds)
 var pipeStartSkip = 24; // amount of pipes that won't be rendered at the start (2 = 1 pipe)
 
 var isMusicOn = true; // Initial state of the background music
@@ -301,6 +309,12 @@ function playGhostSound(){
   ghostSound.play();
 }
 
+// Play the star sound
+function playSizeSound(){
+  var sizeSound = document.getElementById("sizeSound")
+  sizeSound.play();
+}
+
 // Generate a random spawn rate between minSpawnRate and maxSpawnRate
 function generateStarSpawnRate() {
   return Math.random() * (maxStarSpawn - minStarSpawn) + minStarSpawn;
@@ -310,10 +324,16 @@ function generateGhostSpawnRate() {
   return Math.random() * (maxGhostSpawn - minGhostSpawn) + minGhostSpawn;
 }
 
+// Generate a random spawn rate between minSpawnRate and maxSpawnRate
+function generateSizeSpawnRate() {
+  return Math.random() * (maxSizeSpawn - minSizeSpawn) + minSizeSpawn;
+}
+
 // Start the initial star interval with a random spawn rate
 starIntervalId = setInterval(addStar, generateStarSpawnRate());
 ghostIntervalId = setInterval (addGhost, generateGhostSpawnRate());
 coinIntervalId = setInterval(addCoin, AMOUNT_OF_COINS);
+sizeIntervalId = setInterval (addSize, generateSizeSpawnRate());
 
 
 //Determines the coins spawning location
@@ -344,6 +364,16 @@ function addGhost() {
     radius: 40, // Adjust the size of the coin as needed
   };
   ghosts.push(ghost);
+}
+
+//Determines the star spawning location
+function addSize() {
+  var size = {
+    x: canvas.width, // Spawn the coin at the right edge of the canvas
+    y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
+    radius: 40, // Adjust the size of the coin as needed
+  };
+  sizes.push(size);
 }
 
 // Updates the coin spawning, coin collecting and hitbox
@@ -423,6 +453,32 @@ function updateGhosts() {
       ghostSound.play();
       clearInterval(ghostIntervalId);
       ghostIntervalId = setInterval (addGhost, generateGhostSpawnRate());
+      }
+  }
+}
+
+// Updates the star spawning, star collecting and hitbox
+function updateSizes() {
+  for (var i = 1; i < sizes.length; i++) {
+    var size = sizes[i];
+    size.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
+
+    // Draw the coin image
+    var sizeImage = document.getElementById("sizeImage"); // Get the coin image element
+    ctx.drawImage(sizeImage, size.x - size.radius, size.y - size.radius, size.radius * COIN_SIZE, size.radius * COIN_SIZE);
+
+    // Check if the bird collects the coin
+    if (bird.x + COIN_HITBOX + bird.width > size.x - size.radius &&
+        bird.x < COIN_HITBOX + size.x + size.radius &&
+        bird.y + COIN_HITBOX + bird.height > size.y - size.radius &&
+        bird.y < COIN_HITBOX + size.y + size.radius) {
+      sizes.splice(i, 1); // Remove the collected coin from the array
+      isSize = true;
+      sizePowerUpEndTime = Date.now() + sizePowerUpDuration;
+      // Apply power-up effects
+      sizeSound.play();
+      clearInterval(sizeIntervalId);
+      sizeIntervalId = setInterval (addSize, generateSizeSpawnRate());
       }
   }
 }
@@ -779,6 +835,7 @@ function moveUp(event) {
       pipes = [];
       isGhost = false;
       isInvincible = false;
+      isSize = false;
       document.addEventListener("mousedown", moveUp);
       }
     }
@@ -835,15 +892,26 @@ function restartGame(event) {
     birdUp.x = 700;
     birdDown.y = 400;
     birdDown.x = 700;
+    birdUp.width = 250;
+    birdUp.height = 250;
+    birdDown.width = 250;
+    birdDown.height = 250;
+    HITBOX_RIGHT = -40; 
+    HITBOX_TOP = -60; 
+    HITBOX_BOTTOM = 0; 
+    HITBOX_LEFT = 140; 
     pipes = [];
     coins = [];
     ghosts = [];
+    sizes = [];
+    isSize = false;
     GRAVITY = 0.9;
     PIPE_SPEED = 2;
     GROUND_SPEED = 2.1;
     skyboxSpeed  = 1;
     JUMP = 1.2;
     pipeStartSkip = 24;
+    
   
     // Start the game
     startGame();
@@ -942,11 +1010,29 @@ function drawSkybox() {
 // Draws the bird based on up or down position
 function drawBird() {
   clearTimeout(drawTimeout); // Clear any previously scheduled draw
-  if (isMovingUp && bird.y > 0) {
+  if (isMovingUp && bird.y > 0 && !isSize ) {
     ctx.drawImage(birdUpImg, birdUp.x, birdUp.y, birdUp.width, birdUp.height);
-  } else if (!isMovingUp && bird.y <= canvas.height - bird.height &&!isGhost) {
+  } else if (!isMovingUp && bird.y <= canvas.height - bird.height &&!isGhost && !isSize) {
     ctx.drawImage(birdDownImg, birdDown.x, birdDown.y, birdDown.width, birdDown.height);
+  } 
+  else if (isMovingUp && bird.y > 0 && isSize){
+    birdUp.width = 125;
+    birdUp.height = 125;
+    HITBOX_BOTTOM = -70
+    HITBOX_LEFT = 60;
+    HITBOX_RIGHT = -100;
+    HITBOX_TOP = -60
+    ctx.drawImage(birdUpImg, birdUp.x, birdUp.y, birdUp.width, birdUp.height);
   }
+  else if (!isMovingUp && bird.y <= canvas.height - bird.height && isSize && !isGhost) {
+    birdDown.width = 125;
+    birdDown.height = 125;
+    HITBOX_BOTTOM = -70
+    HITBOX_LEFT = 60;
+    HITBOX_RIGHT = -100;
+    HITBOX_TOP = -60
+    ctx.drawImage(birdDownImg, birdDown.x, birdDown.y, birdDown.width, birdDown.height);
+  } 
 }
 
 let isBirdUp = true;
@@ -1116,6 +1202,18 @@ if (skybox.x <= -skybox.width) {
     ghostSpeedMultiplier = 1;
   }
 
+  if (currentTime > sizePowerUpEndTime) {
+    // Power-up has expired, reset effects
+    HITBOX_RIGHT = -40;
+    HITBOX_TOP = -60; 
+    HITBOX_BOTTOM = 0; 
+    HITBOX_LEFT = 140; 
+    birdUp.width = 250;
+    birdUp.height = 250;
+    birdDown.width = 250;
+    birdDown.height = 250;
+    isSize = false;
+  }
 
 
   if (isInvincible) {
@@ -1127,6 +1225,9 @@ if (skybox.x <= -skybox.width) {
   if (isGhost) {
     speed = speed * ghostSpeedMultiplier;
   }
+
+  if (isSize) {
+}
 
   // Check for collision with pipes
   if (checkCollision()) {
@@ -1174,6 +1275,9 @@ if (skybox.x <= -skybox.width) {
 
   //Spawn in ghosts
   updateGhosts();
+
+  //Spawn in Sizes
+  updateSizes();
 
   //Draw and move pipes
   updatePipes();
