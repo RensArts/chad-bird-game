@@ -8,7 +8,7 @@ var HITBOX_RIGHT = -40; // Adjust the right side hitbox of the bird
 var HITBOX_TOP = -60; // Adjust the top side hitbox of the bird
 var HITBOX_BOTTOM = 0; // Adjust the bottom side hitbox of the bird
 var HITBOX_LEFT = 140; // Adjust the left side hitbox of the bird
-var COIN_HITBOX = 20; // Adjust the radius for collecting coins
+var COIN_HITBOX = 0; // Adjust the radius for collecting coins
 const COIN_SIZE = 2.5; // Adjust the size of the coin
 const COIN_SPEED = 2.5; // Adjust the speed of the coin
 const STAR_SPEED = 3; // Adjust the speed of the stars
@@ -19,6 +19,7 @@ let powerUpCoinIntervalId;
 let starIntervalId;
 let ghostIntervalId;
 let sizeIntervalId;
+let reduceGapIntervalId;
 
 // Set up event listeners
 document.addEventListener("mouseup", moveDown);
@@ -32,6 +33,7 @@ var pipes = [];
 var stars = [];
 var ghosts = [];
 var sizes = [];
+var reduceGaps = [];
 
 
 // Variables
@@ -42,28 +44,35 @@ var GROUND_SPEED = 2.1; // Adjust the speed of the ground and ceiling
 var JUMP = 1.2; // Adjust the value of upward momentum
 var GRAVITY = 0.9; // Adjust this value to control the downward speed of the bird
 var PIPE_GAP = 320; // Adjust this value to control the gap of the spawn pipes
+var gapSize = 500; // Consistent gap size
 var score = 0; // Variable to keep track of the score
 var collectedCoins = 0; // Variable to keep track of collected coins
 var matchCoins = 0; // Variable to keep track of coins collected in single match
 var groundSpeed = 0; // Track the speed of the ground movement
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
 var minStarSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxStarSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxStarSpawn = 70000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxGhostSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxGhostSpawn = 70000; // Maximum spawn rate in milliseconds (40 seconds)
 var minSizeSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxSizeSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxSizeSpawn = 70000; // Maximum spawn rate in milliseconds (40 seconds)
+var minReduceGapSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxReduceGapSpawn = 70000; // Maximum spawn rate in milliseconds (40 seconds)
 var starSpeedMultiplier = 1; // Initial speed multiplier
 var ghostSpeedMultiplier = 1;
+var reduceGapSpeedMultiplier = 1;
 var isInvincible = false; // Initial invincibility state
 var isGhost = false; // Initial ghost state
 var isSize = false; // Initial size state
+var isReduceGap = false; // initial gap size state
 var starPowerUpDuration = 2500; // Duration of power-ups in milliseconds 
 var ghostPowerUpDuration = 5000;  // Duration of power-ups in milliseconds
-var sizePowerUpDuration = 8000; // Duration of power-ups in milliseconds
+var sizePowerUpDuration = 10000; // Duration of power-ups in milliseconds
+var reduceGapPowerUpDuration = 5000; // duration of the power up
 var starPowerUpEndTime = 0; // Time when the current power-up will end
 var ghostPowerUpEndTime = 0; // Time when the current power-up will end
 var sizePowerUpEndTime = 0; // Time when the current power-up will end
+var reduceGapPowerUpEndTime = 0; // Time when the current power up will end
 var powerUpCoinSpawnRate = 200; // Spawn rate of coins during power-up (in milliseconds)
 var pipeStartSkip = 24; // amount of pipes that won't be rendered at the start (2 = 1 pipe)
 
@@ -315,6 +324,11 @@ function playSizeSound(){
   sizeSound.play();
 }
 
+function playReduceGapSound(){
+  var reduceGapSound = document.getElementById("reduceGapSound")
+  reduceGapSound.play();
+}
+
 // Generate a random spawn rate between minSpawnRate and maxSpawnRate
 function generateStarSpawnRate() {
   return Math.random() * (maxStarSpawn - minStarSpawn) + minStarSpawn;
@@ -329,11 +343,17 @@ function generateSizeSpawnRate() {
   return Math.random() * (maxSizeSpawn - minSizeSpawn) + minSizeSpawn;
 }
 
+// Generate a random spawn rate between minSpawnRate and maxSpawnRate
+function generateReduceGapSpawnRate() {
+  return Math.random() * (maxReduceGapSpawn - minReduceGapSpawn) + minReduceGapSpawn;
+}
+
 // Start the initial star interval with a random spawn rate
 starIntervalId = setInterval(addStar, generateStarSpawnRate());
 ghostIntervalId = setInterval (addGhost, generateGhostSpawnRate());
 coinIntervalId = setInterval(addCoin, AMOUNT_OF_COINS);
 sizeIntervalId = setInterval (addSize, generateSizeSpawnRate());
+reduceGapIntervalId = setInterval (addReduceGap, generateReduceGapSpawnRate());
 
 
 //Determines the coins spawning location
@@ -351,7 +371,7 @@ function addStar() {
   var star = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
     y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 50, // Adjust the size of the coin as needed
+    radius: 45, // Adjust the size of the coin as needed
   };
   stars.push(star);
 }
@@ -361,7 +381,7 @@ function addGhost() {
   var ghost = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
     y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 50, // Adjust the size of the coin as needed
+    radius: 45, // Adjust the size of the coin as needed
   };
   ghosts.push(ghost);
 }
@@ -371,9 +391,19 @@ function addSize() {
   var size = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
     y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 50, // Adjust the size of the coin as needed
+    radius: 45, // Adjust the size of the coin as needed
   };
   sizes.push(size);
+}
+
+//Determines the star spawning location
+function addReduceGap() {
+  var reduceGap = {
+    x: canvas.width, // Spawn the coin at the right edge of the canvas
+    y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
+    radius: 45, // Adjust the size of the coin as needed
+  };
+  reduceGaps.push(reduceGap);
 }
 
 // Updates the coin spawning, coin collecting and hitbox
@@ -479,6 +509,33 @@ function updateSizes() {
       sizeSound.play();
       clearInterval(sizeIntervalId);
       sizeIntervalId = setInterval (addSize, generateSizeSpawnRate());
+      }
+  }
+}
+
+// Updates the star spawning, star collecting and hitbox
+function updateReduceGaps() {
+  for (var i = 0; i < reduceGaps.length; i++) {
+    var reduceGap = reduceGaps[i];
+    reduceGap.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
+
+    // Draw the coin image
+    var reduceGapImage = document.getElementById("reduceGapImage"); // Get the coin image element
+    ctx.drawImage(reduceGapImage, reduceGap.x - reduceGap.radius, reduceGap.y - reduceGap.radius, reduceGap.radius * COIN_SIZE, reduceGap.radius * COIN_SIZE);
+
+    // Check if the bird collects the coin
+    if (bird.x + COIN_HITBOX + bird.width > reduceGap.x - reduceGap.radius &&
+        bird.x < COIN_HITBOX + reduceGap.x + reduceGap.radius &&
+        bird.y + COIN_HITBOX + bird.height > reduceGap.y - reduceGap.radius &&
+        bird.y < COIN_HITBOX + reduceGap.y + reduceGap.radius) {
+      reduceGaps.splice(i, 1); // Remove the collected coin from the array
+      isReduceGap = true;
+      reduceGapPowerUpEndTime = Date.now() + reduceGapPowerUpDuration;
+      reduceGapSpeedMultiplier = 0.96;
+      // Apply power-up effects
+      reduceGapSound.play();
+      clearInterval(reduceGapIntervalId);
+      reduceGapIntervalId = setInterval (addReduceGap, generateReduceGapSpawnRate());
       }
   }
 }
@@ -645,7 +702,8 @@ function createSfxButton() {
       starSound.volume = 0;
       buttonSound.volume = 0;
       ghostSound.volume = 0;
-      sizeSound.volume - 0;
+      sizeSound.volume = 0;
+      reduceGapSound.volume = 0;
     } else {
       // Enable the SFX
       isSfxOn = true;
@@ -665,6 +723,7 @@ function createSfxButton() {
       buttonSound.volume = 1;
       ghostSound.volume = 1;
       sizeSound.volume = 1;
+      reduceGapSound.volume = 1;
     }
   });
   // Append the button to the body element
@@ -717,7 +776,7 @@ function getRandomInt(min, max) {
  */
 function addPipe() {
   var gapPosition = getRandomInt(100, canvas.height - PIPE_GAP - 400);
-  var gapSize = 500; // Consistent gap size
+  
 
   pipes.push({
     x: canvas.width,
@@ -866,6 +925,9 @@ function startGame() {
   pipes = []; // Clear the pipes array
   coins = []; // Clear the coins array
   stars = []; // Clear the stars array
+  ghosts = [];
+  sizes = [];
+  reduceGaps = [];
   score = 0; // Reset the score
   // Hide the logo
   logo.style.display = "none";
@@ -904,11 +966,12 @@ function restartGame(event) {
     HITBOX_LEFT = 140; 
     pipes = [];
     coins = [];
-    ghosts = [];
-    sizes = [];
     isSize = false;
+    isReduceGap = false;
     GRAVITY = 0.9;
     PIPE_SPEED = 2;
+    PIPE_GAP = 320;
+    gapSize = 500;
     GROUND_SPEED = 2.1;
     skyboxSpeed  = 1;
     JUMP = 1.2;
@@ -1217,6 +1280,12 @@ if (skybox.x <= -skybox.width) {
     isSize = false;
   }
 
+  if (currentTime > reduceGapPowerUpEndTime) {
+    PIPE_GAP = 320;
+    isReduceGap = false;
+    reduceGapSpeedMultiplier = 1;
+  }
+
 
   if (isInvincible) {
     speed = speed * starSpeedMultiplier;
@@ -1228,8 +1297,10 @@ if (skybox.x <= -skybox.width) {
     speed = speed * ghostSpeedMultiplier;
   }
 
-  if (isSize) {
-}
+  if (isReduceGap) {
+  PIPE_GAP = 600;
+  speed = speed * reduceGapSpeedMultiplier
+  }
 
   // Check for collision with pipes
   if (checkCollision()) {
@@ -1280,6 +1351,9 @@ if (skybox.x <= -skybox.width) {
 
   //Spawn in Sizes
   updateSizes();
+
+  //Spawn in reduce gap
+  updateReduceGaps();
 
   //Draw and move pipes
   updatePipes();
