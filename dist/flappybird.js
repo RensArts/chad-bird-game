@@ -8,7 +8,7 @@ var HITBOX_RIGHT = -40; // Adjust the right side hitbox of the bird
 var HITBOX_TOP = -60; // Adjust the top side hitbox of the bird
 var HITBOX_BOTTOM = 0; // Adjust the bottom side hitbox of the bird
 var HITBOX_LEFT = 140; // Adjust the left side hitbox of the bird
-var COIN_HITBOX = 40; // Adjust the radius for collecting coins
+var COIN_HITBOX = 20; // Adjust the radius for collecting coins
 const COIN_SIZE = 2.5; // Adjust the size of the coin
 const COIN_SPEED = 2.5; // Adjust the speed of the coin
 const STAR_SPEED = 3; // Adjust the speed of the stars
@@ -47,20 +47,20 @@ var collectedCoins = 0; // Variable to keep track of collected coins
 var matchCoins = 0; // Variable to keep track of coins collected in single match
 var groundSpeed = 0; // Track the speed of the ground movement
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
-var minStarSpawn = 2000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxStarSpawn = 40000; // Maximum spawn rate in milliseconds (40 seconds)
-var minGhostSpawn = 2000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxGhostSpawn = 40000; // Maximum spawn rate in milliseconds (40 seconds)
-var minSizeSpawn = 2000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxSizeSpawn = 40000; // Maximum spawn rate in milliseconds (40 seconds)
+var minStarSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxStarSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
+var minGhostSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxGhostSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
+var minSizeSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxSizeSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
 var starSpeedMultiplier = 1; // Initial speed multiplier
 var ghostSpeedMultiplier = 1;
 var isInvincible = false; // Initial invincibility state
 var isGhost = false; // Initial ghost state
 var isSize = false; // Initial size state
-var starPowerUpDuration = 2200; // Duration of power-ups in milliseconds 
-var ghostPowerUpDuration = 3200;  // Duration of power-ups in milliseconds
-var sizePowerUpDuration = 5000; // Duration of power-ups in milliseconds
+var starPowerUpDuration = 2500; // Duration of power-ups in milliseconds 
+var ghostPowerUpDuration = 5000;  // Duration of power-ups in milliseconds
+var sizePowerUpDuration = 8000; // Duration of power-ups in milliseconds
 var starPowerUpEndTime = 0; // Time when the current power-up will end
 var ghostPowerUpEndTime = 0; // Time when the current power-up will end
 var sizePowerUpEndTime = 0; // Time when the current power-up will end
@@ -341,7 +341,7 @@ function addCoin() {
   var coin = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
     y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 40, // Adjust the size of the coin as needed
+    radius: 30, // Adjust the size of the coin as needed
   };
   coins.push(coin);
 }
@@ -351,7 +351,7 @@ function addStar() {
   var star = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
     y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 40, // Adjust the size of the coin as needed
+    radius: 50, // Adjust the size of the coin as needed
   };
   stars.push(star);
 }
@@ -361,7 +361,7 @@ function addGhost() {
   var ghost = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
     y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 40, // Adjust the size of the coin as needed
+    radius: 50, // Adjust the size of the coin as needed
   };
   ghosts.push(ghost);
 }
@@ -371,7 +371,7 @@ function addSize() {
   var size = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
     y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 40, // Adjust the size of the coin as needed
+    radius: 50, // Adjust the size of the coin as needed
   };
   sizes.push(size);
 }
@@ -401,7 +401,7 @@ function updateCoins() {
 
 // Updates the star spawning, star collecting and hitbox
 function updateStars() {
-  for (var i = 1; i < stars.length; i++) {
+  for (var i = 0; i < stars.length; i++) {
     var star = stars[i];
     star.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
 
@@ -432,7 +432,7 @@ function updateStars() {
 
 // Updates the star spawning, star collecting and hitbox
 function updateGhosts() {
-  for (var i = 1; i < ghosts.length; i++) {
+  for (var i = 0; i < ghosts.length; i++) {
     var ghost = ghosts[i];
     ghost.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
 
@@ -459,7 +459,7 @@ function updateGhosts() {
 
 // Updates the star spawning, star collecting and hitbox
 function updateSizes() {
-  for (var i = 1; i < sizes.length; i++) {
+  for (var i = 0; i < sizes.length; i++) {
     var size = sizes[i];
     size.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
 
