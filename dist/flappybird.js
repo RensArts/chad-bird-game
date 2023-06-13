@@ -55,7 +55,7 @@ var maxStarSpawn = 70000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxGhostSpawn = 70000; // Maximum spawn rate in milliseconds (40 seconds)
 var minSizeSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxSizeSpawn = 70000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxSizeSpawn = 7000; // Maximum spawn rate in milliseconds (40 seconds)
 var minReduceGapSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxReduceGapSpawn = 70000; // Maximum spawn rate in milliseconds (40 seconds)
 var starSpeedMultiplier = 1; // Initial speed multiplier
@@ -348,14 +348,6 @@ function generateReduceGapSpawnRate() {
   return Math.random() * (maxReduceGapSpawn - minReduceGapSpawn) + minReduceGapSpawn;
 }
 
-// Start the initial star interval with a random spawn rate
-starIntervalId = setInterval(addStar, generateStarSpawnRate());
-ghostIntervalId = setInterval (addGhost, generateGhostSpawnRate());
-coinIntervalId = setInterval(addCoin, AMOUNT_OF_COINS);
-sizeIntervalId = setInterval (addSize, generateSizeSpawnRate());
-reduceGapIntervalId = setInterval (addReduceGap, generateReduceGapSpawnRate());
-
-
 //Determines the coins spawning location
 function addCoin() {
   var coin = {
@@ -408,7 +400,7 @@ function addReduceGap() {
 
 // Updates the coin spawning, coin collecting and hitbox
 function updateCoins() {
-  for (var i = 2; i < coins.length; i++) {
+  for (var i = 1; i < coins.length; i++) {
     var coin = coins[i];
     coin.x -= PIPE_SPEED * (speed + COIN_SPEED); // Move the coin with the pipes
 
@@ -821,7 +813,7 @@ function updatePipes() {
     // Render picture on top of the pipes
     var imageWidth = p.width + 80; // Adjust the image width as desired
     var imageHeight = p.height +125; // Adjust the image height as desired
-    ctx.drawImage(pipeImage, p.x - 40, p.y - 115, imageWidth, imageHeight);
+    ctx.drawImage(pipeImage, p.x - 40, p.y - 120, imageWidth, imageHeight);
   }
 }
 //p.x - 150
@@ -898,6 +890,12 @@ function moveUp(event) {
       isInvincible = false;
       isSize = false;
       document.addEventListener("mousedown", moveUp);
+      // Start the initial star interval with a random spawn rate
+      starIntervalId = setInterval(addStar, generateStarSpawnRate());
+      ghostIntervalId = setInterval (addGhost, generateGhostSpawnRate());
+      coinIntervalId = setInterval(addCoin, AMOUNT_OF_COINS);
+      sizeIntervalId = setInterval (addSize, generateSizeSpawnRate());
+      reduceGapIntervalId = setInterval (addReduceGap, generateReduceGapSpawnRate());
       }
     }
 
@@ -928,6 +926,11 @@ function startGame() {
   ghosts = [];
   sizes = [];
   reduceGaps = [];
+  clearInterval(reduceGapIntervalId);
+  clearInterval(sizeIntervalId)
+  clearInterval(starIntervalId);
+  clearInterval(ghostIntervalId)
+  clearInterval(coinIntervalId)
   score = 0; // Reset the score
   // Hide the logo
   logo.style.display = "none";
@@ -976,11 +979,6 @@ function restartGame(event) {
     skyboxSpeed  = 1;
     JUMP = 1.2;
     pipeStartSkip = 24;
-    clearInterval(reduceGapIntervalId);
-    clearInterval(sizeIntervalId);
-    clearInterval(ghostIntervalId);
-    clearInterval(starIntervalId);
-    clearInterval(coinIntervalIdIntervalId);
     
   
     // Start the game
@@ -1088,20 +1086,20 @@ function drawBird() {
   else if (isMovingUp && bird.y > 0 && isSize){
     birdUp.width = 125;
     birdUp.height = 125;
-    HITBOX_BOTTOM = -70
-    HITBOX_LEFT = 60;
-    HITBOX_RIGHT = -100;
-    HITBOX_TOP = -60
-    ctx.drawImage(birdUpImg, birdUp.x, birdUp.y, birdUp.width, birdUp.height);
+    HITBOX_BOTTOM = 20
+    HITBOX_LEFT = 200;
+    HITBOX_RIGHT = -30;
+    HITBOX_TOP = -150
+    ctx.drawImage(birdUpImg, birdUp.x + 120, birdUp.y + 100, birdUp.width, birdUp.height);
   }
   else if (!isMovingUp && bird.y <= canvas.height - bird.height && isSize && !isGhost) {
     birdDown.width = 125;
     birdDown.height = 125;
-    HITBOX_BOTTOM = -70
-    HITBOX_LEFT = 60;
-    HITBOX_RIGHT = -100;
-    HITBOX_TOP = -60
-    ctx.drawImage(birdDownImg, birdDown.x, birdDown.y, birdDown.width, birdDown.height);
+    HITBOX_BOTTOM = 20
+    HITBOX_LEFT = 200;
+    HITBOX_RIGHT = -30;
+    HITBOX_TOP = -150
+    ctx.drawImage(birdDownImg, birdDown.x + 120, birdDown.y + 100, birdDown.width, birdDown.height);
   } 
 }
 
