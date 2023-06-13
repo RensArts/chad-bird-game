@@ -1,12 +1,12 @@
 
 // Constants
 const PIPE_PASSED = 200; // distance through pipe before counting as point
-const PIPE_WIDTH = 80; // Adjust this value to control the width of the spawn pipes
-const PIPE_COLOR_TOP = "#000000"; //Adjust the color of the top pipe
-const PIPE_COLOR_BOTTOM = "#00000"; //Adjust the color of the bottom pipe
+const PIPE_WIDTH = 130; // Adjust this value to control the width of the spawn pipes
+const PIPE_COLOR_TOP = "red"; //Adjust the color of the top pipe
+const PIPE_COLOR_BOTTOM = "blue"; //Adjust the color of the bottom pipe
 var HITBOX_RIGHT = -40; // Adjust the right side hitbox of the bird
 var HITBOX_TOP = -60; // Adjust the top side hitbox of the bird
-var HITBOX_BOTTOM = 0; // Adjust the bottom side hitbox of the bird
+var HITBOX_BOTTOM = 30; // Adjust the bottom side hitbox of the bird
 var HITBOX_LEFT = 140; // Adjust the left side hitbox of the bird
 var COIN_HITBOX = 0; // Adjust the radius for collecting coins
 const COIN_SIZE = 2.5; // Adjust the size of the coin
@@ -819,9 +819,9 @@ function updatePipes() {
     ctx.fillRect(p.x, p.height + PIPE_GAP, p.width, bottomPipeHeight);
     
     // Render picture on top of the pipes
-    var imageWidth = p.width + 300; // Adjust the image width as desired
-    var imageHeight = p.height + 170; // Adjust the image height as desired
-    ctx.drawImage(pipeImage, p.x - 150, p.y - 130, imageWidth, imageHeight);
+    var imageWidth = p.width + 80; // Adjust the image width as desired
+    var imageHeight = p.height +125; // Adjust the image height as desired
+    ctx.drawImage(pipeImage, p.x - 40, p.y - 115, imageWidth, imageHeight);
   }
 }
 //p.x - 150
@@ -962,7 +962,7 @@ function restartGame(event) {
     birdDown.height = 250;
     HITBOX_RIGHT = -40; 
     HITBOX_TOP = -60; 
-    HITBOX_BOTTOM = 0; 
+    HITBOX_BOTTOM = 30; 
     HITBOX_LEFT = 140; 
     pipes = [];
     coins = [];
@@ -976,6 +976,11 @@ function restartGame(event) {
     skyboxSpeed  = 1;
     JUMP = 1.2;
     pipeStartSkip = 24;
+    clearInterval(reduceGapIntervalId);
+    clearInterval(sizeIntervalId);
+    clearInterval(ghostIntervalId);
+    clearInterval(starIntervalId);
+    clearInterval(coinIntervalIdIntervalId);
     
   
     // Start the game
@@ -1271,7 +1276,7 @@ if (skybox.x <= -skybox.width) {
     // Power-up has expired, reset effects
     HITBOX_RIGHT = -40;
     HITBOX_TOP = -60; 
-    HITBOX_BOTTOM = 0; 
+    HITBOX_BOTTOM = 30; 
     HITBOX_LEFT = 140; 
     birdUp.width = 250;
     birdUp.height = 250;
