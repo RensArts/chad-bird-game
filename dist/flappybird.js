@@ -1,10 +1,8 @@
-// Get the game canvas and its 2D rendering context
+
 var canvas = document.getElementById("gameCanvas");
-canvas.width = 1280;
-canvas.height = 720;
+canvas.width = 2560;
+canvas.height = 1080;
 var ctx = canvas.getContext("2d");
-// const widthScaleFactor = canvas.width / 2560;
-// const heightScaleFactor = canvas.height / 1080;
 
 // Constants
 const PIPE_PASSED = canvas.width * 0.0781;
@@ -92,7 +90,7 @@ var minFramesPerPipe = 0.1; // set minimum spawn time for the pipes 200ms/30fps
 var pipeSpawnRate = 0.3; // set spawn rate for the pipes (higher = more pipes)
 var minimumFpsValue = 3; // if framerate drops below 30fps, it will register as 30fps
 var pipeSpawnNormal = 0.22; // set this value if changing the pipespawnrate of hard difficulty in function
-var pipeSpawnHard = 0.38; // set this value if changing the pipe spawn rate of normal difficulty in function
+var pipeSpawnHard = 0.34; // set this value if changing the pipe spawn rate of normal difficulty in function
 
 // to adjust game speed based on frames per 0.1 seconds (in update)
 var speed = 8; // Variable to increment speed in function Update();
@@ -573,19 +571,23 @@ function drawCollectedCoins() {
     collectedCoins = parseInt(savedCoins); // Update the collectedCoins variable with the saved value
   }
 
-  // Draw image
-  var imageSize = Math.ceil(widthScale * heightScale * 120);
-  var imageX = Math.ceil(widthScale * 20); // Adjust the x position as needed
-  var imageY = Math.ceil(heightScale * 0);
-  ctx.drawImage(image, imageX, imageY, imageSize, imageSize);
+  // Calculate the new width and maintain the aspect ratio
+  var newWidth = Math.ceil(widthScale * heightScale * 200);
+  var aspectRatio = image.width / image.height;
+  var newHeight = Math.ceil(newWidth / aspectRatio);
 
-  var textX = Math.ceil(widthScale * 175); // Adjust the x position as needed
-  var textY = Math.ceil(heightScale * 59);
+  // Draw the image with the new width and height
+  var imageX = Math.ceil(widthScale * 20); // Adjust the x position as needed
+  var imageY = Math.ceil(heightScale * -9);
+  ctx.drawImage(image, imageX, imageY, newWidth, newHeight);
+
+  var textX = Math.ceil(widthScale * 160); // Adjust the x position as needed
+  var textY = Math.ceil(heightScale * 45);
   ctx.fillText(collectedCoins, textX, textY);
   ctx.strokeText(collectedCoins, textX, textY);
 
-  var xSymbolX = Math.ceil(widthScale * 135); // Adjust the x position as needed
-  var xSymbolY = Math.ceil(heightScale * 55);
+  var xSymbolX = Math.ceil(widthScale * 120); // Adjust the x position as needed
+  var xSymbolY = Math.ceil(heightScale * 41);
   ctx.fillText("x", xSymbolX, xSymbolY);
   ctx.strokeText("x", xSymbolX, xSymbolY);
 }
@@ -599,11 +601,15 @@ function saveCollectedCoins(collectedCoins) {
 function drawFPS() {
   var text = "FPS: " + fps * 10; // Create the FPS text string
 
-  ctx.font = "bold " + Math.ceil(canvas.width / 100) + "px Arial";
+  ctx.font = "bold " + Math.ceil(canvas.width / 70) + "px Arial";
   ctx.fillStyle = "white";
   ctx.textAlign = "right";
   ctx.textBaseline = "top";
   ctx.fillText(text, canvas.width - Math.ceil(canvas.width / 100), Math.ceil(canvas.width / 100));
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = Math.ceil(canvas.width / 1500);
+  ctx.strokeText(text, canvas.width - Math.ceil(canvas.width / 100), Math.ceil(canvas.width / 100));
+
 }
 
 // Draw score on the top of the screen
@@ -613,18 +619,18 @@ function drawScore() {
   }
   var text = score.toString(); // Convert the score to a string
 
-  ctx.font = "bolder " + Math.ceil(canvas.width / 17) + "px Arial";
+  ctx.font = "bolder " + Math.ceil(canvas.width / 28) + "px Arial";
   ctx.textAlign = "end";
   ctx.textBaseline = "middle";
 
   // Set the stroke style (black border)
   ctx.strokeStyle = "black";
-  ctx.lineWidth = Math.ceil(canvas.width / 170);
-  ctx.strokeText(text, canvas.width - Math.ceil(canvas.width / 2.1), Math.ceil(canvas.width / 12));
+  ctx.lineWidth = Math.ceil(canvas.width / 220);
+  ctx.strokeText(text, canvas.width - Math.ceil(canvas.width / 2.1), Math.ceil(canvas.width / 55));
 
   // Set the fill style (white text)
   ctx.fillStyle = "white";
-  ctx.fillText(text, canvas.width - Math.ceil(canvas.width / 2.1), Math.ceil(canvas.width / 12));
+  ctx.fillText(text, canvas.width - Math.ceil(canvas.width / 2.1), Math.ceil(canvas.width / 55));
 }
 
 // Checks if bird passes pipe and adds score
@@ -788,7 +794,7 @@ function addPipe() {
   
   var pipeWidth = Math.ceil(canvas.width * 0.06);
   var pipeHeightTop = gapPosition + Math.ceil(canvas.height * 0.093);
-  var pipeHeightBottom = canvas.height - (gapPosition + gapSize - Math.ceil(canvas.height * 0.148));
+  var pipeHeightBottom = canvas.height - (gapPosition + gapSize - Math.ceil(canvas.height * 0.4));
 
   pipes.push({
     x: canvas.width,
@@ -828,7 +834,7 @@ function updatePipes() {
     var adjustedHeight = Math.round(p.height * (canvas.height / 1080));
     var adjustedGap = Math.round(PIPE_GAP * (canvas.width / 2560));
     var adjustedImageWidth = Math.round((p.width + 80) * (canvas.width / 2560));
-    var adjustedImageHeight = Math.round((p.height + 125) * (canvas.height / 1080));
+    var adjustedImageHeight = Math.round((p.height + 90) * (canvas.height / 1080));
     
     // Draw top pipe
     ctx.fillStyle = PIPE_COLOR_TOP; 
@@ -840,7 +846,7 @@ function updatePipes() {
     ctx.fillRect(adjustedX, adjustedHeight + adjustedGap, adjustedWidth, bottomPipeHeight);
     
     // Render picture on top of the pipes
-    ctx.drawImage(pipeImage, adjustedX - Math.round(40 * (canvas.width / 2560)), adjustedY - Math.round(120 * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
+    ctx.drawImage(pipeImage, adjustedX - Math.round(40 * (canvas.width / 2560)), adjustedY - Math.round(85 * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
   }
 }
 
@@ -851,8 +857,8 @@ function drawReadyMessage() {
   ctx.font = "bolder " + Math.round(160 * (canvas.width / 2560)) + "px Arial";
   ctx.textAlign = "start";
   ctx.textBaseline = "middle";
-  ctx.fillText("READY", canvas.width / 2 - Math.round(260 * (canvas.width / 2560)), canvas.height / 2 - Math.round(200 * (canvas.height / 1080)));
-  ctx.strokeText("READY", canvas.width / 2 - Math.round(260 * (canvas.width / 2560)), canvas.height / 2 - Math.round(200 * (canvas.height / 1080)));
+  ctx.fillText("READY", canvas.width / 2 - Math.round(245 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
+  ctx.strokeText("READY", canvas.width / 2 - Math.round(245 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
 }
 
 function drawGoMessage() {
@@ -863,8 +869,8 @@ function drawGoMessage() {
     ctx.font = "bolder " + Math.round(220 * (canvas.width / 2560)) + "px Arial";
     ctx.textAlign = "start";
     ctx.textBaseline = "middle";
-    ctx.fillText("GO", canvas.width / 2 - Math.round(155 * (canvas.width / 2560)), canvas.height / 2 - Math.round(200 * (canvas.height / 1080)));
-    ctx.strokeText("GO", canvas.width / 2 - Math.round(155 * (canvas.width / 2560)), canvas.height / 2 - Math.round(200 * (canvas.height / 1080)));
+    ctx.fillText("GO", canvas.width / 2 - Math.round(140 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
+    ctx.strokeText("GO", canvas.width / 2 - Math.round(140 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
   }
 }
 
