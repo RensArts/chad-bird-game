@@ -1,15 +1,22 @@
+// Get the game canvas and its 2D rendering context
+var canvas = document.getElementById("gameCanvas");
+canvas.width = 2560;
+canvas.height = 1080;
+var ctx = canvas.getContext("2d");
+const widthScaleFactor = canvas.width / 2560;
+const heightScaleFactor = canvas.height / 1080;
 
 // Constants
-const PIPE_PASSED = 200; // distance through pipe before counting as point
-const PIPE_WIDTH = 130; // Adjust this value to control the width of the spawn pipes
-const PIPE_COLOR_TOP = "red"; //Adjust the color of the top pipe
-const PIPE_COLOR_BOTTOM = "blue"; //Adjust the color of the bottom pipe
-var HITBOX_RIGHT = -40; // Adjust the right side hitbox of the bird
-var HITBOX_TOP = -60; // Adjust the top side hitbox of the bird
-var HITBOX_BOTTOM = 30; // Adjust the bottom side hitbox of the bird
-var HITBOX_LEFT = 140; // Adjust the left side hitbox of the bird
-var COIN_HITBOX = 0; // Adjust the radius for collecting coins
-const COIN_SIZE = 2.5; // Adjust the size of the coin
+const PIPE_PASSED = canvas.width * 0.0781;
+const PIPE_WIDTH = canvas.width * 0.0508;
+const PIPE_COLOR_TOP = "red";
+const PIPE_COLOR_BOTTOM = "blue";
+var HITBOX_RIGHT = canvas.width * -0.0156;
+var HITBOX_TOP = canvas.height * -0.0556;
+var HITBOX_BOTTOM = canvas.height * 0.0278;
+var HITBOX_LEFT = canvas.width * 0.0547;
+var COIN_HITBOX = 0;
+const COIN_SIZE = canvas.width * 0.0006;
 const COIN_SPEED = 2.5; // Adjust the speed of the coin
 const STAR_SPEED = 3; // Adjust the speed of the stars
 const countDown = 2950; // time before game starts in ms
@@ -43,8 +50,8 @@ var difficulty = "normal"; // Default difficulty level
 var GROUND_SPEED = 2.1; // Adjust the speed of the ground and ceiling
 var JUMP = 1.2; // Adjust the value of upward momentum
 var GRAVITY = 0.9; // Adjust this value to control the downward speed of the bird
-var PIPE_GAP = 320; // Adjust this value to control the gap of the spawn pipes
-var gapSize = 500; // Consistent gap size
+var PIPE_GAP = canvas.width * 0.125; // Adjust this value to control the gap of the spawn pipes
+var gapSize = canvas.width * 0.1953; // Consistent gap size
 var score = 0; // Variable to keep track of the score
 var collectedCoins = 0; // Variable to keep track of collected coins
 var matchCoins = 0; // Variable to keep track of coins collected in single match
@@ -96,10 +103,6 @@ var frameCount = 0; // set counter for game speed update interval
 var fps = 0; // set default value for game speed update interval
 var lastTime = performance.now(); // counts frames in update
 var elapsedTime = 0; // set counter for game speed update interval
-
-// Get the game canvas and its 2D rendering context
-var canvas = document.getElementById("gameCanvas");
-var ctx = canvas.getContext("2d");
 
 // Initialize game state variables
 var isMovingUp = false; // Track if bird is moving up
@@ -175,34 +178,34 @@ borderBox.src = "assets/borderBox.png";
 
 // Define the bird object (for hitbox)
 var bird = {
-  x: 700,
-  y: 400,
-  width: 250,
-  height: 250,
+  x: canvas.width * 700 / 2560 * widthScaleFactor, // Adjusted x-coordinate
+  y: canvas.height * 400 / 1080 * heightScaleFactor, // Adjusted y-coordinate
+  width: canvas.width * 250 / 2560 * widthScaleFactor, // Adjusted width
+  height: canvas.height * 250 / 1080 * heightScaleFactor, // Adjusted height
 };
 
 // Define the bird going up object
 var birdUp = {
-  x: 700,
-  y: 400,
-  width: 250,
-  height: 250,
+  x: canvas.width * 700 / 2560 * widthScaleFactor,
+  y: canvas.height * 400 / 1080 * heightScaleFactor,
+  width: canvas.width * 250 / 2560 * widthScaleFactor,
+  height: canvas.height * 250 / 1080 * heightScaleFactor,
 };
 
 // Define the bird going down object
 var birdDown = {
-  x: 700,
-  y: 400,
-  width: 250,
-  height: 250,
+  x: canvas.width * 700 / 2560 * widthScaleFactor,
+  y: canvas.height * 400 / 1080 * heightScaleFactor,
+  width: canvas.width * 250 / 2560 * widthScaleFactor,
+  height: canvas.height * 250 / 1080 * heightScaleFactor,
 };
 
 // Define the ground object
 var ground = {
   x: 0,
-  y: canvas.height - 100, // Adjust the y-coordinate according to your game's ground position
+  y: canvas.height - (canvas.height * 100 / 1080), // Adjusted y-coordinate
   width: canvas.width,
-  height: 100, // Adjust the height of the ground as needed
+  height: canvas.height * 100 / 1080, // Adjusted height
   speed: 0, // Adjust the speed of the ground movement
 };
 
@@ -211,7 +214,7 @@ var ceiling = {
   x: 0,
   y: 0,
   width: canvas.width,
-  height: 100, // Adjust the height of the ceiling as needed
+  height: canvas.height * 100 / 1080, // Adjusted height
   speed: 0, // Adjust the speed of the ceiling movement
 };
 
@@ -348,55 +351,56 @@ function generateReduceGapSpawnRate() {
   return Math.random() * (maxReduceGapSpawn - minReduceGapSpawn) + minReduceGapSpawn;
 }
 
-//Determines the coins spawning location
+// Determines the coins spawning location
 function addCoin() {
   var coin = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
-    y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 30, // Adjust the size of the coin as needed
+    y: getRandomInt(canvas.height * 450 / 720, canvas.height - (canvas.height * 450 / 720)), // Randomize the coin's y-coordinate
+    radius: canvas.width * 30 / 1280, // Adjusted size of the coin
   };
   coins.push(coin);
 }
 
-//Determines the star spawning location
+// Determines the star spawning location
 function addStar() {
   var star = {
-    x: canvas.width, // Spawn the coin at the right edge of the canvas
-    y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 45, // Adjust the size of the coin as needed
+    x: canvas.width, // Spawn the star at the right edge of the canvas
+    y: getRandomInt(canvas.height * 450 / 720, canvas.height - (canvas.height * 450 / 720)), // Randomize the star's y-coordinate
+    radius: canvas.width * 45 / 1280, // Adjusted size of the star
   };
   stars.push(star);
 }
 
-//Determines the star spawning location
+// Determines the ghost spawning location
 function addGhost() {
   var ghost = {
-    x: canvas.width, // Spawn the coin at the right edge of the canvas
-    y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 45, // Adjust the size of the coin as needed
+    x: canvas.width, // Spawn the ghost at the right edge of the canvas
+    y: getRandomInt(canvas.height * 450 / 720, canvas.height - (canvas.height * 450 / 720)), // Randomize the ghost's y-coordinate
+    radius: canvas.width * 45 / 1280, // Adjusted size of the ghost
   };
   ghosts.push(ghost);
 }
 
-//Determines the star spawning location
+// Determines the size spawning location
 function addSize() {
   var size = {
-    x: canvas.width, // Spawn the coin at the right edge of the canvas
-    y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 45, // Adjust the size of the coin as needed
+    x: canvas.width, // Spawn the size at the right edge of the canvas
+    y: getRandomInt(canvas.height * 450 / 720, canvas.height - (canvas.height * 450 / 720)), // Randomize the size's y-coordinate
+    radius: canvas.width * 45 / 1280, // Adjusted size of the size
   };
   sizes.push(size);
 }
 
-//Determines the star spawning location
+// Determines the reduceGap spawning location
 function addReduceGap() {
   var reduceGap = {
-    x: canvas.width, // Spawn the coin at the right edge of the canvas
-    y: getRandomInt(450, canvas.height - 450), // Randomize the coin's y-coordinate
-    radius: 45, // Adjust the size of the coin as needed
+    x: canvas.width, // Spawn the reduceGap at the right edge of the canvas
+    y: getRandomInt(canvas.height * 450 / 720, canvas.height - (canvas.height * 450 / 720)), // Randomize the reduceGap's y-coordinate
+    radius: canvas.width * 45 / 1280, // Adjusted size of the reduceGap
   };
   reduceGaps.push(reduceGap);
 }
+
 
 // Updates the coin spawning, coin collecting and hitbox
 function updateCoins() {
@@ -549,12 +553,19 @@ if (image.complete) {
   });
 }
 
-// Draw score and image on the top of the screen
+// Draw score and image on the top left of the screen
 function drawCollectedCoins() {
   ctx.fillStyle = "orange";
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 3;
-  ctx.font = "bolder 60px Arial";
+  
+  // Calculate scaling factors based on the current canvas resolution and the initial resolution
+  var widthScale = canvas.width / 2560;
+  var heightScale = canvas.height / 1080;
+  
+  // Adjust line width and font size based on the scaling factors
+  ctx.lineWidth = Math.ceil(widthScale * heightScale * 3);
+  ctx.font = "bolder " + Math.ceil(widthScale * heightScale * 60) + "px Arial";
+  
   ctx.textAlign = "start";
   ctx.textBaseline = "middle";
 
@@ -564,11 +575,20 @@ function drawCollectedCoins() {
   }
 
   // Draw image
-  ctx.drawImage(image, canvas.width - 2560, 0, 260, 120); // Adjust the position and size of the image as needed
-  ctx.fillText(collectedCoins, canvas.width - 2395, 59);
-  ctx.strokeText(collectedCoins, canvas.width - 2395, 59);
-  ctx.fillText("x", canvas.width - 2435, 55);
-  ctx.strokeText("x", canvas.width - 2435, 55);
+  var imageSize = Math.ceil(widthScale * heightScale * 120);
+  var imageX = Math.ceil(widthScale * 20); // Adjust the x position as needed
+  var imageY = Math.ceil(heightScale * 0);
+  ctx.drawImage(image, imageX, imageY, imageSize, imageSize);
+
+  var textX = Math.ceil(widthScale * 175); // Adjust the x position as needed
+  var textY = Math.ceil(heightScale * 59);
+  ctx.fillText(collectedCoins, textX, textY);
+  ctx.strokeText(collectedCoins, textX, textY);
+
+  var xSymbolX = Math.ceil(widthScale * 135); // Adjust the x position as needed
+  var xSymbolY = Math.ceil(heightScale * 55);
+  ctx.fillText("x", xSymbolX, xSymbolY);
+  ctx.strokeText("x", xSymbolX, xSymbolY);
 }
 
 // Saves the collected coins to local storage
@@ -580,11 +600,11 @@ function saveCollectedCoins(collectedCoins) {
 function drawFPS() {
   var text = "FPS: " + fps * 10; // Create the FPS text string
 
-  ctx.font = "bold 24px Arial";
+  ctx.font = "bold " + Math.ceil(canvas.width / 100) + "px Arial";
   ctx.fillStyle = "white";
   ctx.textAlign = "right";
   ctx.textBaseline = "top";
-  ctx.fillText(text, canvas.width - 10, 10);
+  ctx.fillText(text, canvas.width - Math.ceil(canvas.width / 100), Math.ceil(canvas.width / 100));
 }
 
 // Draw score on the top of the screen
@@ -594,18 +614,18 @@ function drawScore() {
   }
   var text = score.toString(); // Convert the score to a string
 
-  ctx.font = "bolder 150px Arial";
+  ctx.font = "bolder " + Math.ceil(canvas.width / 17) + "px Arial";
   ctx.textAlign = "end";
   ctx.textBaseline = "middle";
-  
+
   // Set the stroke style (black border)
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 15;
-  ctx.strokeText(text, canvas.width - 1220, 90);
-  
+  ctx.lineWidth = Math.ceil(canvas.width / 170);
+  ctx.strokeText(text, canvas.width - Math.ceil(canvas.width / 2.1), Math.ceil(canvas.width / 12));
+
   // Set the fill style (white text)
   ctx.fillStyle = "white";
-  ctx.fillText(text, canvas.width - 1220, 90);
+  ctx.fillText(text, canvas.width - Math.ceil(canvas.width / 2.1), Math.ceil(canvas.width / 12));
 }
 
 // Checks if bird passes pipe and adds score
@@ -637,9 +657,9 @@ function createMusicButton() {
   button.id = "musicButton";
   button.style.backgroundImage = "url('assets/musicButton.png')";
   button.style.backgroundSize = "cover";
-  button.style.width = "80px";
-  button.style.height = "80px";
-  
+  button.style.width = Math.ceil(canvas.width / 32) + "px";
+  button.style.height = Math.ceil(canvas.width / 32) + "px";
+
   // Add event listener to handle button click
   button.addEventListener("click", function() {
     buttonSound.play();
@@ -657,11 +677,11 @@ function createMusicButton() {
     if (clickHandler) {
       clickHandler();
     }
-    });
-  
+  });
+
   // Append the button to the body element
   document.body.appendChild(button);
-};
+}
 
 // Creates the button to turn the sound effects on or off
 function createSfxButton() {
@@ -669,8 +689,8 @@ function createSfxButton() {
   button.id = "sfxButton";
   button.style.backgroundImage = "url('assets/sfxButton.png')";
   button.style.backgroundSize = "cover";
-  button.style.width = "80px";
-  button.style.height = "80px";
+  button.style.width = Math.ceil(canvas.width / 32) + "px";
+  button.style.height = Math.ceil(canvas.width / 32) + "px";
 
   // Add event listener to handle button click
   button.addEventListener("click", function() {
@@ -691,7 +711,6 @@ function createSfxButton() {
       }
       deathSound.volume = 0;
       startSound.volume = 0;
-      starSound.volume = 0;
       buttonSound.volume = 0;
       ghostSound.volume = 0;
       sizeSound.volume = 0;
@@ -711,10 +730,9 @@ function createSfxButton() {
       }
       deathSound.volume = 1;
       startSound.volume = 1;
-      starSound.volume = 1;
       buttonSound.volume = 1;
       ghostSound.volume = 1;
-      sizeSound.volume = 1;
+      sizeSound.volume = 
       reduceGapSound.volume = 1;
     }
   });
@@ -767,14 +785,17 @@ function getRandomInt(min, max) {
  * Adds a new pair of pipes and the coins to the game.
  */
 function addPipe() {
-  var gapPosition = getRandomInt(100, canvas.height - PIPE_GAP - 400);
+  var gapPosition = getRandomInt(Math.ceil(canvas.height * 0.093), canvas.height - PIPE_GAP - Math.ceil(canvas.height * 0.37));
   
+  var pipeWidth = Math.ceil(canvas.width * 0.06);
+  var pipeHeightTop = gapPosition + Math.ceil(canvas.height * 0.093);
+  var pipeHeightBottom = canvas.height - (gapPosition + gapSize - Math.ceil(canvas.height * 0.148));
 
   pipes.push({
     x: canvas.width,
     y: 0,
-    width: PIPE_WIDTH,
-    height: gapPosition + 100,
+    width: pipeWidth,
+    height: pipeHeightTop,
     top: true,
     passed: false,
   });
@@ -782,8 +803,8 @@ function addPipe() {
   pipes.push({
     x: canvas.width,
     y: gapPosition + gapSize,
-    width: PIPE_WIDTH,
-    height: canvas.height - (gapPosition + gapSize - 200),
+    width: pipeWidth,
+    height: pipeHeightBottom,
     top: false,
     passed: false,
   });
@@ -796,50 +817,55 @@ pipeImage.src = 'assets/pipeTexture.png';
 
 // Draws the pipes on the canvas and moves them
 function updatePipes() {
-   // Move all existing pipes from right to left on every frame
+  // Move all existing pipes from right to left on every frame
   for (var i = pipeStartSkip; i < pipes.length; i++) {
     var p = pipes[i];
     p.x -= PIPE_SPEED * speed; // Pipe movement speed
     
+    // Calculate adjusted sizes and positions based on canvas resolution
+    var adjustedX = Math.round(p.x * (canvas.width / 2560));
+    var adjustedY = Math.round(p.y * (canvas.height / 1080));
+    var adjustedWidth = Math.round(p.width * (canvas.width / 2560));
+    var adjustedHeight = Math.round(p.height * (canvas.height / 1080));
+    var adjustedGap = Math.round(PIPE_GAP * (canvas.width / 2560));
+    var adjustedImageWidth = Math.round((p.width + 80) * (canvas.width / 2560));
+    var adjustedImageHeight = Math.round((p.height + 125) * (canvas.height / 1080));
+    
     // Draw top pipe
     ctx.fillStyle = PIPE_COLOR_TOP; 
-    ctx.fillRect(p.x, p.y, p.width, p.height);
+    ctx.fillRect(adjustedX, adjustedY, adjustedWidth, adjustedHeight);
 
     // Draw bottom pipe
     ctx.fillStyle = PIPE_COLOR_BOTTOM; 
-    var bottomPipeHeight = canvas.height - (p.height + PIPE_GAP);
-    ctx.fillRect(p.x, p.height + PIPE_GAP, p.width, bottomPipeHeight);
+    var bottomPipeHeight = canvas.height - (p.height + adjustedGap);
+    ctx.fillRect(adjustedX, adjustedHeight + adjustedGap, adjustedWidth, bottomPipeHeight);
     
     // Render picture on top of the pipes
-    var imageWidth = p.width + 80; // Adjust the image width as desired
-    var imageHeight = p.height +125; // Adjust the image height as desired
-    ctx.drawImage(pipeImage, p.x - 40, p.y - 120, imageWidth, imageHeight);
+    ctx.drawImage(pipeImage, adjustedX - Math.round(40 * (canvas.width / 2560)), adjustedY - Math.round(120 * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
   }
 }
-//p.x - 150
 
 function drawReadyMessage() {
   ctx.fillStyle = "white";
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 6;
-  ctx.font = "bolder 160px Arial";
+  ctx.lineWidth = Math.round(6 * (canvas.width / 2560));
+  ctx.font = "bolder " + Math.round(160 * (canvas.width / 2560)) + "px Arial";
   ctx.textAlign = "start";
   ctx.textBaseline = "middle";
-  ctx.fillText("READY", canvas.width / 2 - 260, canvas.height / 2 - 200);
-  ctx.strokeText("READY", canvas.width / 2 - 260, canvas.height / 2 - 200);
-  
+  ctx.fillText("READY", canvas.width / 2 - Math.round(260 * (canvas.width / 2560)), canvas.height / 2 - Math.round(200 * (canvas.height / 1080)));
+  ctx.strokeText("READY", canvas.width / 2 - Math.round(260 * (canvas.width / 2560)), canvas.height / 2 - Math.round(200 * (canvas.height / 1080)));
 }
 
 function drawGoMessage() {
-  if (!isGameOver){
-  ctx.fillStyle = "white";
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 6;
-  ctx.font = "bolder 220px Arial";
-  ctx.textAlign = "start";
-  ctx.textBaseline = "middle";
-  ctx.fillText("GO", canvas.width / 2 - 155, canvas.height / 2 - 200);
-  ctx.strokeText("GO", canvas.width / 2 - 155, canvas.height / 2 - 200);
+  if (!isGameOver) {
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = Math.round(6 * (canvas.width / 2560));
+    ctx.font = "bolder " + Math.round(220 * (canvas.width / 2560)) + "px Arial";
+    ctx.textAlign = "start";
+    ctx.textBaseline = "middle";
+    ctx.fillText("GO", canvas.width / 2 - Math.round(155 * (canvas.width / 2560)), canvas.height / 2 - Math.round(200 * (canvas.height / 1080)));
+    ctx.strokeText("GO", canvas.width / 2 - Math.round(155 * (canvas.width / 2560)), canvas.height / 2 - Math.round(200 * (canvas.height / 1080)));
   }
 }
 
@@ -919,7 +945,7 @@ function moveDown(event) {
  */
 function startGame() {
   isGameOver = false;
-  bird.y = 400; // Reset the bird's position
+  bird.y = Math.round(400 * (canvas.height / 1080)); // Reset the bird's position
   pipes = []; // Clear the pipes array
   coins = []; // Clear the coins array
   stars = []; // Clear the stars array
@@ -927,10 +953,10 @@ function startGame() {
   sizes = [];
   reduceGaps = [];
   clearInterval(reduceGapIntervalId);
-  clearInterval(sizeIntervalId)
+  clearInterval(sizeIntervalId);
   clearInterval(starIntervalId);
-  clearInterval(ghostIntervalId)
-  clearInterval(coinIntervalId)
+  clearInterval(ghostIntervalId);
+  clearInterval(coinIntervalId);
   score = 0; // Reset the score
   // Hide the logo
   logo.style.display = "none";
@@ -953,31 +979,31 @@ function restartGame(event) {
     isGameStarted = false;
     score = 0;
     matchCoins = 0;
-    bird.y = 400;
-    bird.x = 700;
-    birdUp.y = 400;
-    birdUp.x = 700;
-    birdDown.y = 400;
-    birdDown.x = 700;
-    birdUp.width = 250;
-    birdUp.height = 250;
-    birdDown.width = 250;
-    birdDown.height = 250;
-    HITBOX_RIGHT = -40; 
-    HITBOX_TOP = -60; 
-    HITBOX_BOTTOM = 30; 
-    HITBOX_LEFT = 140; 
+    bird.y = Math.round(400 * (canvas.height / 1080));
+    bird.x = Math.round(700 * (canvas.width / 2560));
+    birdUp.y = Math.round(400 * (canvas.height / 1080));
+    birdUp.x = Math.round(700 * (canvas.width / 2560));
+    birdDown.y = Math.round(400 * (canvas.height / 1080));
+    birdDown.x = Math.round(700 * (canvas.width / 2560));
+    birdUp.width = Math.round(250 * (canvas.width / 2560));
+    birdUp.height = Math.round(250 * (canvas.height / 1080));
+    birdDown.width = Math.round(250 * (canvas.width / 2560));
+    birdDown.height = Math.round(250 * (canvas.height / 1080));
+    HITBOX_RIGHT = Math.round(-40 * (canvas.width / 2560));
+    HITBOX_TOP = Math.round(-60 * (canvas.height / 1080));
+    HITBOX_BOTTOM = Math.round(30 * (canvas.height / 1080));
+    HITBOX_LEFT = Math.round(140 * (canvas.width / 2560));
     pipes = [];
     coins = [];
     isSize = false;
     isReduceGap = false;
-    GRAVITY = 0.9;
-    PIPE_SPEED = 2;
-    PIPE_GAP = 320;
-    gapSize = 500;
-    GROUND_SPEED = 2.1;
-    skyboxSpeed  = 1;
-    JUMP = 1.2;
+    GRAVITY = 0.9 * (canvas.height / 1080);
+    PIPE_SPEED = 2 * (canvas.width / 2560);
+    PIPE_GAP = Math.round(320 * (canvas.width / 2560));
+    gapSize = Math.round(500 * (canvas.height / 1080));
+    GROUND_SPEED = 2.1 * (canvas.width / 2560);
+    skyboxSpeed  = 1 * (canvas.width / 2560);
+    JUMP = 1.2 * (canvas.height / 1080);
     pipeStartSkip = 24;
     
   
@@ -1056,12 +1082,11 @@ ctx.drawImage(groundImg, ground.x, ground.y, ground.width, ground.height);
 ctx.drawImage(groundImg, ground.x + ground.width, ground.y, ground.width, ground.height);
 };
 
-// Define skybox properties
 var skybox = {
   x: 0,
   y: 0,
-  width: 11486,
-  height: 1080,
+  width: Math.round(11486 * (canvas.width / 2560)),
+  height: Math.round(1080 * (canvas.height / 1080)),
 };
 
 // Preload skybox texture
@@ -1075,33 +1100,58 @@ function drawSkybox() {
   ctx.drawImage(skyboxImg, skybox.x + skybox.width, skybox.y, skybox.width, skybox.height);
 }
 
-// Draws the bird based on up or down position
 function drawBird() {
   clearTimeout(drawTimeout); // Clear any previously scheduled draw
-  if (isMovingUp && bird.y > 0 && !isSize ) {
-    ctx.drawImage(birdUpImg, birdUp.x, birdUp.y, birdUp.width, birdUp.height);
-  } else if (!isMovingUp && bird.y <= canvas.height - bird.height &&!isGhost && !isSize) {
-    ctx.drawImage(birdDownImg, birdDown.x, birdDown.y, birdDown.width, birdDown.height);
-  } 
-  else if (isMovingUp && bird.y > 0 && isSize){
-    birdUp.width = 125;
-    birdUp.height = 125;
-    HITBOX_BOTTOM = 20
-    HITBOX_LEFT = 200;
-    HITBOX_RIGHT = -30;
-    HITBOX_TOP = -150
-    ctx.drawImage(birdUpImg, birdUp.x + 120, birdUp.y + 100, birdUp.width, birdUp.height);
+
+  if (isMovingUp && bird.y > 0 && !isSize) {
+    ctx.drawImage(
+      birdUpImg,
+      birdUp.x * (canvas.width / 2560),
+      birdUp.y * (canvas.height / 1080),
+      birdUp.width * (canvas.width / 2560),
+      birdUp.height * (canvas.height / 1080)
+    );
+  } else if (!isMovingUp && bird.y <= canvas.height - bird.height && !isGhost && !isSize) {
+    ctx.drawImage(
+      birdDownImg,
+      birdDown.x * (canvas.width / 2560),
+      birdDown.y * (canvas.height / 1080),
+      birdDown.width * (canvas.width / 2560),
+      birdDown.height * (canvas.height / 1080)
+    );
+  } else if (isMovingUp && bird.y > 0 && isSize) {
+    birdUp.width = Math.round(125 * (canvas.width / 2560));
+    birdUp.height = Math.round(125 * (canvas.height / 1080));
+    HITBOX_BOTTOM = Math.round(20 * (canvas.height / 1080));
+    HITBOX_LEFT = Math.round(200 * (canvas.width / 2560));
+    HITBOX_RIGHT = Math.round(-30 * (canvas.width / 2560));
+    HITBOX_TOP = Math.round(-150 * (canvas.height / 1080));
+
+    ctx.drawImage(
+      birdUpImg,
+      (birdUp.x + 120) * (canvas.width / 2560),
+      (birdUp.y + 100) * (canvas.height / 1080),
+      birdUp.width,
+      birdUp.height
+    );
+  } else if (!isMovingUp && bird.y <= canvas.height - bird.height && isSize && !isGhost) {
+    birdDown.width = Math.round(125 * (canvas.width / 2560));
+    birdDown.height = Math.round(125 * (canvas.height / 1080));
+    HITBOX_BOTTOM = Math.round(20 * (canvas.height / 1080));
+    HITBOX_LEFT = Math.round(200 * (canvas.width / 2560));
+    HITBOX_RIGHT = Math.round(-30 * (canvas.width / 2560));
+    HITBOX_TOP = Math.round(-150 * (canvas.height / 1080));
+
+    ctx.drawImage(
+      birdDownImg,
+      (birdDown.x + 120) * (canvas.width / 2560),
+      (birdDown.y + 100) * (canvas.height / 1080),
+      birdDown.width,
+      birdDown.height
+    );
   }
-  else if (!isMovingUp && bird.y <= canvas.height - bird.height && isSize && !isGhost) {
-    birdDown.width = 125;
-    birdDown.height = 125;
-    HITBOX_BOTTOM = 20
-    HITBOX_LEFT = 200;
-    HITBOX_RIGHT = -30;
-    HITBOX_TOP = -150
-    ctx.drawImage(birdDownImg, birdDown.x + 120, birdDown.y + 100, birdDown.width, birdDown.height);
-  } 
 }
+
 
 let isBirdUp = true;
 
@@ -1112,9 +1162,9 @@ function drawAnimatedBird() {
 
   // Change bird.y position based on isBirdUp
   if (isBirdUp) {
-    bird.y -= 8;
+    bird.y -= 8 * (canvas.height / 1080);
   } else {
-    bird.y += 6;
+    bird.y += 6 * (canvas.height / 1080);
   }
 }
 
@@ -1149,38 +1199,35 @@ function gameOver() {
   backgroundMusic.currentTime = 0;
 
   // Display game over message, score, and highscore
-  ctx.drawImage(borderBox, canvas.width / 2 - 450, canvas.height / 2 - 265)
+  ctx.drawImage(borderBox, canvas.width / 2 - (450 * (canvas.width / 2560)), canvas.height / 2 - (265 * (canvas.height / 1080)));
   ctx.fillStyle = "white";
   ctx.strokeStyle = "black"; // Set the border color
-  ctx.lineWidth = 8; // Set the border width
-  ctx.font = "bolder 80px Helvetica";
-    
-  ctx.strokeText(score, canvas.width / 2 + 60, canvas.height / 2 - 160);
-  ctx.strokeText(matchCoins, canvas.width / 2 + 60, canvas.height / 2 - 75);
-  ctx.strokeText(`${previousHighscore}`, canvas.width / 2 + 60, canvas.height / 2 + 15);
-  ctx.strokeText(collectedCoins, canvas.width / 2 + 60, canvas.height / 2 + 100);
-  ctx.strokeText(`${difficulty}`, canvas.width / 2 + 60, canvas.height / 2 + 190);
-  ctx.fillText(score, canvas.width / 2 + 60, canvas.height / 2 - 160);
-  ctx.fillText(matchCoins, canvas.width / 2 + 60, canvas.height / 2 - 75);
-  ctx.fillText(`${previousHighscore}`, canvas.width / 2 + 60, canvas.height / 2 + 15);
-  ctx.fillText(collectedCoins, canvas.width / 2 + 60, canvas.height / 2 + 100);
-  ctx.fillText(`${difficulty}`, canvas.width / 2 + 60, canvas.height / 2 + 190);
-  //ctx.drawImage(arrowUpLogo, canvas.width / 2 - 90, canvas.height / 2 + 40);
-  
-// Disable the button temporarily using a timer
+  ctx.lineWidth = Math.round(8 * (canvas.width / 2560)); // Set the border width
+  ctx.font = `bolder ${Math.round(80 * (canvas.width / 2560))}px Helvetica`;
+
+  ctx.strokeText(score, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (160 * (canvas.height / 1080)));
+  ctx.strokeText(matchCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (75 * (canvas.height / 1080)));
+  ctx.strokeText(`${previousHighscore}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (15 * (canvas.height / 1080)));
+  ctx.strokeText(collectedCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (100 * (canvas.height / 1080)));
+  ctx.strokeText(`${difficulty}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (190 * (canvas.height / 1080)));
+  ctx.fillText(score, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (160 * (canvas.height / 1080)));
+  ctx.fillText(matchCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (75 * (canvas.height / 1080)));
+  ctx.fillText(`${previousHighscore}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (15 * (canvas.height / 1080)));
+  ctx.fillText(collectedCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (100 * (canvas.height / 1080)));
+  ctx.fillText(`${difficulty}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (190 * (canvas.height / 1080)));
+  // Disable the button temporarily using a timer
 var buttonEnabled = false;
 setTimeout(function() {
   buttonEnabled = true;
-  document.removeEventListener("mousedown", moveUp)
+  document.removeEventListener("mousedown", moveUp);
   document.addEventListener("mousedown", restartGame); // Press to continue to main menu
-  ctx.font = "bolder 70px Helvetica";
+  ctx.font = `bolder ${Math.round(70 * (canvas.width / 2560))}px Helvetica`;
   ctx.fillStyle = "white";
   ctx.strokeStyle = "black"; // Set the border color
-  ctx.lineWidth = 8; // Set the border width
-  ctx.strokeText("continue ", canvas.width / 2 - 140, canvas.height / 2 + 400);
-  ctx.fillText("continue ", canvas.width / 2 - 140, canvas.height / 2 + 400);
-}, 300); // Change the duration (in milliseconds) to your desired delay 
-
+  ctx.lineWidth = Math.round(8 * (canvas.width / 2560)); // Set the border width
+  ctx.strokeText("Continue", canvas.width / 2 - (140 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
+  ctx.fillText("Continue", canvas.width / 2 - (140 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
+}, 300); // Change the duration (in milliseconds) to your desired delay
 }
 
 //Plays the death sound effect.
@@ -1272,19 +1319,19 @@ if (skybox.x <= -skybox.width) {
 
   if (currentTime > sizePowerUpEndTime) {
     // Power-up has expired, reset effects
-    HITBOX_RIGHT = -40;
-    HITBOX_TOP = -60; 
-    HITBOX_BOTTOM = 30; 
-    HITBOX_LEFT = 140; 
-    birdUp.width = 250;
-    birdUp.height = 250;
-    birdDown.width = 250;
-    birdDown.height = 250;
+    HITBOX_RIGHT = -40 * (canvas.width / 2560);
+    HITBOX_TOP = -60 * (canvas.height / 1080); 
+    HITBOX_BOTTOM = 30 * (canvas.height / 1080); 
+    HITBOX_LEFT = 140 * (canvas.width / 2560); 
+    birdUp.width = 250 * (canvas.width / 2560);
+    birdUp.height = 250 * (canvas.height / 1080);
+    birdDown.width = 250 * (canvas.width / 2560);
+    birdDown.height = 250 * (canvas.height / 1080);
     isSize = false;
   }
 
   if (currentTime > reduceGapPowerUpEndTime) {
-    PIPE_GAP = 320;
+    PIPE_GAP = 320 * (canvas.height / 1080);
     isReduceGap = false;
     reduceGapSpeedMultiplier = 1;
   }
@@ -1301,8 +1348,8 @@ if (skybox.x <= -skybox.width) {
   }
 
   if (isReduceGap) {
-  PIPE_GAP = 600;
-  speed = speed * reduceGapSpeedMultiplier
+    PIPE_GAP = 600 * (canvas.height / 1080);
+    speed = speed * reduceGapSpeedMultiplier;
   }
 
   // Check for collision with pipes
