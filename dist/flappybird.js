@@ -11,7 +11,7 @@ const PIPE_COLOR_TOP = "red";
 const PIPE_COLOR_BOTTOM = "blue";
 var HITBOX_RIGHT = canvas.width * -0.0156;
 var HITBOX_TOP = canvas.height * -0.0556;
-var HITBOX_BOTTOM = canvas.height * 0.0278;
+var HITBOX_BOTTOM = canvas.height * 0.0208;
 var HITBOX_LEFT = canvas.width * 0.0547;
 var COIN_HITBOX = 0;
 const COIN_SIZE = canvas.width * 0.0006;
@@ -793,8 +793,8 @@ function addPipe() {
   var gapPosition = getRandomInt(Math.ceil(canvas.height * 0.093), canvas.height - PIPE_GAP - Math.ceil(canvas.height * 0.37));
   
   var pipeWidth = Math.ceil(canvas.width * 0.06);
-  var pipeHeightTop = gapPosition + Math.ceil(canvas.height * 0.093);
-  var pipeHeightBottom = canvas.height - (gapPosition + gapSize - Math.ceil(canvas.height * 0.4));
+  var pipeHeightTop = gapPosition + Math.ceil(canvas.height * 0.089);
+  var pipeHeightBottom = canvas.height - (gapPosition + gapSize - Math.ceil(canvas.height * 0.32));
 
   pipes.push({
     x: canvas.width,
@@ -833,8 +833,8 @@ function updatePipes() {
     var adjustedWidth = Math.round(p.width * (canvas.width / 2560));
     var adjustedHeight = Math.round(p.height * (canvas.height / 1080));
     var adjustedGap = Math.round(PIPE_GAP * (canvas.width / 2560));
-    var adjustedImageWidth = Math.round((p.width + 80) * (canvas.width / 2560));
-    var adjustedImageHeight = Math.round((p.height + 90) * (canvas.height / 1080));
+    var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560));
+    var adjustedImageHeight = Math.round((p.height + 120) * (canvas.height / 1080));
     
     // Draw top pipe
     ctx.fillStyle = PIPE_COLOR_TOP; 
@@ -846,7 +846,7 @@ function updatePipes() {
     ctx.fillRect(adjustedX, adjustedHeight + adjustedGap, adjustedWidth, bottomPipeHeight);
     
     // Render picture on top of the pipes
-    ctx.drawImage(pipeImage, adjustedX - Math.round(40 * (canvas.width / 2560)), adjustedY - Math.round(85 * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
+    ctx.drawImage(pipeImage, adjustedX - Math.round(40 * (canvas.width / 2560)), adjustedY - Math.round(110 * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
   }
 }
 
