@@ -1,10 +1,10 @@
 // Get the game canvas and its 2D rendering context
 var canvas = document.getElementById("gameCanvas");
-canvas.width = 2560;
-canvas.height = 1080;
+canvas.width = 1280;
+canvas.height = 720;
 var ctx = canvas.getContext("2d");
-const widthScaleFactor = canvas.width / 2560;
-const heightScaleFactor = canvas.height / 1080;
+// const widthScaleFactor = canvas.width / 2560;
+// const heightScaleFactor = canvas.height / 1080;
 
 // Constants
 const PIPE_PASSED = canvas.width * 0.0781;
@@ -31,7 +31,6 @@ let reduceGapIntervalId;
 // Set up event listeners
 document.addEventListener("mouseup", moveDown);
 document.getElementById("startButton").addEventListener("mousedown", moveUp);
-window.addEventListener("resize", resizeVideo); // Call resizeVideo on window resize event
 
 //Arrays
 var flapSounds = [];
@@ -178,26 +177,26 @@ borderBox.src = "assets/borderBox.png";
 
 // Define the bird object (for hitbox)
 var bird = {
-  x: canvas.width * 700 / 2560 * widthScaleFactor, // Adjusted x-coordinate
-  y: canvas.height * 400 / 1080 * heightScaleFactor, // Adjusted y-coordinate
-  width: canvas.width * 250 / 2560 * widthScaleFactor, // Adjusted width
-  height: canvas.height * 250 / 1080 * heightScaleFactor, // Adjusted height
+  x: canvas.width * 700 / 2560, // Adjusted x-coordinate
+  y: canvas.height * 400 / 1080, // Adjusted y-coordinate
+  width: canvas.width * 250 / 2560, // Adjusted width
+  height: canvas.height * 250 / 1080, // Adjusted height
 };
 
 // Define the bird going up object
 var birdUp = {
-  x: canvas.width * 700 / 2560 * widthScaleFactor,
-  y: canvas.height * 400 / 1080 * heightScaleFactor,
-  width: canvas.width * 250 / 2560 * widthScaleFactor,
-  height: canvas.height * 250 / 1080 * heightScaleFactor,
+  x: canvas.width * 700 / 2560,
+  y: canvas.height * 400 / 1080,
+  width: canvas.width * 250 / 2560,
+  height: canvas.height * 250 / 1080,
 };
 
 // Define the bird going down object
 var birdDown = {
-  x: canvas.width * 700 / 2560 * widthScaleFactor,
-  y: canvas.height * 400 / 1080 * heightScaleFactor,
-  width: canvas.width * 250 / 2560 * widthScaleFactor,
-  height: canvas.height * 250 / 1080 * heightScaleFactor,
+  x: canvas.width * 700 / 2560,
+  y: canvas.height * 400 / 1080,
+  width: canvas.width * 250 / 2560,
+  height: canvas.height * 250 / 1080,
 };
 
 // Define the ground object
@@ -961,7 +960,7 @@ function startGame() {
   // Hide the logo
   logo.style.display = "none";
   // Display "ready?" message for the first second
-  requestAnimationFrame(update);
+  update();
 }
 
 /**
@@ -1006,7 +1005,7 @@ function restartGame(event) {
     JUMP = 1.2 * (canvas.height / 1080);
     pipeStartSkip = 24;
     
-  
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     // Start the game
     startGame();
   }
@@ -1056,17 +1055,6 @@ function checkCollision() {
     }
   }
   return false; // No collision detected
-}
-
-/**
- * Resizes the video element to match the canvas size and sets the video source.
- */
-function resizeVideo() {
-  const video = document.getElementById("gameVideo");
-  const canvas = document.getElementById("gameCanvas");
-  video.style.width = canvas.clientWidth + "px";
-  video.style.height = canvas.clientHeight + "px";
-  video.src = "assets/hell.mp4";
 }
 
 var drawTimeout = null;
@@ -1360,8 +1348,6 @@ if (skybox.x <= -skybox.width) {
 }  
 
    // Clear canvas before drawing new elements each frame
-  
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Check if the game is started
     if (!isGameStarted) {
@@ -1506,9 +1492,6 @@ function adjustPipeSpawnRate() {
   // Assign the adjusted frame rate value to the pipeSpawnRate variable
   pipeSpawnRate = adjustedFrameRate;
 }
-
-// Resize the video element
-resizeVideo();
 
 // Start the game
 startGame();
