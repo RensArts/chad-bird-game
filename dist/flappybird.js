@@ -1,7 +1,8 @@
-
 var canvas = document.getElementById("gameCanvas");
+
 canvas.width = 2560;
 canvas.height = 1080;
+
 var ctx = canvas.getContext("2d");
 
 // Constants
@@ -49,7 +50,6 @@ var JUMP = 1.2; // Adjust the value of upward momentum
 var GRAVITY = 0.9; // Adjust this value to control the downward speed of the bird
 var PIPE_GAP = canvas.width * 0.125; // Adjust this value to control the gap of the spawn pipes
 var gapSize = canvas.width * 0.1953; // Consistent gap size
-var score = 0; // Variable to keep track of the score
 var collectedCoins = 0; // Variable to keep track of collected coins
 var matchCoins = 0; // Variable to keep track of coins collected in single match
 var groundSpeed = 0; // Track the speed of the ground movement
