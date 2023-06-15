@@ -15,47 +15,41 @@
       <img src="assets/coin-box.png" alt="Coin Box" id="coinBox">
       <span id="coinCount">0</span>
     
-    <div class="skins-container">
-      <div class="skin">
-        <img src="assets/birdUp.png" alt="Default" id="bird-up">
-        <p>$0</p>
-        <button class="purchase-button">Buy</button>
-      </div>
-      <div class="skin">
-        <img src="assets/storeAssets/birdUpCap.png" alt="Baseball Cap" id="bird-up-cap">
-        <p>$100</p>
-        <button class="purchase-button">Buy</button>
-      </div>
-      <div class="skin">
-        <img src="assets/storeAssets/birdUpSunglasses.png" alt="Sunglasses" id="bird-up-sunglasses">
-        <p>$500</p>
-        <button class="purchase-button">Buy</button>
-      </div>
-      <div class="skin">
-        <img src="assets/storeAssets/birdUpViking.png" alt="Viking" id="bird-up-viking">
-        <p>$750</p>
-        <button class="purchase-button">Buy</button>
-      </div>
-      <div class="skin">
-        <img src="assets/storeAssets/birdUpNinja.png" alt="Ninja" id="bird-up-ninja">
-        <p>$1000</p>
-        <button class="purchase-button">Buy</button>
-      </div>
-      <div class="skin">
-        <img src="assets/storeAssets/birdUpSir.png" alt="Sir" id="bird-up-sir">
-        <p>$2000</p>
-        <button class="purchase-button">Buy</button>
-      </div>
-      <div class="skin">
-        <img src="assets/storeAssets/birdUpRasta.png" alt="Rasta" id="bird-up-rasta">
-        <p>$3000</p>
-        <button class="purchase-button">Buy</button>
-      </div>
-      <div class="skin">
-        <img src="assets/storeAssets/birdUpBaller.png" alt="Baller" id="bird-up-baller">
-        <p>$10000</p>
-        <button class="purchase-button">Buy</button>
-      </div>
+    <div class="skins-container" id="skins-container">
+      <script>
+        const skins = [
+          {src: 'assets/birdUp.png', alt: 'Default', id: 'bird-up', price: '$0'},
+          {src: 'assets/storeAssets/birdUpCap.png', alt: 'Baseball Cap', id: 'bird-up-cap', price: '$100'},
+          {src: 'assets/storeAssets/birdUpSunglasses.png', alt: 'Sunglasses', id: 'bird-up-sunglasses', price: '$500'},
+          {src: 'assets/storeAssets/birdUpViking.png', alt: 'Viking', id: 'bird-up-viking', price: '$750'},
+          {src: 'assets/storeAssets/birdUpNinja.png', alt: 'Ninja', id: 'bird-up-ninja', price: '$1000'},
+          {src: 'assets/storeAssets/birdUpSir.png', alt: 'Sir', id: 'bird-up-sir', price: '$2000'},
+          {src: 'assets/storeAssets/birdUpRasta.png', alt: 'Rasta', id: 'bird-up-rasta', price: '$3000'},
+          {src: 'assets/storeAssets/birdUpBaller.png', alt: 'Baller', id: 'bird-up-baller', price: '$10000'}
+        ];
+
+        const skinsContainer = document.getElementById('skins-container');
+
+        skins.forEach(skin => {
+          const skinDiv = document.createElement('div');
+          skinDiv.classList.add('skin');
+
+          const img = document.createElement('img');
+          img.src = skin.src;
+          img.alt = skin.alt;
+          img.id = skin.id;
+
+          const p = document.createElement('p');
+          p.textContent = skin.price;
+
+          const button = document.createElement('button');
+          button.classList.add('purchase-button');
+          button.textContent = 'Buy';
+
+          skinDiv.append(img, p, button);
+          skinsContainer.append(skinDiv);
+        });
+      </script>
     </div>
     
     <div id="alertContainer"></div>
