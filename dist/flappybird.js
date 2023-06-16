@@ -1,4 +1,14 @@
 
+// Native resolution
+// var canvas = document.getElementById("gameCanvas");
+// canvas.width = 2560;
+// canvas.height = 1080;
+// var ctx = canvas.getContext("2d");
+
+// var resolutionAdjust = 1;
+// var secondResolutionAdjust = 1;
+
+// Resolution 0.5
 var canvas = document.getElementById("gameCanvas");
 canvas.width = 1280;
 canvas.height = 540;
@@ -7,24 +17,29 @@ var ctx = canvas.getContext("2d");
 var resolutionAdjust = 2;
 var secondResolutionAdjust = 1.5;
 
+// Resolution 0.25
+// var canvas = document.getElementById("gameCanvas");
+// canvas.width = 640;
+// canvas.height = 270;
+// var ctx = canvas.getContext("2d");
 
-
-
+// var resolutionAdjust = 4;
+// var secondResolutionAdjust = 2;
 
 
 // Constants
 const PIPE_PASSED = canvas.width * resolutionAdjust * 0.0781;
 const PIPE_WIDTH = canvas.width * resolutionAdjust * 0.0508;
-const PIPE_COLOR_TOP = "red";
-const PIPE_COLOR_BOTTOM = "blue";
-var HITBOX_RIGHT = canvas.width * resolutionAdjust * -0.0156;
-var HITBOX_TOP = canvas.height * resolutionAdjust * -0.0556;
-var HITBOX_BOTTOM = canvas.height * resolutionAdjust * 0.0208;
-var HITBOX_LEFT = canvas.width * resolutionAdjust * 0.0547;
+const PIPE_COLOR_TOP = "black";
+const PIPE_COLOR_BOTTOM = "black";
+var HITBOX_RIGHT = -40 * (canvas.width / 2560);
+var HITBOX_TOP = -75 * (canvas.height / 1080); 
+var HITBOX_BOTTOM = -10 * (canvas.height / 1080); 
+var HITBOX_LEFT = 140 * (canvas.width / 2560); 
 var COIN_HITBOX = 0;
 const COIN_SIZE = canvas.width * resolutionAdjust * 0.0006;
-const COIN_SPEED = 2.5; // Adjust the speed of the coin
-const STAR_SPEED = 3; // Adjust the speed of the stars
+const COIN_SPEED = 2.5 / secondResolutionAdjust; // Adjust the speed of the coin
+const STAR_SPEED = 3 / secondResolutionAdjust; // Adjust the speed of the stars
 const countDown = 2950; // time before game starts in ms
 let selectedButton = null;
 let coinIntervalId;
@@ -49,14 +64,14 @@ var reduceGaps = [];
 
 
 // Variables
-var PIPE_SPEED = 2; //Adjust the speed of the pipes
+var PIPE_SPEED = 2 / secondResolutionAdjust; //Adjust the speed of the pipes
 var skyboxSpeed = 1; // Adjust the speed of the skybox
 var difficulty = "normal"; // Default difficulty level
-var GROUND_SPEED = 2.1; // Adjust the speed of the ground and ceiling
-var JUMP = 1.2; // Adjust the value of upward momentum
-var GRAVITY = 0.9; // Adjust this value to control the downward speed of the bird
-var PIPE_GAP = canvas.width * resolutionAdjust * 0.125; // Adjust this value to control the gap of the spawn pipes
-var gapSize = canvas.width * resolutionAdjust * 0.1953; // Consistent gap size
+var GROUND_SPEED = 2.1 / secondResolutionAdjust; // Adjust the speed of the ground and ceiling
+var JUMP = 1.2 * secondResolutionAdjust;// Adjust the value of upward momentum
+var GRAVITY = 0.9 * secondResolutionAdjust; // Adjust this value to control the downward speed of the bird
+var PIPE_GAP = 320 * (canvas.height / 1080); // Adjust this value to control the gap of the spawn pipes
+var gapSize = 500 * (canvas.height / 1080); // Consistent gap size
 var score = 0; // Variable to keep track of the score
 var collectedCoins = 0; // Variable to keep track of collected coins
 var matchCoins = 0; // Variable to keep track of coins collected in single match
@@ -67,7 +82,7 @@ var maxStarSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxGhostSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
 var minSizeSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxSizeSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxSizeSpawn = 6000; // Maximum spawn rate in milliseconds (40 seconds)
 var minReduceGapSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxReduceGapSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
 var starSpeedMultiplier = 1; // Initial speed multiplier
@@ -101,9 +116,9 @@ var pipeSpawnNormal = 0.22; // set this value if changing the pipespawnrate of h
 var pipeSpawnHard = 0.34; // set this value if changing the pipe spawn rate of normal difficulty in function
 
 // to adjust game speed based on frames per 0.1 seconds (in update)
-var speed = 8; // Variable to increment speed in function Update();
-var speedNormal = 8; // set this value if changing the speed of normal difficulty in function
-var speedHard = 10; // set this value if changing the speed of hard difficulty in function
+var speed = 8 / secondResolutionAdjust; // Variable to increment speed in function Update();
+var speedNormal = 8 / secondResolutionAdjust; // set this value if changing the speed of normal difficulty in function
+var speedHard = 10 / secondResolutionAdjust; // set this value if changing the speed of hard difficulty in function
 var frameCount = 0; // set counter for game speed update interval
 var fps = 0; // set default value for game speed update interval
 var lastTime = performance.now(); // counts frames in update
@@ -183,26 +198,26 @@ borderBox.src = "assets/borderBox.png";
 
 // Define the bird object (for hitbox)
 var bird = {
-  x: canvas.width / resolutionAdjust * 700 / 2560, // Adjusted x-coordinate
-  y: canvas.height / resolutionAdjust * 400 / 1080, // Adjusted y-coordinate
-  width: canvas.width * resolutionAdjust * 250 / 2560, // Adjusted width
-  height: canvas.height * resolutionAdjust * 250 / 1080, // Adjusted height
+  x: canvas.width * 700 / 2560, // Adjusted x-coordinate
+  y: canvas.height * 400 / 1080, // Adjusted y-coordinate
+  width: canvas.width  * 250 / 2560, // Adjusted width
+  height: canvas.height  * 250 / 1080, // Adjusted height
 };
 
 // Define the bird going up object
 var birdUp = {
-  x: canvas.width / resolutionAdjust * 700 / 2560,
-  y: canvas.height / resolutionAdjust * 400 / 1080,
-  width: canvas.width / resolutionAdjust * 250 / 2560,
-  height: canvas.height / resolutionAdjust * 250 / 1080,
+  x: canvas.width  * 700 / 2560,
+  y: canvas.height  * 400 / 1080,
+  width: canvas.width  * 250 / 2560,
+  height: canvas.height  * 250 / 1080,
 };
 
 // Define the bird going down object
 var birdDown = {
-  x: canvas.width / resolutionAdjust * 700 / 2560,
-  y: canvas.height / resolutionAdjust * 400 / 1080,
-  width: canvas.width / resolutionAdjust * 250 / 2560,
-  height: canvas.height / resolutionAdjust * 250 / 1080,
+  x: canvas.width  * 700 / 2560,
+  y: canvas.height  * 400 / 1080,
+  width: canvas.width  * 250 / 2560,
+  height: canvas.height  * 250 / 1080,
 };
 
 // Define the ground object
@@ -360,8 +375,8 @@ function generateReduceGapSpawnRate() {
 function addCoin() {
   var coin = {
     x: canvas.width, // Spawn the coin at the right edge of the canvas
-    y: getRandomInt(canvas.height * resolutionAdjust * 450 / 720, canvas.height * resolutionAdjust - (canvas.height * resolutionAdjust * 450 / 720)), // Randomize the coin's y-coordinate
-    radius: canvas.width * resolutionAdjust * 30 / 1280, // Adjusted size of the coin
+    y: getRandomInt(canvas.height * 450 / 1080, canvas.height - (canvas.height * 450 / 1080)), // Randomize the coin's y-coordinate
+    radius: canvas.width * 30 / 1080, // Adjusted size of the coin
   };
   coins.push(coin);
 }
@@ -370,8 +385,8 @@ function addCoin() {
 function addStar() {
   var star = {
     x: canvas.width, // Spawn the star at the right edge of the canvas
-    y: getRandomInt(canvas.height * resolutionAdjust * 450 / 720, canvas.height * resolutionAdjust - (canvas.height * resolutionAdjust * 450 / 720)), // Randomize the star's y-coordinate
-    radius: canvas.width * resolutionAdjust * 45 / 1280, // Adjusted size of the star
+    y: getRandomInt(canvas.height * 450 / 1080, canvas.height  - (canvas.height * 450 / 1080)), // Randomize the star's y-coordinate
+    radius: canvas.width * 45 / 1080, // Adjusted size of the star
   };
   stars.push(star);
 }
@@ -380,8 +395,8 @@ function addStar() {
 function addGhost() {
   var ghost = {
     x: canvas.width, // Spawn the ghost at the right edge of the canvas
-    y: getRandomInt(canvas.height * resolutionAdjust * 450 / 720, canvas.height * resolutionAdjust - (canvas.height * resolutionAdjust * 450 / 720)), // Randomize the ghost's y-coordinate
-    radius: canvas.width * resolutionAdjust * 45 / 1280, // Adjusted size of the ghost
+    y: getRandomInt(canvas.height * 450 / 1080, canvas.height - (canvas.height * 450 / 1080)), // Randomize the ghost's y-coordinate
+    radius: canvas.width * 45 / 1080, // Adjusted size of the ghost
   };
   ghosts.push(ghost);
 }
@@ -390,8 +405,8 @@ function addGhost() {
 function addSize() {
   var size = {
     x: canvas.width, // Spawn the size at the right edge of the canvas
-    y: getRandomInt(canvas.height * resolutionAdjust * 450 / 720, canvas.height * resolutionAdjust - (canvas.height * resolutionAdjust * 450 / 720)), // Randomize the size's y-coordinate
-    radius: canvas.width * resolutionAdjust * 45 / 1280, // Adjusted size of the size
+    y: getRandomInt(canvas.height * 450 / 1080, canvas.height - (canvas.height * 450 / 1080)), // Randomize the size's y-coordinate
+    radius: canvas.width * 45 / 1080, // Adjusted size of the size
   };
   sizes.push(size);
 }
@@ -400,8 +415,8 @@ function addSize() {
 function addReduceGap() {
   var reduceGap = {
     x: canvas.width, // Spawn the reduceGap at the right edge of the canvas
-    y: getRandomInt(canvas.height * resolutionAdjust * 450 / 720, canvas.height * resolutionAdjust - (canvas.height * resolutionAdjust * 450 / 720)), // Randomize the reduceGap's y-coordinate
-    radius: canvas.width * resolutionAdjust * 45 / 1280, // Adjusted size of the reduceGap
+    y: getRandomInt(canvas.height * 450 / 1080, canvas.height - (canvas.height * 450 / 1080)), // Randomize the reduceGap's y-coordinate
+    radius: canvas.width * 45 / 1080, // Adjusted size of the reduceGap
   };
   reduceGaps.push(reduceGap);
 }
@@ -798,11 +813,11 @@ function getRandomInt(min, max) {
  * Adds a new pair of pipes and the coins to the game.
  */
 function addPipe() {
-  var gapPosition = getRandomInt(Math.ceil(canvas.height * resolutionAdjust * 0.093), canvas.height * resolutionAdjust - PIPE_GAP - Math.ceil(canvas.height * resolutionAdjust * 0.37));
+  var gapPosition = getRandomInt(Math.ceil(canvas.height * 0.093), canvas.height - PIPE_GAP  - Math.ceil(canvas.height * 0.37));
   
-  var pipeWidth = Math.ceil(canvas.width * resolutionAdjust * 0.06);
-  var pipeHeightTop = gapPosition + Math.ceil(canvas.height * resolutionAdjust * 0.089);
-  var pipeHeightBottom = canvas.height * resolutionAdjust - (gapPosition + gapSize - Math.ceil(canvas.height * resolutionAdjust * 0.32));
+  var pipeWidth = Math.ceil(canvas.width * 0.06);
+  var pipeHeightTop = gapPosition + Math.ceil(canvas.height * 0.089);
+  var pipeHeightBottom = canvas.height - (gapPosition + gapSize - Math.ceil(canvas.height * 0.32));
 
   pipes.push({
     x: canvas.width,
@@ -825,8 +840,8 @@ function addPipe() {
   groundSpeed = GROUND_SPEED * speed;
 }
 
-var pipeImage = new Image();
-pipeImage.src = 'assets/pipeTexture.png';
+//var pipeImage = new Image();
+//pipeImage.src = 'assets/pipeTexture.png';
 
 // Draws the pipes on the canvas and moves them
 function updatePipes() {
@@ -836,13 +851,21 @@ function updatePipes() {
     p.x -= PIPE_SPEED * speed; // Pipe movement speed
     
     // Calculate adjusted sizes and positions based on canvas resolution
-    var adjustedX = Math.round(p.x * (canvas.width * secondResolutionAdjust / 2560));
-    var adjustedY = Math.round(p.y * (canvas.height * secondResolutionAdjust / 1080));
-    var adjustedWidth = Math.round(p.width * (canvas.width * secondResolutionAdjust / 2560));
-    var adjustedHeight = Math.round(p.height * (canvas.height * secondResolutionAdjust / 1080));
-    var adjustedGap = Math.round(PIPE_GAP * (canvas.width * resolutionAdjust / 2560));
-    var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width * secondResolutionAdjust / 2560));
-    var adjustedImageHeight = Math.round((p.height + 120) * (canvas.height  * secondResolutionAdjust/ 1080));
+    var adjustedX = Math.round(p.x * (canvas.width * resolutionAdjust / 2560));
+    var adjustedY = Math.round(p.y * (canvas.height * resolutionAdjust / 1080));
+    var adjustedWidth = Math.round(p.width * (canvas.width / 2560 * resolutionAdjust));
+    var adjustedHeight = Math.round(p.height * (canvas.height / 1080 * resolutionAdjust));
+    var adjustedGap = Math.round(PIPE_GAP * (canvas.width / 2560 * resolutionAdjust));
+    //var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
+    //var adjustedImageHeight = Math.round((p.height + 140) * (canvas.height / 1080 * secondResolutionAdjust));
+    
+    // Debugging: Log the adjusted values for inspection
+    console.log("Adjusted X:", adjustedX);
+    console.log("Adjusted Y:", adjustedY);
+    console.log("Adjusted Width:", adjustedWidth);
+    console.log("Adjusted Height:", adjustedHeight);
+    //console.log("Adjusted Image Width:", adjustedImageWidth);
+    //console.log("Adjusted Image Height:", adjustedImageHeight);
     
     // Draw top pipe
     ctx.fillStyle = PIPE_COLOR_TOP; 
@@ -854,7 +877,7 @@ function updatePipes() {
     ctx.fillRect(adjustedX, adjustedHeight + adjustedGap, adjustedWidth, bottomPipeHeight);
     
     // Render picture on top of the pipes
-    ctx.drawImage(pipeImage, adjustedX - Math.round(40 * (canvas.width * secondResolutionAdjust / 2560)), adjustedY - Math.round(110 * (canvas.height * resolutionAdjust / 1080)), adjustedImageWidth, adjustedImageHeight);
+    //ctx.drawImage(pipeImage, adjustedX - Math.round(240 * (canvas.width / 2560)), adjustedY - Math.round(140 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
   }
 }
 
@@ -892,10 +915,10 @@ function handleVerticalMovement() {
   }
 
   if (isMovingUp && bird.y > 0) {
-    bird.y -= JUMP * speed;
+    bird.y -= JUMP * speed / resolutionAdjust;
     birdUp.y = bird.y; // Update birdUp's position
   } else {
-    bird.y += GRAVITY * speed;
+    bird.y += GRAVITY * speed / resolutionAdjust;
     birdDown.y = bird.y; // Update birdDown's position
   }
 }
@@ -992,31 +1015,31 @@ function restartGame(event) {
     isGameStarted = false;
     score = 0;
     matchCoins = 0;
-    bird.y = Math.round(400 * (canvas.height * resolutionAdjust / 1080));
-    bird.x = Math.round(700 * (canvas.width * resolutionAdjust / 2560));
-    birdUp.y = Math.round(400 * (canvas.height * resolutionAdjust / 1080));
-    birdUp.x = Math.round(700 * (canvas.width * resolutionAdjust / 2560));
-    birdDown.y = Math.round(400 * (canvas.height * resolutionAdjust / 1080));
-    birdDown.x = Math.round(700 * (canvas.width * resolutionAdjust / 2560));
-    birdUp.width = Math.round(250 * (canvas.width * resolutionAdjust / 2560));
-    birdUp.height = Math.round(250 * (canvas.height * resolutionAdjust / 1080));
-    birdDown.width = Math.round(250 * (canvas.width * resolutionAdjust / 2560));
-    birdDown.height = Math.round(250 * (canvas.height * resolutionAdjust / 1080));
-    HITBOX_RIGHT = Math.round(-40 * (canvas.width * resolutionAdjust / 2560));
-    HITBOX_TOP = Math.round(-60 * (canvas.height * resolutionAdjust / 1080));
-    HITBOX_BOTTOM = Math.round(30 * (canvas.height * resolutionAdjust / 1080));
-    HITBOX_LEFT = Math.round(140 * (canvas.width * resolutionAdjust / 2560));
+    bird.y = 400 * (canvas.height / 1080);
+    bird.x = 700 * (canvas.width / 2560);
+    birdUp.y = 400 * (canvas.height / 1080);
+    birdUp.x = 700 * (canvas.width / 2560);
+    birdDown.y = 400 * (canvas.height / 1080);
+    birdDown.x = 700 * (canvas.width / 2560);
+    birdUp.width = 250 * (canvas.width * resolutionAdjust / 2560);
+    birdUp.height = 250 * (canvas.height * resolutionAdjust / 1080);
+    birdDown.width = 250 * (canvas.width * resolutionAdjust / 2560);
+    birdDown.height = 250 * (canvas.height * resolutionAdjust / 1080);
+    HITBOX_RIGHT = -40 * (canvas.width / 2560);
+    HITBOX_TOP = -75 * (canvas.height / 1080); 
+    HITBOX_BOTTOM = -10 * (canvas.height / 1080); 
+    HITBOX_LEFT = 140 * (canvas.width / 2560); 
     pipes = [];
     coins = [];
     isSize = false;
     isReduceGap = false;
-    GRAVITY = 0.9 * (canvas.height * resolutionAdjust / 1080);
-    PIPE_SPEED = 2 * (canvas.width * resolutionAdjust / 2560);
-    PIPE_GAP = Math.round(320 * (canvas.width * resolutionAdjust / 2560));
-    gapSize = Math.round(500 * (canvas.height * resolutionAdjust / 1080));
-    GROUND_SPEED = 2.1 * (canvas.width * resolutionAdjust / 2560);
-    skyboxSpeed = 1 * (canvas.width * resolutionAdjust / 2560);
-    JUMP = 1.2 * (canvas.height * resolutionAdjust / 1080);
+    GRAVITY = 0.9 * secondResolutionAdjust
+    PIPE_SPEED = 2 / secondResolutionAdjust
+    PIPE_GAP = 320 * (canvas.width / 2560);
+    gapSize = 500 * (canvas.height / 1080);
+    GROUND_SPEED = 2.1 / secondResolutionAdjust
+    skyboxSpeed = 1 * (canvas.width / 2560);
+    JUMP = 1.2 * secondResolutionAdjust
     pipeStartSkip = 24;
     
     
@@ -1058,11 +1081,11 @@ function checkCollision() {
     if (bird.x + HITBOX_RIGHT + bird.width > p.x && bird.x + HITBOX_LEFT < p.x + p.width) {
       // Check if bird overlaps vertically with top or bottom pipe
       if (bird.y < p.y + HITBOX_TOP + p.height && bird.y + HITBOX_BOTTOM + bird.height > p.y) {
-        GRAVITY = 1.6;
-        PIPE_SPEED = 0.5;
-        GROUND_SPEED = 0.55;
-        skyboxSpeed = 0.25;
-        JUMP = -1.6;
+        GRAVITY = 1.6 * secondResolutionAdjust;
+        PIPE_SPEED = 0.5 / secondResolutionAdjust;
+        GROUND_SPEED = 0.55 / secondResolutionAdjust;
+        skyboxSpeed = 0.25
+        JUMP = -1.6 * secondResolutionAdjust;
         isBirdFalling = true;
         return true; // Collision detected
       }
@@ -1110,44 +1133,44 @@ function drawBird() {
       birdUpImg,
       birdUp.x * (canvas.width * resolutionAdjust / 2560),
       birdUp.y * (canvas.height * resolutionAdjust / 1080),
-      birdUp.width * (canvas.width * resolutionAdjust / 2560),
-      birdUp.height * (canvas.height * resolutionAdjust / 1080)
+      birdUp.width * (canvas.width / 2560),
+      birdUp.height * (canvas.height / 1080)
     );
   } else if (!isMovingUp && bird.y <= canvas.height - bird.height && !isGhost && !isSize) {
     ctx.drawImage(
       birdDownImg,
       birdDown.x * (canvas.width * resolutionAdjust / 2560),
       birdDown.y * (canvas.height * resolutionAdjust / 1080),
-      birdDown.width * (canvas.width * resolutionAdjust / 2560),
-      birdDown.height * (canvas.height * resolutionAdjust / 1080)
+      birdDown.width * (canvas.width / 2560),
+      birdDown.height * (canvas.height / 1080)
     );
   } else if (isMovingUp && bird.y > 0 && isSize) {
-    birdUp.width = Math.round(125 * (canvas.width * resolutionAdjust / 2560));
-    birdUp.height = Math.round(125 * (canvas.height * resolutionAdjust / 1080));
-    HITBOX_BOTTOM = Math.round(20 * (canvas.height * resolutionAdjust / 1080));
-    HITBOX_LEFT = Math.round(200 * (canvas.width * resolutionAdjust / 2560));
-    HITBOX_RIGHT = Math.round(-30 * (canvas.width * resolutionAdjust / 2560));
-    HITBOX_TOP = Math.round(-150 * (canvas.height * resolutionAdjust / 1080));
+    birdUp.width = 125 * (canvas.width / 2560);
+    birdUp.height = 125 * (canvas.height / 1080);
+    HITBOX_BOTTOM = -80 / secondResolutionAdjust * (canvas.height / 1080);
+    HITBOX_LEFT = 145/ secondResolutionAdjust * (canvas.width / 2560);
+    HITBOX_RIGHT = -120/ secondResolutionAdjust * (canvas.width / 2560);
+    HITBOX_TOP = -60 * secondResolutionAdjust  * (canvas.height / 1080);
 
     ctx.drawImage(
       birdUpImg,
-      (birdUp.x + 120) * (canvas.width * resolutionAdjust / 2560),
-      (birdUp.y + 100) * (canvas.height * resolutionAdjust / 1080),
+      (birdUp.x + 20) * (canvas.width  / 2560 * resolutionAdjust),
+      (birdUp.y + 10) * (canvas.height  / 1080 * resolutionAdjust),
       birdUp.width,
       birdUp.height
     );
   } else if (!isMovingUp && bird.y <= canvas.height - bird.height && isSize && !isGhost) {
-    birdDown.width = Math.round(125 * (canvas.width * resolutionAdjust / 2560));
-    birdDown.height = Math.round(125 * (canvas.height * resolutionAdjust / 1080));
-    HITBOX_BOTTOM = Math.round(20 * (canvas.height * resolutionAdjust / 1080));
-    HITBOX_LEFT = Math.round(200 * (canvas.width * resolutionAdjust / 2560));
-    HITBOX_RIGHT = Math.round(-30 * (canvas.width * resolutionAdjust / 2560));
-    HITBOX_TOP = Math.round(-150 * (canvas.height * resolutionAdjust / 1080));
+    birdDown.width = 125 * (canvas.width / 2560);
+    birdDown.height = 125 * (canvas.height / 1080);
+    HITBOX_BOTTOM = -80 / secondResolutionAdjust * (canvas.height / 1080);
+    HITBOX_LEFT = 200 / secondResolutionAdjust * (canvas.width  / 2560);
+    HITBOX_RIGHT = -120 / secondResolutionAdjust * (canvas.width / 2560);
+    HITBOX_TOP = -60 / secondResolutionAdjust * (canvas.height / 1080);
 
     ctx.drawImage(
       birdDownImg,
-      (birdDown.x + 120) * (canvas.width * resolutionAdjust / 2560),
-      (birdDown.y + 100) * (canvas.height * resolutionAdjust / 1080),
+      (birdDown.x + 20) * (canvas.width / 2560 * resolutionAdjust),
+      (birdDown.y + 10) * (canvas.height / 1080 * resolutionAdjust),
       birdDown.width,
       birdDown.height
     );
@@ -1214,7 +1237,6 @@ function gameOver() {
   ctx.strokeStyle = "black"; // Set the border color
   ctx.lineWidth = Math.round(8 * (canvas.width / 2560)); // Set the border width
   ctx.font = `bolder ${Math.round(80 * (canvas.width / 2560))}px Helvetica`;
-
 
   ctx.strokeText(score, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (160 * (canvas.height / 1080)));
   ctx.strokeText(matchCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (75 * (canvas.height / 1080)));
@@ -1296,18 +1318,19 @@ if (skybox.x <= -skybox.width) {
 
   // Move the skybox
   skybox.x -= skyboxSpeed;
+
   // Check for collision with top border
-  if (bird.y < 20) {
+  if (bird.y < 10 / resolutionAdjust) {
     isGameOver = true; // Set the game over state
     drawBird();
     gameOver(); // Call the game over function
-    JUMP = -1.6
-    GRAVITY = 1.6
+    JUMP = -1.6 
+    GRAVITY = 1.6 * secondResolutionAdjust
     document.removeEventListener("mousedown", moveUp)
   }
   
   // Check for collision with bottom border
-  if (bird.y + bird.height > canvas.height + 40) {
+  if (bird.y + bird.height > canvas.height + 40 / resolutionAdjust) {
     isGameOver = true; // Set the game over state
     gameOver(); // Call the game over function
     return;
@@ -1330,10 +1353,10 @@ if (skybox.x <= -skybox.width) {
 
   if (currentTime > sizePowerUpEndTime) {
     // Power-up has expired, reset effects
-    HITBOX_RIGHT = -40 * (canvas.width * resolutionAdjust / 2560);
-    HITBOX_TOP = -60 * (canvas.height * resolutionAdjust / 1080); 
-    HITBOX_BOTTOM = 30 * (canvas.height * resolutionAdjust / 1080); 
-    HITBOX_LEFT = 140 * (canvas.width * resolutionAdjust / 2560); 
+    HITBOX_RIGHT = -40 * (canvas.width / 2560);
+    HITBOX_TOP = -75 * (canvas.height / 1080); 
+    HITBOX_BOTTOM = -10 * (canvas.height / 1080); 
+    HITBOX_LEFT = 140 * (canvas.width / 2560); 
     birdUp.width = 250 * (canvas.width * resolutionAdjust / 2560);
     birdUp.height = 250 * (canvas.height * resolutionAdjust / 1080);
     birdDown.width = 250 * (canvas.width * resolutionAdjust / 2560);
@@ -1342,7 +1365,7 @@ if (skybox.x <= -skybox.width) {
   }
 
   if (currentTime > reduceGapPowerUpEndTime) {
-    PIPE_GAP = 320 * (canvas.height * resolutionAdjust / 1080);
+    PIPE_GAP = 320 * (canvas.height / 1080);
     isReduceGap = false;
     reduceGapSpeedMultiplier = 1;
   }
@@ -1363,17 +1386,16 @@ if (skybox.x <= -skybox.width) {
     speed = speed * reduceGapSpeedMultiplier;
   }
 
-  ctx.clearRect(0, 0, canvas.width * resolutionAdjust, canvas.height * resolutionAdjust);
-
-
   // Check for collision with pipes
   if (checkCollision()) {
     deathSound.play()
     backgroundMusic.pause()
     isGameOver = true; // Set the game over state
+    return;
 }  
 
    // Clear canvas before drawing new elements each frame
+   ctx.clearRect(0, 0, canvas.width * resolutionAdjust, canvas.height * resolutionAdjust);
 
     // Check if the game is started
     if (!isGameStarted) {
