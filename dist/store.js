@@ -1,5 +1,5 @@
-var canvas = document.getElementById("storeCanvas");
-var video = document.getElementById("storeVideo");
+const canvas = document.getElementById("storeCanvas");
+const video = document.getElementById("storeVideo");
 
 // Create Audio objects for each sound
 const buttonSound = new Audio("assets/button-sound.mp3");
@@ -25,15 +25,15 @@ window.onload = function() {
   video.play();
 
   // Check if there are purchased skins in local storage
-  var purchasedSkins = JSON.parse(localStorage.getItem("purchasedSkins")) || [];
-  var equippedSkin = localStorage.getItem("equippedSkin");
+  const purchasedSkins = JSON.parse(localStorage.getItem("purchasedSkins")) || [];
+  const equippedSkin = localStorage.getItem("equippedSkin");
 
   // Find all the purchase buttons
-  var purchaseButtons = document.querySelectorAll(".purchase-button");
+  const purchaseButtons = document.querySelectorAll(".purchase-button");
 
   // Loop through each purchase button
   purchaseButtons.forEach(function(button) {
-    var skinName = button.parentNode.querySelector("img").alt;
+    const skinName = button.parentNode.querySelector("img").alt;
 
     if (purchasedSkins.includes(skinName)) {
       // Skin is purchased but not equipped
@@ -50,7 +50,7 @@ window.onload = function() {
   });
 
   // Update the coin count display
-  var availableCoins = parseInt(localStorage.getItem("coins")) || 0;
+  const availableCoins = parseInt(localStorage.getItem("coins")) || 0;
   updateCoinCount(availableCoins);
 };
 
@@ -62,15 +62,15 @@ function goBackToIndex() {
 }
 
 // Get all purchase buttons on the page
-var purchaseButtons = document.querySelectorAll(".purchase-button");
+const purchaseButtons = document.querySelectorAll(".purchase-button");
 
 // Loop through each purchase button
 purchaseButtons.forEach(function(button) {
   button.addEventListener("click", function() {
     buttonSound.play();
     // Get the price and skin name
-    var skinPrice = parseInt(this.parentNode.querySelector("p").innerText.split("$")[1]);
-    var skinName = this.parentNode.querySelector("img").alt;
+    const skinPrice = parseInt(this.parentNode.querySelector("p").innerText.split("$")[1]);
+    const skinName = this.parentNode.querySelector("img").alt;
 
     // Check if the player has already purchased the skin
     var purchasedSkins = JSON.parse(localStorage.getItem("purchasedSkins")) || [];
@@ -84,10 +84,10 @@ purchaseButtons.forEach(function(button) {
         this.disabled = false;
       } else {
         // Skin is not equipped, so equip it
-        var prevEquippedSkinButton = document.querySelector(".equipped");
+        const prevEquippedSkinButton = document.querySelector(".equipped");
         if (prevEquippedSkinButton) {
           // Unequip the previously equipped skin
-          var prevEquippedSkinName = prevEquippedSkinButton.parentNode.querySelector("img").alt;
+          const prevEquippedSkinName = prevEquippedSkinButton.parentNode.querySelector("img").alt;
           prevEquippedSkinButton.innerText = "Equip";
           prevEquippedSkinButton.classList.remove("equipped");
           purchasedSkins.push(prevEquippedSkinName);
@@ -102,7 +102,7 @@ purchaseButtons.forEach(function(button) {
       // Skin is not purchased yet, proceed with the purchase logic
 
       // Check if the player has enough coins
-      var availableCoins = parseInt(localStorage.getItem("coins")) || 0;
+      let availableCoins = parseInt(localStorage.getItem("coins")) || 0;
       if (availableCoins >= skinPrice) {
         // Purchase the skin
         // Subtract the price from the available coins
@@ -136,12 +136,12 @@ purchaseButtons.forEach(function(button) {
 });
 
 function updateCoinCount(count) {
-  var coinCountElement = document.getElementById("coinCount");
+  const coinCountElement = document.getElementById("coinCount");
   coinCountElement.innerText = count;
 }
 
 function showAlert(message, type) {
-  var alertBox = document.createElement("div");
+  const alertBox = document.createElement("div");
   alertBox.innerText = message;
   alertBox.classList.add("alert");
 
@@ -149,7 +149,7 @@ function showAlert(message, type) {
     alertBox.classList.add(type);
   }
 
-  var alertContainer = document.getElementById("alertContainer");
+  const alertContainer = document.getElementById("alertContainer");
   alertContainer.appendChild(alertBox);
 
   setTimeout(function() {
