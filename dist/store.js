@@ -1,5 +1,5 @@
-const canvas = document.getElementById("storeCanvas");
-const video = document.getElementById("storeVideo");
+var canvas = document.getElementById("storeCanvas");
+var video = document.getElementById("storeVideo");
 
 // Create Audio objects for each sound
 const buttonSound = new Audio("assets/button-sound.mp3");
@@ -25,15 +25,15 @@ window.onload = function() {
   video.play();
 
   // Check if there are purchased skins in local storage
-  const purchasedSkins = JSON.parse(localStorage.getItem("purchasedSkins")) || [];
-  const equippedSkin = localStorage.getItem("equippedSkin");
+  var purchasedSkins = JSON.parse(localStorage.getItem("purchasedSkins")) || [];
+  var equippedSkin = localStorage.getItem("equippedSkin");
 
   // Find all the purchase buttons
-  const purchaseButtons = document.querySelectorAll(".purchase-button");
+  var purchaseButtons = document.querySelectorAll(".purchase-button");
 
   // Loop through each purchase button
   purchaseButtons.forEach(function(button) {
-    const skinName = button.parentNode.querySelector("img").alt;
+    var skinName = button.parentNode.querySelector("img").alt;
 
     if (purchasedSkins.includes(skinName)) {
       // Skin is purchased but not equipped
@@ -50,7 +50,7 @@ window.onload = function() {
   });
 
   // Update the coin count display
-  const availableCoins = parseInt(localStorage.getItem("coins")) || 0;
+  var availableCoins = parseInt(localStorage.getItem("coins")) || 0;
   updateCoinCount(availableCoins);
 };
 
@@ -62,18 +62,18 @@ function goBackToIndex() {
 }
 
 // Get all purchase buttons on the page
-const purchaseButtons = document.querySelectorAll(".purchase-button");
+var purchaseButtons = document.querySelectorAll(".purchase-button");
 
 // Loop through each purchase button
 purchaseButtons.forEach(function(button) {
   button.addEventListener("click", function() {
     buttonSound.play();
     // Get the price and skin name
-    const skinPrice = parseInt(this.parentNode.querySelector("p").innerText.split("$")[1]);
-    const skinName = this.parentNode.querySelector("img").alt;
+    var skinPrice = parseInt(this.parentNode.querySelector("p").innerText.split("$")[1]);
+    var skinName = this.parentNode.querySelector("img").alt;
 
     // Check if the player has already purchased the skin
-    const purchasedSkins = JSON.parse(localStorage.getItem("purchasedSkins")) || [];
+    var purchasedSkins = JSON.parse(localStorage.getItem("purchasedSkins")) || [];
     if (purchasedSkins.includes(skinName)) {
       // Skin is already purchased, so toggle its equipped status
       if (this.classList.contains("equipped")) {
@@ -84,10 +84,10 @@ purchaseButtons.forEach(function(button) {
         this.disabled = false;
       } else {
         // Skin is not equipped, so equip it
-        const prevEquippedSkinButton = document.querySelector(".equipped");
+        var prevEquippedSkinButton = document.querySelector(".equipped");
         if (prevEquippedSkinButton) {
           // Unequip the previously equipped skin
-          const prevEquippedSkinName = prevEquippedSkinButton.parentNode.querySelector("img").alt;
+          var prevEquippedSkinName = prevEquippedSkinButton.parentNode.querySelector("img").alt;
           prevEquippedSkinButton.innerText = "Equip";
           prevEquippedSkinButton.classList.remove("equipped");
           purchasedSkins.push(prevEquippedSkinName);
@@ -102,7 +102,7 @@ purchaseButtons.forEach(function(button) {
       // Skin is not purchased yet, proceed with the purchase logic
 
       // Check if the player has enough coins
-      let availableCoins = parseInt(localStorage.getItem("coins")) || 0;
+      var availableCoins = parseInt(localStorage.getItem("coins")) || 0;
       if (availableCoins >= skinPrice) {
         // Purchase the skin
         // Subtract the price from the available coins
@@ -136,12 +136,12 @@ purchaseButtons.forEach(function(button) {
 });
 
 function updateCoinCount(count) {
-  const coinCountElement = document.getElementById("coinCount");
+  var coinCountElement = document.getElementById("coinCount");
   coinCountElement.innerText = count;
 }
 
 function showAlert(message, type) {
-  const alertBox = document.createElement("div");
+  var alertBox = document.createElement("div");
   alertBox.innerText = message;
   alertBox.classList.add("alert");
 
@@ -149,7 +149,7 @@ function showAlert(message, type) {
     alertBox.classList.add(type);
   }
 
-  const alertContainer = document.getElementById("alertContainer");
+  var alertContainer = document.getElementById("alertContainer");
   alertContainer.appendChild(alertBox);
 
   setTimeout(function() {

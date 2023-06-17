@@ -16,7 +16,7 @@ body {
 }
 
 #gameCanvas {
-  position: relative; 
+  position: absolute; 
   z-index: 1;
   width: 100%;
   height: 100%;
@@ -69,11 +69,16 @@ body {
   border-radius: 15px;
 }
 
-#storeButton {
-  position: absolute;
+#buttonsContainer {
+  position: fixed;
   z-index: 3;
   bottom: 8%;
-  right: 6%;
+  right: 5%;
+  display: flex;
+  align-items: center;
+}
+
+#storeButton {
   width: 110px;
   height: 110px;
   background-color: #4CAF50;
@@ -82,6 +87,104 @@ body {
   font-size: 35px;
   border-radius: 10px;
   cursor: pointer;
+  margin-right: 40px; 
+}
+
+#settingsButton {
+  width: 110px;
+  height: 110px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  font-size: 25px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.resolutionButton {
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  color: black;
+  font-size: 18px;
+  border-radius: 10px;
+  margin-right: 10px;
+  border: 2px solid black;
+}
+
+.resolutionButton.selected {
+  background-color: red;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.modal h2 {
+  margin-top: 0;
+  font-size: 24px;
+  color: #fff;
+}
+
+.modal-buttons button:first-child {
+  margin-right: 10px;
+}
+
+.modal button {
+  margin-top: 20px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+
+#settingsMenu label {
+  display: block;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 18px;
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 4px;
+  text-shadow: none;
+}
+
+.optionButton {
+  width: 100px;
+  height: 50px;
+  background-color: white;
+  color: black;
+  font-size: 18px;
+  border-radius: 10px;
+  margin-right: 10px;
+  border: 2px solid black;
+}
+
+.optionButton.selected {
+  background-color: red;
 }
 
 .buttonContainer {
@@ -127,6 +230,7 @@ body {
   border: none;
   margin: 15px;
   flex: 0 0 110px;
+  margin-left: 20px;
 }
 
 #storeButton:hover {
@@ -180,7 +284,7 @@ button.selected img {
   }
 
   #startButton {
-    top: 65%;
+    top: 60%;
     right: 50%;
     transform: translateX(50%);
     width: 100px;
@@ -188,15 +292,34 @@ button.selected img {
     font-size: 40px;
   }
 
-  #storeButton {
-    bottom: 3%;
+  #buttonsContainer {
     right: 1%;
+    bottom: 10%;
+  }
+
+  #storeButton {
+    bottom: 5%;
+    right: 1%;
+    width: 90px;
+    height: 90px;
+    font-size: 30px;
+    margin-right: 10px;
+    
+  }
+
+  #settingsButton {
+    bottom: 5%;
+    right: 0%;
     width: 90px;
     height: 90px;
     font-size: 30px;
   }
 
   .buttonContainer {
+    bottom: 3%;
+  }
+
+  #buttonsContainer {
     bottom: 2%;
   }
 

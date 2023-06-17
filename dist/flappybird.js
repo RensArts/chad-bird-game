@@ -1,30 +1,192 @@
+// Check if resolution is stored in local storage
+var savedResolution = localStorage.getItem("resolution");
 
-// Native resolution
-// var canvas = document.getElementById("gameCanvas");
-// canvas.width = 2560;
-// canvas.height = 1080;
-// var ctx = canvas.getContext("2d");
-
-// var resolutionAdjust = 1;
-// var secondResolutionAdjust = 1;
-
-// Resolution 0.5
+// Get the canvas element
 var canvas = document.getElementById("gameCanvas");
-canvas.width = 1280;
-canvas.height = 540;
+
+// Obtain the rendering context
 var ctx = canvas.getContext("2d");
 
-var resolutionAdjust = 2;
-var secondResolutionAdjust = 1.5;
+// Function to open the settings window
+function openSettingsWindow() {
+  // Create the modal overlay
+  var overlay = document.createElement("div");
+  overlay.className = "overlay";
+  document.body.appendChild(overlay);
 
-// Resolution 0.25
-// var canvas = document.getElementById("gameCanvas");
-// canvas.width = 640;
-// canvas.height = 270;
-// var ctx = canvas.getContext("2d");
+  // Create the modal window
+  var modal = document.createElement("div");
+  modal.className = "modal";
+  overlay.appendChild(modal);
 
-// var resolutionAdjust = 4;
-// var secondResolutionAdjust = 2;
+  // Append the settings menu to the modal
+  var settingsMenu = document.getElementById("settingsMenu");
+  modal.appendChild(settingsMenu);
+  settingsMenu.classList.remove("hidden");
+
+  // Create the buttons container
+  var buttonsContainer = document.createElement("div");
+  buttonsContainer.className = "modal-buttons";
+  modal.appendChild(buttonsContainer);
+
+  // Create the Apply button
+  var applyButton = document.createElement("button");
+  applyButton.textContent = "Apply";
+  applyButton.addEventListener("click", applySettings);
+  buttonsContainer.appendChild(applyButton);
+
+  // Create the Close button
+  var closeButton = document.createElement("button");
+  closeButton.textContent = "Close";
+  closeButton.addEventListener("click", closeSettingsWindow);
+  buttonsContainer.appendChild(closeButton);
+
+  // Display the modal
+  modal.style.display = "block";
+}
+
+function applySettings() {
+  var selectedResolution = document.querySelector('.resolutionButton.selected').value;
+
+  switch (selectedResolution) {
+    case "native":
+      localStorage.setItem("resolution", "native");
+      break;
+    case "0.5":
+      localStorage.setItem("resolution", "0.5");
+      break;
+    case "0.25":
+      localStorage.setItem("resolution", "0.25");
+      break;
+    default:
+      break;
+  }
+
+  // Reload the page to apply the new resolution
+  location.reload();
+}
+
+// Function to close the settings window
+function closeSettingsWindow() {
+  var overlay = document.querySelector(".overlay");
+  var settingsMenu = document.getElementById("settingsMenu");
+  settingsMenu.classList.add("hidden");
+  overlay.classList.add("hidden")
+  location.reload();
+}
+
+// Check if resolution is stored in local storage
+var savedResolution = localStorage.getItem("resolution");
+
+if (savedResolution) {
+  switch (savedResolution) {
+    case "native":
+      canvas.width = 2560;
+      canvas.height = 1080;
+      resolutionAdjust = 1;
+      secondResolutionAdjust = 1;
+      break;
+    case "0.5":
+      canvas.width = 1280;
+      canvas.height = 540;
+      resolutionAdjust = 2;
+      secondResolutionAdjust = 1.5;
+      break;
+    case "0.25":
+      canvas.width = 640;
+      canvas.height = 270;
+      resolutionAdjust = 4;
+      secondResolutionAdjust = 2;
+      break;
+    default:
+      break;
+  }
+} else {
+  // Default resolution
+  canvas.width = 1280;
+  canvas.height = 540;
+  resolutionAdjust = 2;
+  secondResolutionAdjust = 1.5;
+  localStorage.setItem("resolution", "0.5");
+}
+
+// Update the checked state of the buttons
+var resolutionButtons = document.querySelectorAll('.resolutionButton');
+resolutionButtons.forEach(function (button) {
+  if (button.value === savedResolution) {
+    button.classList.add('selected');
+  }
+  
+  button.addEventListener('click', function () {
+    resolutionButtons.forEach(function (btn) {
+      btn.classList.remove('selected');
+    });
+    button.classList.add('selected');
+  });
+});
+
+var pipeTextureButton = document.getElementById("pipeTextureButton");
+var showFPSButton = document.getElementById("showFPSButton");
+var showTextures = localStorage.getItem("pipeTexture") === "true";
+
+
+// Set the initial state of the "showFPS" button
+var showFPS = localStorage.getItem("showFPS") || "false";
+showFPSButton.setAttribute("data-value", showFPS);
+if (showFPS === "true") {
+  showFPSButton.classList.add("selected");
+} else {
+  showFPSButton.classList.remove("selected");
+}
+
+// Set the initial state of the "pipeTexture" button
+var showTextures = localStorage.getItem("pipeTexture") || "false";
+pipeTextureButton.setAttribute("data-value", showTextures);
+if (showTextures === "true") {
+  pipeTextureButton.classList.add("selected");
+} else {
+  pipeTextureButton.classList.remove("selected");
+}
+
+pipeTextureButton.addEventListener("click", toggleOption);
+showFPSButton.addEventListener("click", toggleOption);
+
+function toggleOption(event) {
+  var button = event.target;
+  var option = button.getAttribute("data-option");
+  var value = button.getAttribute("data-value");
+
+  if (value === "true") {
+    value = "false";
+    button.classList.remove("selected"); // Remove the "selected" class immediately
+  } else {
+    value = "true";
+    button.classList.add("selected"); // Add the "selected" class immediately
+  }
+
+  button.setAttribute("data-value", value);
+
+  // Update the option value and perform any necessary actions
+  updateOption(option, value);
+}
+
+function updateOption(option, value) {
+  if (option === "pipeTexture") {
+    showTextures = value === "true";
+
+    // Perform any necessary actions based on the pipeTexture option
+    if (showTextures) {
+      pipeTextureButton.classList.add("selected");
+    } else {
+      pipeTextureButton.classList.remove("selected");
+    }
+
+    localStorage.setItem("pipeTexture", value); // Store the value in local storage
+  } else if (option === "showFPS") {
+    showFPS = value === "true";
+    localStorage.setItem("showFPS", value); // Store the value in local storage
+  }
+}
 
 
 // Constants
@@ -82,7 +244,7 @@ var maxStarSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxGhostSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
 var minSizeSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxSizeSpawn = 6000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxSizeSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
 var minReduceGapSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxReduceGapSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
 var starSpeedMultiplier = 1; // Initial speed multiplier
@@ -251,12 +413,33 @@ document.getElementById('hardButton').addEventListener('click', function() {
   buttonSound.play();
 });
 
-// Define button to go to store
+// Create the store button
 var storeButton = document.createElement("button");
 storeButton.textContent = "Store";
 storeButton.addEventListener("click", goToStore);
 storeButton.id = "storeButton";
 document.body.appendChild(storeButton);
+
+// Create the settings button
+var settingsButton = document.createElement("button");
+settingsButton.textContent = "Settings";
+settingsButton.addEventListener("click", openSettingsWindow);
+settingsButton.id = "settingsButton";
+document.body.appendChild(settingsButton);
+
+// Position the buttons
+var buttonsContainer = document.createElement("div");
+buttonsContainer.id = "buttonsContainer";
+document.body.appendChild(buttonsContainer);
+buttonsContainer.appendChild(storeButton);
+buttonsContainer.appendChild(settingsButton);
+
+// Position the buttons on the right side
+function positionButtons() {
+  var windowWidth = window.innerWidth;
+  var buttonsContainerWidth = buttonsContainer.offsetWidth;
+  buttonsContainer.style.right = (windowWidth - buttonsContainerWidth - 1) + "px";
+}
 
 function goToStore() {
   window.location.href = "store.html";
@@ -620,21 +803,28 @@ function saveCollectedCoins(collectedCoins) {
   localStorage.setItem("coins", collectedCoins)
 }
 
-// Draw the FPS on the top-right corner of the screen
 function drawFPS() {
-  var text = "FPS: " + fps * 10; // Create the FPS text string
+  if (showFPS === "true") {
+    var text = "FPS: " + fps * 10; // Create the FPS text string
 
-  ctx.font = "bold " + Math.ceil(canvas.width / 70) + "px Arial";
-  ctx.fillStyle = "white";
-  ctx.textAlign = "right";
-  ctx.textBaseline = "top";
-  ctx.fillText(text, canvas.width - Math.ceil(canvas.width * resolutionAdjust / 100), Math.ceil(canvas.width / 100));
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = Math.ceil(canvas.width / 1500);
-  ctx.strokeText(text, canvas.width - Math.ceil(canvas.width * resolutionAdjust / 100), Math.ceil(canvas.width / 100));
-
+    ctx.font = "bold " + Math.ceil(canvas.width / 70) + "px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "top";
+    ctx.fillText(
+      text,
+      canvas.width - Math.ceil(canvas.width * resolutionAdjust / 100),
+      Math.ceil(canvas.width / 100)
+    );
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = Math.ceil(canvas.width / 1500);
+    ctx.strokeText(
+      text,
+      canvas.width - Math.ceil(canvas.width * resolutionAdjust / 100),
+      Math.ceil(canvas.width / 100)
+    );
+  }
 }
-
 // Draw score on the top of the screen
 function drawScore() {
   if (isGameOver) {
@@ -840,8 +1030,8 @@ function addPipe() {
   groundSpeed = GROUND_SPEED * speed;
 }
 
-//var pipeImage = new Image();
-//pipeImage.src = 'assets/pipeTexture.png';
+var pipeImage = new Image();
+pipeImage.src = 'assets/pipeTexture.png';
 
 // Draws the pipes on the canvas and moves them
 function updatePipes() {
@@ -856,16 +1046,8 @@ function updatePipes() {
     var adjustedWidth = Math.round(p.width * (canvas.width / 2560 * resolutionAdjust));
     var adjustedHeight = Math.round(p.height * (canvas.height / 1080 * resolutionAdjust));
     var adjustedGap = Math.round(PIPE_GAP * (canvas.width / 2560 * resolutionAdjust));
-    //var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
-    //var adjustedImageHeight = Math.round((p.height + 140) * (canvas.height / 1080 * secondResolutionAdjust));
-    
-    // Debugging: Log the adjusted values for inspection
-    console.log("Adjusted X:", adjustedX);
-    console.log("Adjusted Y:", adjustedY);
-    console.log("Adjusted Width:", adjustedWidth);
-    console.log("Adjusted Height:", adjustedHeight);
-    //console.log("Adjusted Image Width:", adjustedImageWidth);
-    //console.log("Adjusted Image Height:", adjustedImageHeight);
+    var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
+    var adjustedImageHeight = Math.round((p.height + 140) * (canvas.height / 1080 * secondResolutionAdjust));
     
     // Draw top pipe
     ctx.fillStyle = PIPE_COLOR_TOP; 
@@ -876,8 +1058,11 @@ function updatePipes() {
     var bottomPipeHeight = canvas.height - (p.height + adjustedGap);
     ctx.fillRect(adjustedX, adjustedHeight + adjustedGap, adjustedWidth, bottomPipeHeight);
     
-    // Render picture on top of the pipes
-    //ctx.drawImage(pipeImage, adjustedX - Math.round(240 * (canvas.width / 2560)), adjustedY - Math.round(140 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
+    // Check if the showTextures option is selected (button is red)
+if (showTextures && pipeTextureButton.classList.contains("selected")) {
+  // Render picture on top of the pipes
+  ctx.drawImage(pipeImage, adjustedX - Math.round(40 * (canvas.width / 2560)), adjustedY - Math.round(190 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
+}
   }
 }
 
@@ -1391,7 +1576,7 @@ if (skybox.x <= -skybox.width) {
     deathSound.play()
     backgroundMusic.pause()
     isGameOver = true; // Set the game over state
-    return;
+
 }  
 
    // Clear canvas before drawing new elements each frame
@@ -1406,6 +1591,7 @@ if (skybox.x <= -skybox.width) {
       difficultyButtons.style.display = "block";
       storeButton.style.display = "block";
       startButton.style.display = "block";
+      settingsButton.style.display = "block"
       drawCollectedCoins();
       drawBird();
       return;
@@ -1419,10 +1605,8 @@ if (skybox.x <= -skybox.width) {
       difficultyButtons.style.display = "none";
       storeButton.style.display = "none";
       startButton.style.display = "none";
+      settingsButton.style.display = "none"
     }
-
-
-   
 
   // Draw skybox
   drawSkybox();

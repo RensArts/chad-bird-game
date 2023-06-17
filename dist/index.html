@@ -11,8 +11,9 @@
 
     
     <div id="gameContainer">
-      
+ 
       <canvas id="gameCanvas"></canvas>
+
       <img id="backgroundImage" src="assets/black-image.jpg" alt="Black Image">
 
       <!-- The video element for displaying the game background -->
@@ -57,6 +58,21 @@
         <button id="hardButton" class="difficultyButton" onclick="setDifficulty('hard')">
           <img src="assets/difficulty-hard.png" alt="Hard Difficulty">
         </button>
+        <div id="settingsMenu" class="hidden">
+          <h2>GRAPHICS</h2>
+          <div id="resolutionOptions">
+            <button class="resolutionButton" name="resolution" value="native" checked>High</button>
+            <button class="resolutionButton" name="resolution" value="0.5">Medium</button>
+            <button class="resolutionButton" name="resolution" value="0.25">Low</button>
+          </div>
+          <div id="pipeTextureOption">
+            <button class="optionButton" id="pipeTextureButton" data-option="pipeTexture" data-value="true">Textures</button>
+          </div>
+          <div id="showFPSOption">
+            <button class="optionButton" id="showFPSButton" data-option="showFPS" data-value="false">Show FPS</button>
+          </div>
+        </div>
+          
       </div>
     </div>
     </div>
