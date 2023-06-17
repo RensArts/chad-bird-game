@@ -227,7 +227,8 @@ var reduceGaps = [];
 
 // Variables
 var PIPE_SPEED = 2 / secondResolutionAdjust; //Adjust the speed of the pipes
-var skyboxSpeed = 1; // Adjust the speed of the skybox
+var skyboxSpeed = 2 / resolutionAdjust; // Adjust the speed of the skybox
+var secondSkyboxSpeed = 16 / resolutionAdjust; // Adjust the speed of the second skybox
 var difficulty = "normal"; // Default difficulty level
 var GROUND_SPEED = 2.1 / secondResolutionAdjust; // Adjust the speed of the ground and ceiling
 var JUMP = 1.2 * secondResolutionAdjust;// Adjust the value of upward momentum
@@ -1223,7 +1224,8 @@ function restartGame(event) {
     PIPE_GAP = 320 * (canvas.width / 2560);
     gapSize = 500 * (canvas.height / 1080);
     GROUND_SPEED = 2.1 / secondResolutionAdjust
-    skyboxSpeed = 1 * (canvas.width / 2560);
+    skyboxSpeed = 2 / resolutionAdjust;
+    secondSkyboxSpeed = 16 / resolutionAdjust;
     JUMP = 1.2 * secondResolutionAdjust
     pipeStartSkip = 24;
     
@@ -1269,9 +1271,11 @@ function checkCollision() {
         GRAVITY = 1.6 * secondResolutionAdjust;
         PIPE_SPEED = 0.5 / secondResolutionAdjust;
         GROUND_SPEED = 0.55 / secondResolutionAdjust;
-        skyboxSpeed = 0.25
+        skyboxSpeed = 0.4 / resolutionAdjust;
+        secondSkyboxSpeed = 3 / resolutionAdjust;
         JUMP = -1.6 * secondResolutionAdjust;
         isBirdFalling = true;
+
         return true; // Collision detected
       }
     }
@@ -1301,13 +1305,29 @@ var skybox = {
 
 // Preload skybox texture
 var skyboxImg = new Image();
-skyboxImg.src = 'assets/skybox.png'; // Replace with the path to your skybox texture
+skyboxImg.src = 'assets/skybox.png'; 
 
 
 // Draws the skybox
 function drawSkybox() {
   ctx.drawImage(skyboxImg, skybox.x, skybox.y, skybox.width, skybox.height);
   ctx.drawImage(skyboxImg, skybox.x + skybox.width, skybox.y, skybox.width, skybox.height);
+}
+
+// Draws the second skybox
+var secondSkybox = {
+  x: 0,
+  y: 750 * (canvas.width / 2560),
+  width: Math.round(4000 * (canvas.width / 2560)),
+  height: Math.round(600 * (canvas.height / 1080)),
+}
+
+var secondSkyboxImg = new Image();
+secondSkyboxImg.src = 'assets/second-background.png';
+
+function drawSecondSkybox() {
+  ctx.drawImage(secondSkyboxImg, secondSkybox.x, secondSkybox.y, secondSkybox.width, secondSkybox.height);
+  ctx.drawImage(secondSkyboxImg, secondSkybox.x + secondSkybox.width, secondSkybox.y, secondSkybox.width, secondSkybox.height);
 }
 
 function drawBird() {
@@ -1495,6 +1515,11 @@ if (skybox.x <= -skybox.width) {
   skybox.x = 0;
 }
 
+// Reset skybox position when it goes off-screen
+if (secondSkybox.x <= -secondSkybox.width) {
+  secondSkybox.x = 0;
+}
+
   // Move the ground
   ground.x -= groundSpeed;
 
@@ -1503,6 +1528,9 @@ if (skybox.x <= -skybox.width) {
 
   // Move the skybox
   skybox.x -= skyboxSpeed;
+
+  // Move the skybox
+  secondSkybox.x -= secondSkyboxSpeed;
 
   // Check for collision with top border
   if (bird.y < 10 / resolutionAdjust) {
@@ -1610,6 +1638,9 @@ if (skybox.x <= -skybox.width) {
 
   // Draw skybox
   drawSkybox();
+
+  // Draw second skybox
+  drawSecondSkybox();
 
   //Spawn in coins
   updateCoins();
