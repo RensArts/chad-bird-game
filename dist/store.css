@@ -1,0 +1,270 @@
+/* General Styles */
+body {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background Image */
+#backgroundImage {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  z-index: -1;
+}
+
+/* Store Canvas */
+#storeCanvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 10px;
+  border-color: black;
+  z-index: 0;
+}
+
+/* Store Video */
+#storeVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Skins Container */
+.skins-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 95%; /* Adjust the max-width to accommodate 4 boxes horizontally */
+  margin: 0 auto; /* Center the container */
+}
+
+/* Skin Box */
+.skin {
+  width: 18%; /* Adjust the initial width as needed */
+  height: auto; /* Adjust the initial height as needed */
+  margin: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; /* Add space between skins */
+  border: 1px solid #ccc;
+  border-radius: 10%;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transform: scale(1); /* Scale the entire box */
+  background-color: rgba(0, 0, 0, 0.4); /* Black background with 20% transparency */
+}
+
+.skin img {
+  margin-top: -10%;
+  width: 100%;
+  height: auto;
+}
+
+.skin p {
+  position: absolute;
+  bottom: 84%;
+  margin: 1px 0;
+  font-size: 250%; /* Increased font size */
+  color: white; /* Set text color to white */
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; /* Add black border effect */
+  border-radius: 5px;
+  padding: 1px; /* Add padding for spacing */
+}
+
+/* Purchase Button */
+.purchase-button {
+  position: absolute;
+  bottom: 5%;
+  z-index: 5;
+  padding: 5px 10px;
+  font-size: 200%;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.purchase-button:active {
+  transform: scale(0.8);
+}
+
+.purchase-button:hover {
+  background-color: #45a049;
+}
+
+.purchase-button.equipped {
+  background-color: #888;
+  cursor: pointer;
+}
+
+.purchase-button:disabled {
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+/* Back Button */
+#backButton {
+  position: absolute;
+  z-index: 3;
+  bottom: 3%;
+  right: 2%;
+  width: 110px;
+  height: 110px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  font-size: 35px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+#backButton:active {
+  transform: scale(0.8);
+}
+
+#backButton:hover {
+  background-color: #45a049;
+}
+
+/* Alert */
+.alert {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #000;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 3vw;
+  margin-bottom: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 35%;
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: "Arial", "Helvetica", sans-serif;
+}
+
+.success {
+  background-color: rgba(76, 175, 80, 0.5);
+  color: white;
+  border: none;
+}
+
+.error {
+  background-color: rgba(244, 67, 54, 0.5);
+  color: white;
+  border: none;
+}
+
+/* Coin Box */
+#coinBox {
+  position: fixed;
+  width: 15%;
+  height: auto;
+  top: 85%;
+  left: 43%;
+}
+
+#coinCount {
+  position: fixed;
+  width: 15%;
+  height: auto;
+  top: 87%;
+  left: 50%;
+  font-family: Arial, sans-serif;
+  font-weight: bolder;
+  font-size: 4vw;
+  color: orange;
+  -webkit-text-stroke: 0.2vw black;
+  -webkit-text-fill-color: orange;
+}
+
+/* Message */
+#message {
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 40px;
+  color: white;
+  z-index: 10;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1080px) {
+  .skins-container {
+    max-width: 100%; /* Adjust the max-width for smaller screens */
+  }
+
+  .skin {
+    width: calc(22% - 80px); /* Adjust the width for smaller screens to fit 4 in a row */
+    margin: 20px; /* Adjust the margin for smaller screens */
+  }
+
+  .skin p {
+    font-size: 150%; /* Adjust the font size for smaller screens */
+  }
+
+  .purchase-button {
+    font-size: 130%; /* Adjust the font size for smaller screens */
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .skins-container {
+    max-width: 100%;
+  }
+
+  .skin {
+    width: calc(18% - 40px); /* Adjust the width for smaller screens to fit 4 in a row */
+    margin: 10px; /* Adjust the margin for smaller screens */
+  }
+
+  .skin p {
+    font-size: 100%; /* Adjust the font size for smaller screens */
+  }
+
+  .purchase-button {
+    font-size: 90%; /* Adjust the font size for smaller screens */
+  }
+
+  #backButton {
+    width: 80px; /* Adjust the width for smaller screens */
+    height: 80px; /* Adjust the height for smaller screens */
+    font-size: 25px; /* Adjust the font size for smaller screens */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .skins-container {
+    max-width: 100%;
+  }
+
+  .skin {
+    width: calc(50% - 20px); /* Adjust the width for smaller screens to fit 2 in a row */
+    margin: 10px; /* Adjust the margin for smaller screens */
+  }
+
+  .skin p {
+    font-size: 80%; /* Adjust the font size for smaller screens */
+  }
+
+  .purchase-button {
+    font-size: 80%; /* Adjust the font size for smaller screens */
+  }
+}

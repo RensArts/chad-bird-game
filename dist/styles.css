@@ -67,6 +67,11 @@ body {
   color: white;
   font-size: 50px;
   border-radius: 15px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+#startButton:active {
+  transform: scale(0.8);
 }
 
 #buttonsContainer {
@@ -88,6 +93,10 @@ body {
   border-radius: 10px;
   cursor: pointer;
   margin-right: 40px; 
+  transition: transform 0.2s;
+}
+#storeButton:active {
+  transform: scale(0.8);
 }
 
 #settingsButton {
@@ -99,6 +108,10 @@ body {
   font-size: 25px;
   border-radius: 10px;
   cursor: pointer;
+  transition: transform 0.2s;
+}
+#settingsButton:active {
+  transform: scale(0.8);
 }
 
 .resolutionButton {
@@ -110,6 +123,11 @@ body {
   border-radius: 10px;
   margin-right: 10px;
   border: 2px solid black;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.resolutionButton:active {
+  transform: scale(0.8);
 }
 
 .resolutionButton.selected {
@@ -181,6 +199,11 @@ body {
   border-radius: 10px;
   margin-right: 10px;
   border: 2px solid black;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.optionButton:active {
+  transform: scale(0.8);
 }
 
 .optionButton.selected {
@@ -214,6 +237,11 @@ body {
   border: none;
   width: 100%;
   height: auto;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+#musicButton:active {
+  transform: scale(0.8);
 }
 
 #sfxButton {
@@ -223,6 +251,11 @@ body {
   z-index: 2;
   background-color: transparent;
   border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+#sfxButton:active {
+  transform: scale(0.8);
 }
 
 .difficultyButton {
@@ -231,6 +264,12 @@ body {
   margin: 15px;
   flex: 0 0 110px;
   margin-left: 20px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.difficultyButton:active {
+  transform: scale(0.8);
 }
 
 #storeButton:hover {
@@ -321,7 +360,7 @@ button.selected img {
     right: 0%;
     width: 90px;
     height: 90px;
-    font-size: 30px;
+    font-size: 20px;
   }
 
   .buttonContainer {

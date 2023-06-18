@@ -32,12 +32,14 @@ function openSettingsWindow() {
   // Create the Apply button
   var applyButton = document.createElement("button");
   applyButton.textContent = "Apply";
+  buttonSound.play();
   applyButton.addEventListener("click", applySettings);
   buttonsContainer.appendChild(applyButton);
 
   // Create the Close button
   var closeButton = document.createElement("button");
   closeButton.textContent = "Close";
+  buttonSound.play();
   closeButton.addEventListener("click", closeSettingsWindow);
   buttonsContainer.appendChild(closeButton);
 
@@ -119,6 +121,7 @@ resolutionButtons.forEach(function (button) {
   
   button.addEventListener('click', function () {
     resolutionButtons.forEach(function (btn) {
+      buttonSound.play();
       btn.classList.remove('selected');
     });
     button.classList.add('selected');
@@ -152,6 +155,7 @@ pipeTextureButton.addEventListener("click", toggleOption);
 showFPSButton.addEventListener("click", toggleOption);
 
 function toggleOption(event) {
+  buttonSound.play();
   var button = event.target;
   var option = button.getAttribute("data-option");
   var value = button.getAttribute("data-value");
@@ -188,7 +192,6 @@ function updateOption(option, value) {
   }
 }
 
-
 // Constants
 const PIPE_PASSED = canvas.width * resolutionAdjust * 0.0781;
 const PIPE_WIDTH = canvas.width * resolutionAdjust * 0.0508;
@@ -210,10 +213,6 @@ let starIntervalId;
 let ghostIntervalId;
 let sizeIntervalId;
 let reduceGapIntervalId;
-
-// Set up event listeners
-document.addEventListener("mouseup", moveDown);
-document.getElementById("startButton").addEventListener("mousedown", moveUp);
 
 //Arrays
 var flapSounds = [];
@@ -405,15 +404,6 @@ var ceiling = {
 const buttonSound = new Audio("assets/button-sound.mp3");
 const startSound = new Audio("assets/start-sound.mp3")
 
-// Add event listeners to your buttons and play corresponding audio on click
-document.getElementById('normalButton').addEventListener('click', function() {
-  buttonSound.play();
-});
-
-document.getElementById('hardButton').addEventListener('click', function() {
-  buttonSound.play();
-});
-
 // Create the store button
 var storeButton = document.createElement("button");
 storeButton.textContent = "Store";
@@ -446,15 +436,26 @@ function goToStore() {
   window.location.href = "store.html";
 }
 
+// Add event listeners to your buttons and play corresponding audio on click
+document.getElementById('normalButton').addEventListener('click', function() {
+  buttonSound.play();
+  setDifficulty('normal');
+});
+
+document.getElementById('hardButton').addEventListener('click', function() {
+  buttonSound.play();
+  setDifficulty('hard');
+});
+
 // Get the selected difficulty from localStorage
 function getDifficulty() {
   return localStorage.getItem('selectedDifficulty');
 }
 
 function setDifficulty(selectedDifficulty) {
-  localStorage.setItem('selectedDifficulty', difficulty);
+  localStorage.setItem('selectedDifficulty', selectedDifficulty);
   difficulty = selectedDifficulty;
-  
+
   // Clear the existing coin interval
   clearInterval(coinIntervalId);
 
@@ -467,7 +468,7 @@ function setDifficulty(selectedDifficulty) {
   switch (selectedDifficulty) {
     case "normal":
       speed = speedNormal;
-      pipeSpawnRate = pipeSpawnNormal
+      pipeSpawnRate = pipeSpawnNormal;
       AMOUNT_OF_COINS = 3000; // Set the appropriate value for normal difficulty
       coinIntervalId = setInterval(addCoin, AMOUNT_OF_COINS);
       selectedButton = document.getElementById('normalButton');
@@ -485,6 +486,20 @@ function setDifficulty(selectedDifficulty) {
   // Add the selected class to the newly selected button
   selectedButton.classList.add('selected');
 }
+
+function initializeGame() {
+  const selectedDifficulty = getDifficulty();
+  if (selectedDifficulty === 'normal') {
+    document.getElementById('normalButton').click();
+  } else if (selectedDifficulty === 'hard') {
+    document.getElementById('hardButton').click();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initializeGame();
+});
+
 
 
 var coinSounds = []; // Array to store coin sound instances
@@ -893,9 +908,6 @@ function createMusicButton() {
       isMusicOn = true;
       button.style.backgroundImage = "url('assets/musicButton.png')";
     }
-    if (clickHandler) {
-      clickHandler();
-    }
   });
 
   // Append the button to the body element
@@ -913,6 +925,7 @@ function createSfxButton() {
 
   // Add event listener to handle button click
   button.addEventListener("click", function() {
+    buttonSound.play();
     initializeFlapSounds();
     initializeCoinSounds();
     if (isSfxOn) {
@@ -930,7 +943,6 @@ function createSfxButton() {
       }
       deathSound.volume = 0;
       startSound.volume = 0;
-      buttonSound.volume = 0;
       ghostSound.volume = 0;
       sizeSound.volume = 0;
       reduceGapSound.volume = 0;
@@ -949,9 +961,8 @@ function createSfxButton() {
       }
       deathSound.volume = 1;
       startSound.volume = 1;
-      buttonSound.volume = 1;
       ghostSound.volume = 1;
-      sizeSound.volume = 
+      sizeSound.volume =  1;
       reduceGapSound.volume = 1;
     }
   });
@@ -1120,47 +1131,65 @@ function startVerticalMovementTimeout() {
   setTimeout(enableVerticalMovementAfterTimeout, countDown); // Enable vertical movement after 1 second
 }
 
-// Function to move the bird up when a key is pressed
+// Set up event listeners
+document.addEventListener("mouseup", moveDown);
+document.getElementById("startButton").addEventListener("mousedown", moveUp);
+
+
+// Function to move the bird up when a mouse button is pressed
 function moveUp(event) {
+  if (event.type === "mousedown") {
+    handleMoveUp();
+  }
+}
+
+// Function to move the bird up when a touch event is triggered
+function touchMoveUp(event) {
+  if (event.type === "touchstart") {
+    handleMoveUp();
+  }
+}
+
+// Common function to handle move up logic
+function handleMoveUp() {
   if (isGameOver) {
     return;
   }
-  if (event.type === "mousedown") {
-    isMovingUp = true;
-    if (!isGameStarted) {
-      isGameStarted = true;
-      startVerticalMovementTimeout();
-      buttonSound.play();
-      startSound.play();
-      startGame();
-      pipes = [];
-      isGhost = false;
-      isInvincible = false;
-      isSize = false;
-      document.addEventListener("mousedown", moveUp);
-      // Start the initial star interval with a random spawn rate
-      starIntervalId = setInterval(addStar, generateStarSpawnRate());
-      ghostIntervalId = setInterval (addGhost, generateGhostSpawnRate());
-      coinIntervalId = setInterval(addCoin, AMOUNT_OF_COINS);
-      sizeIntervalId = setInterval (addSize, generateSizeSpawnRate());
-      reduceGapIntervalId = setInterval (addReduceGap, generateReduceGapSpawnRate());
-      }
-    }
-
-    // Check if the game is in progress and pipes are actively moving
-    if (isGameStarted && pipes.length > 0 && speed > 0 && enableVerticalMovement) {
-      // Play the flap sound
-      playFlapSound();
-      document.getElementById("backgroundMusic").play();
-    }
+  isMovingUp = true;
+  if (!isGameStarted) {
+    isGameStarted = true;
+    startVerticalMovementTimeout();
+    buttonSound.play();
+    startSound.play();
+    startGame();
+    pipes = [];
+    isGhost = false;
+    isInvincible = false;
+    isSize = false;
+    document.addEventListener("mousedown", moveUp);
+    document.addEventListener("touchstart", touchMoveUp);
+    // Start the initial star interval with a random spawn rate
+    starIntervalId = setInterval(addStar, generateStarSpawnRate());
+    ghostIntervalId = setInterval(addGhost, generateGhostSpawnRate());
+    coinIntervalId = setInterval(addCoin, AMOUNT_OF_COINS);
+    sizeIntervalId = setInterval(addSize, generateSizeSpawnRate());
+    reduceGapIntervalId = setInterval(addReduceGap, generateReduceGapSpawnRate());
   }
+  // Check if the game is in progress and pipes are actively moving
+  if (isGameStarted && pipes.length > 0 && speed > 0 && enableVerticalMovement && isMovingUp) {
+    // Play the flap sound
+    playFlapSound();
+    document.getElementById("backgroundMusic").play();
+  }
+}
 
 // Function to move the bird down when the key is released
 function moveDown(event) {
-  if (event.type === "mouseup") { // Customize the key according to your needs
+  if (event.type === "mouseup") {
     isMovingUp = false;
   }
 }
+
 
 /**
  * Starts the game by resetting necessary variables and game state.
@@ -1228,6 +1257,8 @@ function restartGame(event) {
     secondSkyboxSpeed = 16 / resolutionAdjust;
     JUMP = 1.2 * secondResolutionAdjust
     pipeStartSkip = 24;
+    sfxButton.style.display = "block";
+    musicButton.style.display = "block";
     
     
     // Start the game
@@ -1434,6 +1465,7 @@ function gameOver() {
   playDeathSound();
   backgroundMusic.pause();
   backgroundMusic.currentTime = 0;
+  document.removeEventListener("mousedown", restartGame);
 
   // Calculate the width and height of the borderBox
   var borderBoxWidth = 900 * (canvas.width / 2560);
@@ -1463,17 +1495,18 @@ function gameOver() {
   // Disable the button temporarily using a timer
 var buttonEnabled = false;
 setTimeout(function() {
-  buttonEnabled = true;
-  document.removeEventListener("mousedown", moveUp);
-  document.addEventListener("mousedown", restartGame); // Press to continue to main menu
-  ctx.font = `bolder ${Math.round(70 * (canvas.width / 2560))}px Helvetica`;
-  ctx.fillStyle = "white";
-  ctx.strokeStyle = "black"; // Set the border color
-  ctx.lineWidth = Math.round(8 * (canvas.width / 2560)); // Set the border width
-  ctx.strokeText("Continue", canvas.width / 2 - (140 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
-  ctx.fillText("Continue", canvas.width / 2 - (140 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
-}, 300); // Change the duration (in milliseconds) to your desired delay
+    buttonEnabled = true;
+    document.removeEventListener("mousedown", moveUp);
+    document.addEventListener("mousedown", restartGame); // Press to continue to main menu
+    ctx.font = `bolder ${Math.round(70 * (canvas.width / 2560))}px Helvetica`;
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black"; // Set the border color
+    ctx.lineWidth = Math.round(8 * (canvas.width / 2560)); // Set the border width
+    ctx.strokeText("Tap screen to restart", canvas.width / 2 - (340 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
+    ctx.fillText("Tap screen to restart", canvas.width / 2 - (340 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
+  }, 200); // Change the duration (in milliseconds) to your desired delay
 }
+
 
 //Plays the death sound effect.
 function playDeathSound() {
@@ -1483,6 +1516,12 @@ function playDeathSound() {
   }
 }
 
+
+// function playMenuMusic() {
+//   var menuMusic = document.getElementById("menuMusic");
+//   menuMusic.play();
+// }
+
 // Load in the buttons and background. Start background animation.
 window.onload = function() {
   drawCollectedCoins();
@@ -1490,11 +1529,11 @@ window.onload = function() {
   createMusicButton();
   drawBird();
   
-
   const video = document.getElementById("gameVideo");
   video.src = "assets/hell.mp4";
   video.muted = true; // Mute the video
   video.preload = "auto"; // Preload the video
+
   video.onloadeddata = function() {
     // The video has finished preloading, you can proceed with other game setup here
     video.play();
@@ -1612,13 +1651,13 @@ if (secondSkybox.x <= -secondSkybox.width) {
   if (isReduceGap && !isSize) {
     PIPE_GAP = 450 * (canvas.height / 1080);
     speed = speed * reduceGapSpeedMultiplier;
-    HITBOX_BOTTOM = -90 * (canvas.height / 1080);
+    HITBOX_BOTTOM = -80 * (canvas.height / 1080);
   }
 
   if (isReduceGap && isSize){
     PIPE_GAP = 450 * (canvas.height / 1080);
     speed = speed * reduceGapSpeedMultiplier;
-    HITBOX_BOTTOM = -90 * (canvas.height / 1080);
+    HITBOX_BOTTOM = -80 * (canvas.height / 1080);
     HITBOX_BOTTOM = -150 / secondResolutionAdjust * (canvas.height / 1080);
     }
 
@@ -1627,7 +1666,6 @@ if (secondSkybox.x <= -secondSkybox.width) {
     deathSound.play()
     backgroundMusic.pause()
     isGameOver = true; // Set the game over state
-    return;
 }  
 
    // Clear canvas before drawing new elements each frame
@@ -1637,8 +1675,6 @@ if (secondSkybox.x <= -secondSkybox.width) {
     if (!isGameStarted) {
       // Display the logo and buttons
       logo.style.display = "block";
-      sfxButton.style.display = "block";
-      musicButton.style.display = "block";
       difficultyButtons.style.display = "block";
       storeButton.style.display = "block";
       startButton.style.display = "block";
@@ -1729,9 +1765,9 @@ if (secondSkybox.x <= -secondSkybox.width) {
     elapsedTime = 0;
     setTimeout(adjustSpeed, 1000);
     setTimeout(adjustPipeSpawnRate, 1000);
-    console.log("fps: " + fps + " (update)")
-    console.log("speed: " + speed + " (update)")
-    console.log("pipe: " + pipeSpawnRate + " (update)")
+    // console.log("fps: " + fps + " (update)")
+    // console.log("speed: " + speed + " (update)")
+    // console.log("pipe: " + pipeSpawnRate + " (update)")
   }
 
   var minFPS = minimumFpsValue; // Minimum FPS value
