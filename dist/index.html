@@ -1,0 +1,89 @@
+<!--electron-builder --win --x64-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../dist/styles.css">
+    <title>Chad Bird</title>
+  </head>
+  <body>
+
+    
+    <div id="gameContainer">
+ 
+      <canvas id="gameCanvas"></canvas>
+
+      <img id="backgroundImage" src="assets/black-image.jpg" alt="Black Image">
+
+      <!-- The video element for displaying the game background -->
+      <video id="gameVideo" loop autoplay></video>
+      
+      <!-- The images for the ground, ceiling and skybox -->
+      <img id="groundImg" class="hidden" src="assets/ground.png">
+      <img id="ceilingImg" class="hidden" src="assets/ceiling.png">
+      <img id="skyboxImg" class="hidden" src="assets/skybox.png">
+      <img id="secondSkyboxImg" class="hidden" src="assets/second-background.png">
+
+      <div id="message"></div>
+
+      <!-- The image for the game logo -->
+      <img id="logo" src="assets/logo.png" alt="Game Logo">
+
+      <!-- Coins and powerUps-->
+      <img id="coinImage" src="assets/coin.png" style="display: none;">
+      <img id="starImage" src="assets/star.png" style="display: none;">
+      <img id="ghostImage" src="assets/ghost.png" style="display: none;">
+      <img id="sizeImage" src="assets/size.png" style="display: none;">
+      <img id="reduceGapImage" src="assets/reduceGap.png" style="display: none;">
+
+      <!-- The audio elements for game sounds -->
+      <audio id="flapSound" src="assets/flap.mp3"></audio>
+      <audio id="backgroundMusic" src="assets/background-music.mp3" loop></audio>
+      <audio id="deathSound" src="assets/death-sound.mp3"></audio>
+      <audio id="coinSound" src="assets/coin-sound.mp3"></audio>
+      <audio id="starSound" src="assets/star-sound.mp3"></audio>
+      <audio id="ghostSound" src="assets/ghost-sound.mp3"></audio>
+      <audio id="sizeSound" src="assets/size-sound.mp3"></audio>
+      <audio id="reduceGapSound" src="assets/reduce-gap-sound.mp3"></audio>
+    
+
+    <div id="nonGameElements">
+      <!-- Other non-game elements -->
+
+      <button id="startButton">Play</button>
+      <div id="difficultyButtons" class="buttonContainer">
+        <button id="normalButton" class="difficultyButton" onclick="setDifficulty('normal')">
+          <img src="assets/difficulty-easy.png" alt="Normal Difficulty">
+        </button>
+        <button id="hardButton" class="difficultyButton" onclick="setDifficulty('hard')">
+          <img src="assets/difficulty-hard.png" alt="Hard Difficulty">
+        </button>
+        <div id="settingsMenu" class="hidden">
+          <h2>GRAPHICS</h2>
+          <div id="resolutionOptions">
+            <button class="resolutionButton" name="resolution" value="native" checked>High</button>
+            <button class="resolutionButton" name="resolution" value="0.5">Medium</button>
+            <button class="resolutionButton" name="resolution" value="0.25">Low</button>
+          </div>
+          <div id="pipeTextureOption">
+            <button class="optionButton" id="pipeTextureButton" data-option="pipeTexture" data-value="true">Textures</button>
+          </div>
+          <div id="showFPSOption">
+            <button class="optionButton" id="showFPSButton" data-option="showFPS" data-value="false">Show FPS</button>
+          </div>
+        </div>
+          
+      </div>
+    </div>
+    </div>
+  
+    <!-- The JavaScript file containing the game logic -->
+    <script src="flappybird.js"></script>
+  </body>
+</html>
+
+
+
+    
+    
