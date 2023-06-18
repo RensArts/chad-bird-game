@@ -438,12 +438,10 @@ function goToStore() {
 
 // Add event listeners to your buttons and play corresponding audio on click
 document.getElementById('normalButton').addEventListener('click', function() {
-  buttonSound.play();
   setDifficulty('normal');
 });
 
 document.getElementById('hardButton').addEventListener('click', function() {
-  buttonSound.play();
   setDifficulty('hard');
 });
 
@@ -462,6 +460,7 @@ function setDifficulty(selectedDifficulty) {
   // Remove the selected class from the previously selected button
   if (selectedButton) {
     selectedButton.classList.remove('selected');
+    buttonSound.play();
   }
 
   // Adjust the game constants based on the selected difficulty level
@@ -970,31 +969,6 @@ function createSfxButton() {
   document.body.appendChild(button);
 };
 
-// Function to initialize the flap sounds
-function initializeFlapSounds() {
-  for (var i = 0; i < 5; i++) {
-    var flapSound = new Audio("assets/flap.mp3");
-    flapSounds.push(flapSound);
-  }
-}
-
-// Function to play a flap sound
-function playFlapSound() {
-  // Find an available flap sound
-  var flapSound = flapSounds.find(function(sound) {
-    return sound.paused || sound.ended;
-  });
-
-  // If all sounds are in use, create a new one
-  if (!flapSound) {
-    flapSound = new Audio("assets/flap.mp3");
-    flapSounds.push(flapSound);
-  }
-  
-  // Play the flap sound
-  flapSound.play();
-}
-
 function getRandomInt(min, max) {
   const range = max - min + 1;
   const random = Math.random();
@@ -1131,6 +1105,31 @@ function startVerticalMovementTimeout() {
   setTimeout(enableVerticalMovementAfterTimeout, countDown); // Enable vertical movement after 1 second
 }
 
+// Function to initialize the flap sounds
+function initializeFlapSounds() {
+  for (var i = 0; i < 5; i++) {
+    var flapSound = new Audio("assets/flap.mp3");
+    flapSounds.push(flapSound);
+  }
+}
+
+// Function to play a flap sound
+function playFlapSound() {
+  // Find an available flap sound
+  var flapSound = flapSounds.find(function(sound) {
+    return sound.paused || sound.ended;
+  });
+
+  // If all sounds are in use, create a new one
+  if (!flapSound) {
+    flapSound = new Audio("assets/flap.mp3");
+    flapSounds.push(flapSound);
+  }
+  
+  // Play the flap sound
+  flapSound.play();
+}
+
 // Set up event listeners
 document.addEventListener("mouseup", moveDown);
 document.getElementById("startButton").addEventListener("mousedown", moveUp);
@@ -1150,6 +1149,20 @@ function touchMoveUp(event) {
   }
 }
 
+// Function to move the bird down when a touch event ends
+function touchEnd(event) {
+  if (event.target === "touchend") {
+    isMovingUp = false;
+  }
+}
+
+// Function to move the bird down when the key is released
+function moveDown(event) {
+  if (event.type === "mouseup") {
+    isMovingUp = false;
+  }
+}
+
 // Common function to handle move up logic
 function handleMoveUp() {
   if (isGameOver) {
@@ -1166,8 +1179,10 @@ function handleMoveUp() {
     isGhost = false;
     isInvincible = false;
     isSize = false;
+    document.getElementById("startButton").removeEventListener("mousedown", moveUp);
     document.addEventListener("mousedown", moveUp);
     document.addEventListener("touchstart", touchMoveUp);
+    document.addEventListener("touchend", moveDown);
     // Start the initial star interval with a random spawn rate
     starIntervalId = setInterval(addStar, generateStarSpawnRate());
     ghostIntervalId = setInterval(addGhost, generateGhostSpawnRate());
@@ -1180,13 +1195,6 @@ function handleMoveUp() {
     // Play the flap sound
     playFlapSound();
     document.getElementById("backgroundMusic").play();
-  }
-}
-
-// Function to move the bird down when the key is released
-function moveDown(event) {
-  if (event.type === "mouseup") {
-    isMovingUp = false;
   }
 }
 
@@ -1496,8 +1504,10 @@ function gameOver() {
 var buttonEnabled = false;
 setTimeout(function() {
     buttonEnabled = true;
+    document.removeEventListener("touchstart", touchMoveUp);
     document.removeEventListener("mousedown", moveUp);
     document.addEventListener("mousedown", restartGame); // Press to continue to main menu
+    document.getElementById("startButton").addEventListener("mousedown", moveUp);
     ctx.font = `bolder ${Math.round(70 * (canvas.width / 2560))}px Helvetica`;
     ctx.fillStyle = "white";
     ctx.strokeStyle = "black"; // Set the border color
@@ -1586,6 +1596,7 @@ if (secondSkybox.x <= -secondSkybox.width) {
     JUMP = -1.6 
     GRAVITY = 1.6 * secondResolutionAdjust
     document.removeEventListener("mousedown", moveUp)
+    document.removeEventListener("touchstart", touchMoveUp)
   }
   
   // Check for collision with bottom border
