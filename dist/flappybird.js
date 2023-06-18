@@ -1352,11 +1352,14 @@ function drawBird() {
   } else if (isMovingUp && bird.y > 0 && isSize) {
     birdUp.width = 125 * (canvas.width / 2560);
     birdUp.height = 125 * (canvas.height / 1080);
-    HITBOX_BOTTOM = -80 / secondResolutionAdjust * (canvas.height / 1080);
+    HITBOX_TOP = -60 * secondResolutionAdjust  * (canvas.height / 1080);
     HITBOX_LEFT = 145/ secondResolutionAdjust * (canvas.width / 2560);
     HITBOX_RIGHT = -120/ secondResolutionAdjust * (canvas.width / 2560);
-    HITBOX_TOP = -60 * secondResolutionAdjust  * (canvas.height / 1080);
-
+    if (!isReduceGap){
+      HITBOX_BOTTOM = -80 / secondResolutionAdjust * (canvas.height / 1080);
+    } else {
+      HITBOX_BOTTOM = -150 / secondResolutionAdjust * (canvas.height / 1080);
+    }
     ctx.drawImage(
       birdUpImg,
       (birdUp.x + 20) * (canvas.width  / 2560 * resolutionAdjust),
@@ -1367,10 +1370,14 @@ function drawBird() {
   } else if (!isMovingUp && bird.y <= canvas.height - bird.height && isSize && !isGhost) {
     birdDown.width = 125 * (canvas.width / 2560);
     birdDown.height = 125 * (canvas.height / 1080);
-    HITBOX_BOTTOM = -80 / secondResolutionAdjust * (canvas.height / 1080);
     HITBOX_LEFT = 200 / secondResolutionAdjust * (canvas.width  / 2560);
     HITBOX_RIGHT = -120 / secondResolutionAdjust * (canvas.width / 2560);
     HITBOX_TOP = -60 / secondResolutionAdjust * (canvas.height / 1080);
+    if (!isReduceGap){
+      HITBOX_BOTTOM = -80 / secondResolutionAdjust * (canvas.height / 1080);
+    } else {
+      HITBOX_BOTTOM = -150 / secondResolutionAdjust * (canvas.height / 1080);
+    }
 
     ctx.drawImage(
       birdDownImg,
@@ -1577,10 +1584,18 @@ if (secondSkybox.x <= -secondSkybox.width) {
     isSize = false;
   }
 
-  if (currentTime > reduceGapPowerUpEndTime) {
+  if (currentTime > reduceGapPowerUpEndTime && !isSize) {
     PIPE_GAP = 320 * (canvas.height / 1080);
     isReduceGap = false;
     reduceGapSpeedMultiplier = 1;
+    HITBOX_BOTTOM = -10 * (canvas.height / 1080);
+  }
+
+  if (currentTime > reduceGapPowerUpEndTime && isSize) {
+    PIPE_GAP = 320 * (canvas.height / 1080);
+  isReduceGap = false;
+  reduceGapSpeedMultiplier = 1;
+  HITBOX_BOTTOM = -80 * (canvas.height / 1080);
   }
 
 
@@ -1594,17 +1609,25 @@ if (secondSkybox.x <= -secondSkybox.width) {
     speed = speed * ghostSpeedMultiplier;
   }
 
-  if (isReduceGap) {
-    PIPE_GAP = 600 * (canvas.height / 1080);
+  if (isReduceGap && !isSize) {
+    PIPE_GAP = 450 * (canvas.height / 1080);
     speed = speed * reduceGapSpeedMultiplier;
+    HITBOX_BOTTOM = -90 * (canvas.height / 1080);
   }
+
+  if (isReduceGap && isSize){
+    PIPE_GAP = 450 * (canvas.height / 1080);
+    speed = speed * reduceGapSpeedMultiplier;
+    HITBOX_BOTTOM = -90 * (canvas.height / 1080);
+    HITBOX_BOTTOM = -150 / secondResolutionAdjust * (canvas.height / 1080);
+    }
 
   // Check for collision with pipes
   if (checkCollision()) {
     deathSound.play()
     backgroundMusic.pause()
     isGameOver = true; // Set the game over state
-
+    return;
 }  
 
    // Clear canvas before drawing new elements each frame
