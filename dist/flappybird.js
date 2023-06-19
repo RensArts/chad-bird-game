@@ -9,6 +9,7 @@ var ctx = canvas.getContext("2d");
 
 // Function to open the settings window
 function openSettingsWindow() {
+  isInSettingsMenu = true;
   // Create the modal overlay
   var overlay = document.createElement("div");
   overlay.className = "overlay";
@@ -216,6 +217,7 @@ function toggleOption(event) {
 }
 
 function setInputOption(event) {
+  buttonSound.play();
   var button = event.target;
   var value = button.getAttribute("data-value");
 
@@ -1272,7 +1274,7 @@ function handleMoveUp() {
     return;
   }
   isMovingUp = true;
-  if (!isGameStarted) {
+  if (!isGameStarted && canStartGame) {
     isGameStarted = true;
     startVerticalMovementTimeout();
     buttonSound.play();
@@ -1288,7 +1290,7 @@ function handleMoveUp() {
     document.removeEventListener("mousedown", moveUp);
     document.removeEventListener("touchstart", touchMoveUp);
 
-    // Add event listeners based on chosen input
+    // Add event listeners based on chosen input only when the start button is pressed
     if (chosenInput === "mouse") {
       document.addEventListener("mousedown", moveUp);
     } else if (chosenInput === "touch") {
@@ -1309,6 +1311,37 @@ function handleMoveUp() {
     document.getElementById("backgroundMusic").play();
   }
 }
+
+// Set a flag when the game loads indicating that the start button can trigger the game
+var canStartGame = false;
+
+// Start the game with a single click when the game loads
+document.addEventListener("DOMContentLoaded", function() {
+  canStartGame = true;
+});
+
+// Set a flag when the start button is pressed
+var startButtonPressed = false;
+document.getElementById("startButton").addEventListener("click", function() {
+  startButtonPressed = true;
+});
+
+// Add event listener to prevent game start when clicking on the mouse option
+mouseButton.addEventListener("click", function(event) {
+  event.stopPropagation();
+  startButtonPressed = false; // Reset the start button flag to prevent game start
+});
+
+// Add event listener to start the game only when the start button is clicked
+document.addEventListener("click", function(event) {
+  if (event.target.id === "startButton" && startButtonPressed) {
+    canStartGame = true; // Set the game start condition
+    startButtonPressed = false; // Reset the start button flag
+    handleMoveUp(); // Start the game
+  } else {
+    canStartGame = false; // Prevent game start
+  }
+});
 
 
 /**
@@ -1628,7 +1661,6 @@ setTimeout(function() {
     ctx.fillText("Tap screen to restart", canvas.width / 2 - (340 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
   }, 200); // Change the duration (in milliseconds) to your desired delay
 }
-
 
 //Plays the death sound effect.
 function playDeathSound() {
