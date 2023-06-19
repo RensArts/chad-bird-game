@@ -130,8 +130,8 @@ resolutionButtons.forEach(function (button) {
 
 var pipeTextureButton = document.getElementById("pipeTextureButton");
 var showFPSButton = document.getElementById("showFPSButton");
-var showTextures = localStorage.getItem("pipeTexture") === "true";
-
+var touchButton = document.getElementById("touchButton");
+var mouseButton = document.getElementById("mouseButton");
 
 // Set the initial state of the "showFPS" button
 var showFPS = localStorage.getItem("showFPS") || "false";
@@ -151,8 +151,49 @@ if (showTextures === "true") {
   pipeTextureButton.classList.remove("selected");
 }
 
+// Set the initial state of the input buttons
+var chosenInput = localStorage.getItem("chosenInput") || "touch";
+if (chosenInput === "touch") {
+  touchButton.classList.add("selected");
+} else {
+  mouseButton.classList.add("selected");
+}
+
+var pipeTextureButton = document.getElementById("pipeTextureButton");
+var showFPSButton = document.getElementById("showFPSButton");
+var touchButton = document.getElementById("touchButton");
+var mouseButton = document.getElementById("mouseButton");
+
+// Set the initial state of the "showFPS" button
+var showFPS = localStorage.getItem("showFPS") || "false";
+showFPSButton.setAttribute("data-value", showFPS);
+if (showFPS === "true") {
+  showFPSButton.classList.add("selected");
+} else {
+  showFPSButton.classList.remove("selected");
+}
+
+// Set the initial state of the "pipeTexture" button
+var showTextures = localStorage.getItem("pipeTexture") || "false";
+pipeTextureButton.setAttribute("data-value", showTextures);
+if (showTextures === "true") {
+  pipeTextureButton.classList.add("selected");
+} else {
+  pipeTextureButton.classList.remove("selected");
+}
+
+// Set the initial state of the input buttons
+var chosenInput = localStorage.getItem("chosenInput") || "mouse";
+if (chosenInput === "touch") {
+  touchButton.classList.add("selected");
+} else {
+  mouseButton.classList.add("selected");
+}
+
 pipeTextureButton.addEventListener("click", toggleOption);
 showFPSButton.addEventListener("click", toggleOption);
+touchButton.addEventListener("click", setInputOption);
+mouseButton.addEventListener("click", setInputOption);
 
 function toggleOption(event) {
   buttonSound.play();
@@ -174,6 +215,29 @@ function toggleOption(event) {
   updateOption(option, value);
 }
 
+function setInputOption(event) {
+  var button = event.target;
+  var value = button.getAttribute("data-value");
+
+  // Update the input option value and perform any necessary actions
+  chosenInput = value;
+  localStorage.setItem("chosenInput", chosenInput); // Store the chosen input option in local storage
+
+  // Update the button states
+  touchButton.classList.remove("selected");
+  mouseButton.classList.remove("selected");
+  button.classList.add("selected");
+
+  // Add or remove event listeners based on the chosen input
+  if (chosenInput === "touch") {
+    document.removeEventListener("mousedown", moveUp);
+    document.addEventListener("touchstart", touchMoveUp);
+  } else if (chosenInput === "mouse") {
+    document.removeEventListener("touchstart", touchMoveUp);
+    document.addEventListener("mousedown", moveUp);
+  }
+}
+
 function updateOption(option, value) {
   if (option === "pipeTexture") {
     showTextures = value === "true";
@@ -191,6 +255,8 @@ function updateOption(option, value) {
     localStorage.setItem("showFPS", value); // Store the value in local storage
   }
 }
+
+
 
 // Constants
 const PIPE_PASSED = canvas.width * resolutionAdjust * 0.0781;
@@ -1217,9 +1283,18 @@ function handleMoveUp() {
     isInvincible = false;
     isSize = false;
     document.getElementById("startButton").removeEventListener("mousedown", moveUp);
-    document.addEventListener("mousedown", moveUp);
-    document.addEventListener("touchstart", touchMoveUp);
-    document.addEventListener("touchend", moveDown);
+
+    // Remove existing event listeners
+    document.removeEventListener("mousedown", moveUp);
+    document.removeEventListener("touchstart", touchMoveUp);
+
+    // Add event listeners based on chosen input
+    if (chosenInput === "mouse") {
+      document.addEventListener("mousedown", moveUp);
+    } else if (chosenInput === "touch") {
+      document.addEventListener("touchstart", touchMoveUp);
+    }
+
     // Start the initial star interval with a random spawn rate
     starIntervalId = setInterval(addStar, generateStarSpawnRate());
     ghostIntervalId = setInterval(addGhost, generateGhostSpawnRate());
@@ -1809,8 +1884,10 @@ if (secondSkybox.x <= -secondSkybox.width) {
     fps = framesPer100ms.toFixed(1); // Convert framesPer100ms to a string with one decimal place
     frameCount = 0;
     elapsedTime = 0;
-    setTimeout(adjustSpeed, 1000);
-    setTimeout(adjustPipeSpawnRate, 1000);
+    adjustSpeed();
+    if (isGameStarted && !enableVerticalMovement){
+    adjustPipeSpawnRate();
+    }
     // console.log("fps: " + fps + " (update)")
     // console.log("speed: " + speed + " (update)")
     // console.log("pipe: " + pipeSpawnRate + " (update)")
