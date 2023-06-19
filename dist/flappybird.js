@@ -1343,7 +1343,6 @@ document.addEventListener("click", function(event) {
   }
 });
 
-
 /**
  * Starts the game by resetting necessary variables and game state.
  */
@@ -1888,6 +1887,7 @@ if (secondSkybox.x <= -secondSkybox.width) {
   if (!enableVerticalMovement && isGameStarted){
   drawReadyMessage();
   drawAnimatedBird();
+  isMovingUp = false;
   }
 
   // Draw the message afte vertical movement starts
