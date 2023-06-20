@@ -1130,32 +1130,80 @@ function updatePipes() {
   for (var i = pipeStartSkip; i < pipes.length; i++) {
     var p = pipes[i];
     p.x -= PIPE_SPEED * speed; // Pipe movement speed
-    
+
     // Calculate adjusted sizes and positions based on canvas resolution
     var adjustedX = Math.round(p.x * (canvas.width * resolutionAdjust / 2560));
     var adjustedY = Math.round(p.y * (canvas.height * resolutionAdjust / 1080));
     var adjustedWidth = Math.round(p.width * (canvas.width / 2560 * resolutionAdjust));
     var adjustedHeight = Math.round(p.height * (canvas.height / 1080 * resolutionAdjust));
     var adjustedGap = Math.round(PIPE_GAP * (canvas.width / 2560 * resolutionAdjust));
-    var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
-    var adjustedImageHeight = Math.round((p.height + 140) * (canvas.height / 1080 * secondResolutionAdjust));
-    
+
+    // Calculate adjusted image dimensions based on the respective pipe heights
+    var adjustedImageWidth;
+    var adjustedImageHeight;
+    var adjustedImageY;
+    if (resolutionAdjust === 1) {
+      adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560));
+      adjustedImageHeight = Math.round((p.height + 100) * (canvas.height / 1080));
+      adjustedImageY = Math.round(90 * (canvas.height / 1080));
+    } else if (resolutionAdjust === 2) {
+      adjustedImageWidth = Math.round((p.width + 95) * (canvas.width / 2560 * 1.4));
+      adjustedImageHeight = Math.round((p.height + 45) * (canvas.height / 1080 * resolutionAdjust));
+      adjustedImageY = Math.round(175 * (canvas.height / 1080));
+    } else if (resolutionAdjust === 4) {
+      adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * 2));
+      adjustedImageHeight = Math.round((p.height + 23) * (canvas.height / 1080 * resolutionAdjust));
+      adjustedImageY = Math.round(340 * (canvas.height / 1080));
+    }
+
     // Draw top pipe
-    ctx.fillStyle = PIPE_COLOR_TOP; 
+    ctx.fillStyle = PIPE_COLOR_TOP;
     ctx.fillRect(adjustedX, adjustedY, adjustedWidth, adjustedHeight);
 
     // Draw bottom pipe
-    ctx.fillStyle = PIPE_COLOR_BOTTOM; 
+    ctx.fillStyle = PIPE_COLOR_BOTTOM;
     var bottomPipeHeight = canvas.height - (p.height + adjustedGap);
     ctx.fillRect(adjustedX, adjustedHeight + adjustedGap, adjustedWidth, bottomPipeHeight);
-    
+
     // Check if the showTextures option is selected (button is red)
-if (showTextures && pipeTextureButton.classList.contains("selected")) {
-  // Render picture on top of the pipes
-  ctx.drawImage(pipeImage, adjustedX - Math.round(40 * (canvas.width / 2560)), adjustedY - Math.round(190 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
-}
+    if (showTextures && pipeTextureButton.classList.contains("selected")) {
+      // Render picture on top of the pipes
+      ctx.drawImage(
+        pipeImage,
+        adjustedX - Math.round(40 * (canvas.width / 2560)),
+        adjustedY - Math.round(adjustedImageY / resolutionAdjust),
+        adjustedImageWidth,
+        adjustedImageHeight
+      );
+    }
   }
 }
+
+// Correct pipe texture placement values at native resolution
+// var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
+//     var adjustedImageHeight = Math.round((p.height + 100) * (canvas.height / 1080 * secondResolutionAdjust));
+// if (showTextures && pipeTextureButton.classList.contains("selected")) {
+//   // Render picture on top of the pipes
+//   ctx.drawImage(pipeImage, adjustedX - Math.round(240 * (canvas.width / 2560)), adjustedY - Math.round(90 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
+// }
+
+// Correct pipe texture placement values at 0.5 resolution
+// var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
+//     var adjustedImageHeight = Math.round((p.height + 45) * (canvas.height / 1080 * resolutionAdjust));
+//     if (showTextures && pipeTextureButton.classList.contains("selected")) {
+//       // Render picture on top of the pipes
+//       ctx.drawImage(pipeImage, adjustedX - Math.round(240 * (canvas.width / 2560)), adjustedY - Math.round(175 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
+//     }
+
+// Correct pipe texture placement values at 0.25 resolution
+// var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
+//     var adjustedImageHeight = Math.round((p.height + 23) * (canvas.height / 1080 * resolutionAdjust));
+//     if (showTextures && pipeTextureButton.classList.contains("selected")) {
+//       // Render picture on top of the pipes
+//       ctx.drawImage(pipeImage, adjustedX - Math.round(240 * (canvas.width / 2560)), adjustedY - Math.round(340 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
+//     }
+
+
 
 function drawReadyMessage() {
   ctx.fillStyle = "white";
