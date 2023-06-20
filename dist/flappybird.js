@@ -1142,19 +1142,31 @@ function updatePipes() {
     var adjustedImageWidth;
     var adjustedImageHeight;
     var adjustedImageY;
-    if (resolutionAdjust === 1) {
+    if (resolutionAdjust === 1 && !isReduceGap) {
       adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560));
       adjustedImageHeight = Math.round((p.height + 100) * (canvas.height / 1080));
       adjustedImageY = Math.round(90 * (canvas.height / 1080));
-    } else if (resolutionAdjust === 2) {
+    } else if (resolutionAdjust === 2 && !isReduceGap) {
       adjustedImageWidth = Math.round((p.width + 95) * (canvas.width / 2560 * 1.4));
       adjustedImageHeight = Math.round((p.height + 45) * (canvas.height / 1080 * resolutionAdjust));
       adjustedImageY = Math.round(175 * (canvas.height / 1080));
-    } else if (resolutionAdjust === 4) {
+    } else if (resolutionAdjust === 4 && !isReduceGap) {
       adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * 2));
       adjustedImageHeight = Math.round((p.height + 23) * (canvas.height / 1080 * resolutionAdjust));
       adjustedImageY = Math.round(340 * (canvas.height / 1080));
-    }
+    }  else if (resolutionAdjust === 1 && isReduceGap) {
+      adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560));
+      adjustedImageHeight = Math.round((p.height + 10) * (canvas.height / 1080));
+      adjustedImageY = Math.round(5 * (canvas.height / 1080));
+    } else if (resolutionAdjust === 2 && isReduceGap) {
+      adjustedImageWidth = Math.round((p.width + 95) * (canvas.width / 2560 * 1.4));
+      adjustedImageHeight = Math.round((p.height + 5) * (canvas.height / 1080 * resolutionAdjust));
+      adjustedImageY = Math.round(10 * (canvas.height / 1080));
+    } else if (resolutionAdjust === 4 && isReduceGap) {
+      adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * 2));
+      adjustedImageHeight = Math.round((p.height + 2) * (canvas.height / 1080 * resolutionAdjust));
+      adjustedImageY = Math.round(10 * (canvas.height / 1080));
+    } 
 
     // Draw top pipe
     ctx.fillStyle = PIPE_COLOR_TOP;
@@ -1178,32 +1190,6 @@ function updatePipes() {
     }
   }
 }
-
-// Correct pipe texture placement values at native resolution
-// var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
-//     var adjustedImageHeight = Math.round((p.height + 100) * (canvas.height / 1080 * secondResolutionAdjust));
-// if (showTextures && pipeTextureButton.classList.contains("selected")) {
-//   // Render picture on top of the pipes
-//   ctx.drawImage(pipeImage, adjustedX - Math.round(240 * (canvas.width / 2560)), adjustedY - Math.round(90 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
-// }
-
-// Correct pipe texture placement values at 0.5 resolution
-// var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
-//     var adjustedImageHeight = Math.round((p.height + 45) * (canvas.height / 1080 * resolutionAdjust));
-//     if (showTextures && pipeTextureButton.classList.contains("selected")) {
-//       // Render picture on top of the pipes
-//       ctx.drawImage(pipeImage, adjustedX - Math.round(240 * (canvas.width / 2560)), adjustedY - Math.round(175 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
-//     }
-
-// Correct pipe texture placement values at 0.25 resolution
-// var adjustedImageWidth = Math.round((p.width + 85) * (canvas.width / 2560 * secondResolutionAdjust));
-//     var adjustedImageHeight = Math.round((p.height + 23) * (canvas.height / 1080 * resolutionAdjust));
-//     if (showTextures && pipeTextureButton.classList.contains("selected")) {
-//       // Render picture on top of the pipes
-//       ctx.drawImage(pipeImage, adjustedX - Math.round(240 * (canvas.width / 2560)), adjustedY - Math.round(340 / resolutionAdjust * (canvas.height / 1080)), adjustedImageWidth, adjustedImageHeight);
-//     }
-
-
 
 function drawReadyMessage() {
   ctx.fillStyle = "white";
