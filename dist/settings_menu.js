@@ -258,6 +258,3 @@ function updateOption(option, value) {
   }
 }
 
-createMusicButton();
-
-createSfxButton();

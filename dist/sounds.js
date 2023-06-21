@@ -27,6 +27,7 @@ const startSound = new Audio("assets/start-sound.mp3")
   // Function to play a coin sound
 function playCoinSound() {
   // Find an available coin sound
+  if (isSfxOn)
   var coinSound = coinSounds.find(function(sound) {
     return sound.paused || sound.ended;
   });

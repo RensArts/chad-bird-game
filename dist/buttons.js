@@ -157,9 +157,8 @@ function createMusicButton() {
       adjustVolume();
     }
   }
+  
+  
 
-  function initializeButtons() {
-    createMusicButton();
-    createSfxButton();
-  }
+  
   
