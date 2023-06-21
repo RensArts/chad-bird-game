@@ -54,10 +54,10 @@
 
       <button id="startButton">Play</button>
       <div id="difficultyButtons" class="buttonContainer">
-        <button id="normalButton" class="difficultyButton">
+        <button id="normalButton" class="difficultyButton" onclick="setDifficulty('normal')">
           <img src="assets/difficulty-easy.png" alt="Normal Difficulty">
         </button>
-        <button id="hardButton" class="difficultyButton">
+        <button id="hardButton" class="difficultyButton" onclick="setDifficulty('hard')">
           <img src="assets/difficulty-hard.png" alt="Hard Difficulty">
         </button>
         <div id="settingsMenu" class="hidden">
@@ -81,7 +81,7 @@
           </div>
            </div>
           </div>
-    <script type="module" src="flappybird.js"></script>
+    <script src="flappybird.js"></script>
   </body>
 </html>
 
