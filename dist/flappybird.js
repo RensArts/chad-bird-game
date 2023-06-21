@@ -1456,7 +1456,7 @@ let isBirdFalling = true;
 
 // Draw the animated bird based on up or down position
 function drawDeathAnimation() {
-  let birdImage = isBirdFalling ? birdUpImg : birdDownImg;
+  let birdImage = isBirdFalling ? birdDownImg : birdUpImg;
   ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 }
 
@@ -1766,8 +1766,8 @@ if (secondSkybox.x <= -secondSkybox.width) {
   // Check for collision with top border
   if (bird.y < 10 / resolutionAdjust) {
     isGameOver = true; // Set the game over state
+    deathSound.play();
     drawBird();
-    gameOver(); // Call the game over function
     JUMP = -1.6 
     GRAVITY = 1.6 * secondResolutionAdjust
     document.removeEventListener("mousedown", moveUp)
@@ -1780,7 +1780,6 @@ if (secondSkybox.x <= -secondSkybox.width) {
     gameOver(); // Call the game over function
     return;
   }
-
   
   // Check if the current power-up has expired
   var currentTime = Date.now();
@@ -1979,7 +1978,7 @@ if (secondSkybox.x <= -secondSkybox.width) {
   if (isGameOver) {
     drawDeathAnimation(); // Call the drawing function when collision is detected
   }
-
+  
   requestAnimationFrame(update);
 }
 
