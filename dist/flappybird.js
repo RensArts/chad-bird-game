@@ -1,15 +1,15 @@
 // Check if resolution is stored in local storage
-var savedResolution = localStorage.getItem("resolution");
+import * as constants from "./constants.js";
+import * as game_state from "./game_state.js";
+import { canvas } from "./rendering.js";
 
-// Get the canvas element
-var canvas = document.getElementById("gameCanvas");
+var savedResolution = localStorage.getItem("resolution");
 
 // Obtain the rendering context
 var ctx = canvas.getContext("2d");
 
 // Function to open the settings window
 function openSettingsWindow() {
-  isInSettingsMenu = true;
   // Create the modal overlay
   var overlay = document.createElement("div");
   overlay.className = "overlay";
@@ -80,6 +80,8 @@ function closeSettingsWindow() {
 
 // Check if resolution is stored in local storage
 var savedResolution = localStorage.getItem("resolution");
+var resolutionAdjust = 0
+var secondResolutionAdjust = 0
 
 if (savedResolution) {
   switch (savedResolution) {
@@ -265,8 +267,7 @@ const PIPE_PASSED = canvas.width * resolutionAdjust * 0.0781;
 const PIPE_WIDTH = canvas.width * resolutionAdjust * 0.0508;
 const PIPE_COLOR_TOP = "black";
 const PIPE_COLOR_BOTTOM = "black";
-var HITBOX_RIGHT = -40 * (canvas.width / 2560);
-var HITBOX_TOP = -75 * (canvas.height / 1080); 
+var HITBOX_TOP = -75 * (canvas.height / 1080);
 var HITBOX_BOTTOM = -10 * (canvas.height / 1080); 
 var HITBOX_LEFT = 140 * (canvas.width / 2560); 
 var COIN_HITBOX = 0;
@@ -284,7 +285,6 @@ let reduceGapIntervalId;
 
 //Arrays
 var flapSounds = [];
-var coins = [];
 var pipes = [];
 var stars = [];
 var ghosts = [];
@@ -644,7 +644,7 @@ function addCoin() {
     y: getRandomInt(canvas.height * 450 / 1080, canvas.height - (canvas.height * 450 / 1080)), // Randomize the coin's y-coordinate
     radius: canvas.width * 30 / 1080, // Adjusted size of the coin
   };
-  coins.push(coin);
+  game_state.coins.push(coin);
 }
 
 // Determines the star spawning location
@@ -690,8 +690,8 @@ function addReduceGap() {
 
 // Updates the coin spawning, coin collecting and hitbox
 function updateCoins() {
-  for (var i = 1; i < coins.length; i++) {
-    var coin = coins[i];
+  for (var i = 1; i < game_state.coins.length; i++) {
+    var coin = game_state.coins[i];
     coin.x -= PIPE_SPEED * (speed + COIN_SPEED); // Move the coin with the pipes
 
     // Draw the coin image
@@ -702,7 +702,7 @@ function updateCoins() {
         bird.x < COIN_HITBOX + coin.x + coin.radius &&
         bird.y + COIN_HITBOX + bird.height > coin.y - coin.radius &&
         bird.y < COIN_HITBOX + coin.y + coin.radius) {
-      coins.splice(i, 1); // Remove the collected coin from the array
+      game_state.coins.splice(i, 1); // Remove the collected coin from the array
       matchCoins++; // Increment the coins match score
       collectedCoins++; // Increment the total coins score
       playCoinSound();
@@ -1384,7 +1384,7 @@ function startGame() {
   isGameOver = false;
   bird.y = Math.round(400 * (canvas.height / 1080)); // Reset the bird's position
   pipes = []; // Clear the pipes array
-  coins = []; // Clear the coins array
+  game_state.coins.length = 0;
   stars = []; // Clear the stars array
   ghosts = [];
   sizes = [];
@@ -1426,12 +1426,12 @@ function restartGame(event) {
     birdUp.height = 250 * (canvas.height * resolutionAdjust / 1080);
     birdDown.width = 250 * (canvas.width * resolutionAdjust / 2560);
     birdDown.height = 250 * (canvas.height * resolutionAdjust / 1080);
-    HITBOX_RIGHT = -40 * (canvas.width / 2560);
+    constants.hitbox.RIGHT = -40 * (canvas.width / 2560);
     HITBOX_TOP = -75 * (canvas.height / 1080); 
     HITBOX_BOTTOM = -10 * (canvas.height / 1080); 
     HITBOX_LEFT = 140 * (canvas.width / 2560); 
     pipes = [];
-    coins = [];
+    game_state.coins.length = 0;
     isSize = false;
     isReduceGap = false;
     GRAVITY = 0.9 * secondResolutionAdjust
@@ -1482,7 +1482,7 @@ function checkCollision() {
   for (var i = 0; i < pipes.length; i++) {
     var p = pipes[i];
     // Check if bird overlaps horizontally with current pipe
-    if (bird.x + HITBOX_RIGHT + bird.width > p.x && bird.x + HITBOX_LEFT < p.x + p.width) {
+    if (bird.x + constants.hitbox.RIGHT + bird.width > p.x && bird.x + HITBOX_LEFT < p.x + p.width) {
       // Check if bird overlaps vertically with top or bottom pipe
       if (bird.y < p.y + HITBOX_TOP + p.height && bird.y + HITBOX_BOTTOM + bird.height > p.y) {
         GRAVITY = 1.6 * secondResolutionAdjust;
@@ -1571,7 +1571,7 @@ function drawBird() {
     birdUp.height = 125 * (canvas.height / 1080);
     HITBOX_TOP = -60 * secondResolutionAdjust  * (canvas.height / 1080);
     HITBOX_LEFT = 145/ secondResolutionAdjust * (canvas.width / 2560);
-    HITBOX_RIGHT = -120/ secondResolutionAdjust * (canvas.width / 2560);
+    constants.hitbox.RIGHT = -120/ secondResolutionAdjust * (canvas.width / 2560);
     if (!isReduceGap){
       HITBOX_BOTTOM = -80 / secondResolutionAdjust * (canvas.height / 1080);
     } else {
@@ -1588,7 +1588,7 @@ function drawBird() {
     birdDown.width = 125 * (canvas.width / 2560);
     birdDown.height = 125 * (canvas.height / 1080);
     HITBOX_LEFT = 200 / secondResolutionAdjust * (canvas.width  / 2560);
-    HITBOX_RIGHT = -120 / secondResolutionAdjust * (canvas.width / 2560);
+    constants.hitbox.RIGHT = -120 / secondResolutionAdjust * (canvas.width / 2560);
     HITBOX_TOP = -60 / secondResolutionAdjust * (canvas.height / 1080);
     if (!isReduceGap){
       HITBOX_BOTTOM = -80 / secondResolutionAdjust * (canvas.height / 1080);
@@ -1797,7 +1797,7 @@ if (secondSkybox.x <= -secondSkybox.width) {
 
   if (currentTime > sizePowerUpEndTime) {
     // Power-up has expired, reset effects
-    HITBOX_RIGHT = -40 * (canvas.width / 2560);
+    constants.hitbox.RIGHT = -40 * (canvas.width / 2560);
     HITBOX_TOP = -75 * (canvas.height / 1080); 
     HITBOX_BOTTOM = -10 * (canvas.height / 1080); 
     HITBOX_LEFT = 140 * (canvas.width / 2560); 
