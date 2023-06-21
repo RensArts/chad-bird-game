@@ -1,3 +1,4 @@
+
 //Arrays
 var flapSounds = [];
 var coinSounds = [];
@@ -59,7 +60,7 @@ var groundSpeed = 0; // Track the speed of the ground movement
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
 var powerUpCoinSpawnRate = 200; // Spawn rate of coins during power-up (in milliseconds)
 var minStarSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxStarSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxStarSpawn = 8000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxGhostSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
 var minSizeSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
@@ -107,7 +108,8 @@ var logo = document.getElementById("logo");
 // Load in the buttons and background. Start background animation.
 window.onload = function() {
   drawCollectedCoins();
-  drawBird();
+  createMusicButton();
+  createSfxButton();
   
   const video = document.getElementById("gameVideo");
   video.src = "assets/hell.mp4";
@@ -138,6 +140,5 @@ function initializeCoinSounds() {
   }
 }
 
-// Start the game
-startGame();
+
 

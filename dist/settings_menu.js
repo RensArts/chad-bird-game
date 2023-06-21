@@ -257,3 +257,7 @@ function updateOption(option, value) {
     localStorage.setItem("showFPS", value); // Store the value in local storage
   }
 }
+
+createMusicButton();
+
+createSfxButton();

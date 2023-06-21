@@ -190,11 +190,15 @@ function restartGame(event) {
     if (event.type === "mousedown") {
       // Remove the event listener
       document.removeEventListener("mousedown", restartGame);
-  
       // Reset game variables and state
       isMovingUp = false;
       isGameOver = false;
       isGameStarted = false;
+      isSize = false;
+      isReduceGap = false;
+      isInvincible = false;
+      isGhost = false;
+      isSize = false;
       score = 0;
       matchCoins = 0;
       bird.y = 400 * (canvas.height / 1080);
@@ -213,8 +217,6 @@ function restartGame(event) {
       HITBOX_LEFT = 140 * (canvas.width / 2560); 
       pipes = [];
       coins = [];
-      isSize = false;
-      isReduceGap = false;
       GRAVITY = 0.9 * secondResolutionAdjust
       PIPE_SPEED = 2 / secondResolutionAdjust
       PIPE_GAP = 320 * (canvas.width / 2560);

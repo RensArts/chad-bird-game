@@ -82,7 +82,7 @@ function createMusicButton() {
     document.body.appendChild(button);
   }
   
-  createMusicButton();
+  
   
   
   // Creates the button to turn the sound effects on or off
@@ -157,6 +157,9 @@ function createMusicButton() {
       adjustVolume();
     }
   }
-  
-  createSfxButton();
+
+  function initializeButtons() {
+    createMusicButton();
+    createSfxButton();
+  }
   
