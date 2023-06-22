@@ -6,6 +6,12 @@ function adjustSpeed() {
   // Calculate the adjusted speed based on the current FPS
   var adjustedSpeed = targetSpeed * (targetFPS / Math.max(fps, minFPS));
 
+  // Calculate the score-based speed adjustment
+  var scoreBasedSpeedAdjustment = Math.floor(score / 50); // Increase speed by 10% for every 50 points
+
+  // Apply the score-based speed adjustment
+  adjustedSpeed += (adjustedSpeed * 0.1 * scoreBasedSpeedAdjustment);
+
   // Assign the adjusted speed value to the speed variable
   speed = adjustedSpeed;
 }
@@ -18,9 +24,16 @@ function adjustPipeSpawnRate() {
   // Calculate the adjusted frame rate based on the current FPS
   var adjustedFrameRate = targetFrameRate * (targetFPS / Math.max(fps, minFPS * 2.3));
 
+  // Calculate the score-based frame rate adjustment
+  var scoreBasedFrameRateAdjustment = Math.floor(score / 50); // Increase frame rate by 10% for every 50 points
+
+  // Apply the score-based frame rate adjustment
+  adjustedFrameRate += (adjustedFrameRate * 0.07 * scoreBasedFrameRateAdjustment);
+
   // Assign the adjusted frame rate value to the pipeSpawnRate variable
   pipeSpawnRate = adjustedFrameRate;
 }
+let isPipesCleared = false;
 
 //Updates the game state every frame.
 function update() {
@@ -232,7 +245,21 @@ function update() {
     if (enableVerticalMovement && score < 1 && isGameStarted){
     drawGoMessage();
     }
-  
+
+    if (score > 0 && score % 50 === 0){
+      drawGameSpeedIncreaseMessage();
+    }
+
+    if (score > 0 && score % 50 === 0) {
+      if (!isPipesCleared) {
+        pipes = [];
+        pipeStartSkip = 0;
+        isPipesCleared = true;
+      }
+    } else {
+      isPipesCleared = false;
+    }
+    
     // Check if bird passes pipe and add score
     checkScore();
   
@@ -251,12 +278,10 @@ function update() {
       frameCount = 0;
       elapsedTime = 0;
       adjustSpeed();
-      if (isGameStarted && !enableVerticalMovement){
       adjustPipeSpawnRate();
-      }
-      // console.log("fps: " + fps + " (update)")
-      // console.log("speed: " + speed + " (update)")
-      // console.log("pipe: " + pipeSpawnRate + " (update)")
+      console.log("fps: " + fps + " (update)")
+      console.log("speed: " + speed + " (update)")
+      console.log("pipe: " + pipeSpawnRate + " (update)")
     }
   
     var minFPS = minimumFpsValue; // Minimum FPS value

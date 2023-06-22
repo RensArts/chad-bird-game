@@ -102,6 +102,17 @@ function drawGoMessage() {
     }
   }
 
+  function drawGameSpeedIncreaseMessage() {
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = Math.round(6 * (canvas.width/ 2560));
+    ctx.font = "bolder " + Math.round(140 * (canvas.width / 2560)) + "px Arial";
+    ctx.textAlign = "start";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Speed increased by 10%", canvas.width / 2 - Math.round(750 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
+    ctx.strokeText("Speed increased by 10%", canvas.width / 2 - Math.round(750 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
+  } 
+
 function addPipe() {
     var gapPosition = getRandomInt(Math.ceil(canvas.height * 0.093), canvas.height - PIPE_GAP  - Math.ceil(canvas.height * 0.37));
     

@@ -60,13 +60,13 @@ var groundSpeed = 0; // Track the speed of the ground movement
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
 var powerUpCoinSpawnRate = 300; // Spawn rate of coins during power-up (in milliseconds)
 var minStarSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxStarSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxStarSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxGhostSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxGhostSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
 var minSizeSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxSizeSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxSizeSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
 var minReduceGapSpawn = 5000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxReduceGapSpawn = 45000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxReduceGapSpawn = 55000; // Maximum spawn rate in milliseconds (40 seconds)
 
 var starPowerUpDuration = 5000; // Duration of power-ups in milliseconds 
 var ghostPowerUpDuration = 5000;  // Duration of power-ups in milliseconds
