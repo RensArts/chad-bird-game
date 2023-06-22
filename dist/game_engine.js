@@ -145,10 +145,28 @@ function update() {
       speed = speed * starSpeedMultiplier;
       pipeStartSkip = 0;
       pipes = [];
+        ghosts = [];
+        sizes = [];
+        reduceGaps = [];
     }
   
     if (isGhost) {
       speed = speed * ghostSpeedMultiplier;
+        stars = [];
+        sizes = [];
+        reduceGaps = [];
+    }
+
+    if (isSize) {
+      stars = [];
+      ghosts = [];
+      reduceGaps = [];
+    }
+
+    if (isReduceGap){
+      stars = [];
+      ghosts = [];
+      sizes = [];
     }
   
     if (isReduceGap && !isSize) {
@@ -163,8 +181,7 @@ function update() {
       HITBOX_BOTTOM = -80 * (canvas.height / 1080);
       HITBOX_BOTTOM = -150 / secondResolutionAdjust * (canvas.height / 1080);
       }
-  
-  
+
      // Clear canvas before drawing new elements each frame
      ctx.clearRect(0, 0, canvas.width * resolutionAdjust, canvas.height * resolutionAdjust);
   
