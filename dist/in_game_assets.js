@@ -17,7 +17,7 @@ borderBox.src = "assets/borderBox.png";
 var ground = {
     x: 0,
     y: canvas.height - (canvas.height * 100 / 1080), // Adjusted y-coordinate
-    width: canvas.width,
+    width: canvas.width  + 1600 / resolutionAdjust,
     height: canvas.height* 100 / 1080, // Adjusted height
     speed: 0, // Adjust the speed of the ground movement
   };
@@ -26,7 +26,7 @@ var ground = {
   var ceiling = {
     x: 0,
     y: 0,
-    width: canvas.width,
+    width: canvas.width + 1600 / resolutionAdjust,
     height: canvas.height * 100 / 1080, // Adjusted height
     speed: 0, // Adjust the speed of the ceiling movement
   };

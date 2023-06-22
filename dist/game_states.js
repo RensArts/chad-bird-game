@@ -112,11 +112,11 @@ function checkCollision() {
       if (bird.x + HITBOX_RIGHT + bird.width > p.x && bird.x + HITBOX_LEFT < p.x + p.width) {
         // Check if bird overlaps vertically with top or bottom pipe
         if (bird.y < p.y + HITBOX_TOP + p.height && bird.y + HITBOX_BOTTOM + bird.height > p.y) {
-          GRAVITY = 1.6 * secondResolutionAdjust;
-          PIPE_SPEED = 0.5 / secondResolutionAdjust;
-          GROUND_SPEED = 0.55 / secondResolutionAdjust;
-          skyboxSpeed = 0.4 / resolutionAdjust;
-          secondSkyboxSpeed = 3 / resolutionAdjust;
+          GRAVITY = 1.2 * secondResolutionAdjust;
+          PIPE_SPEED = 1.5 / secondResolutionAdjust;
+          GROUND_SPEED = 1.5 / secondResolutionAdjust;
+          skyboxSpeed = 1.5 / resolutionAdjust;
+          secondSkyboxSpeed = 12 / resolutionAdjust;
           JUMP = -1.6 * secondResolutionAdjust;
           isBirdFalling = true;
   
