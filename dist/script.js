@@ -37,18 +37,18 @@ var COIN_HITBOX = 0;
 var PIPE_SPEED = 2 / secondResolutionAdjust; //Adjust the speed of the pipes
 var skyboxSpeed = 2 / resolutionAdjust; // Adjust the speed of the skybox
 var secondSkyboxSpeed = 16 / resolutionAdjust; // Adjust the speed of the second skybox
-var GROUND_SPEED = 2.03 / secondResolutionAdjust; // Adjust the speed of the ground and ceiling
-var speed = 8 / secondResolutionAdjust; // Variable to increment speed in function Update();
-var speedNormal = 8 / secondResolutionAdjust; // set this value if changing the speed of normal difficulty in function
-var speedHard = 10 / secondResolutionAdjust; // set this value if changing the speed of hard difficulty in function
+var GROUND_SPEED = 2.05 / secondResolutionAdjust; // Adjust the speed of the ground and ceiling
+var speed = 7 / secondResolutionAdjust; // Variable to increment speed in function Update();
+var speedNormal = 7 / secondResolutionAdjust; // set this value if changing the speed of normal difficulty in function
+var speedHard = 9 / secondResolutionAdjust; // set this value if changing the speed of hard difficulty in function
 
 var JUMP = 1.2 * secondResolutionAdjust;// Adjust the value of upward momentum
 var GRAVITY = 0.9 * secondResolutionAdjust; // Adjust this value to control the downward speed of the bird
 
 var pipeStartSkip = 24; // amount of pipes that won't be rendered at the start (2 = 1 pipe)
 var pipeSpawnRate = 0.3; // set spawn rate for the pipes (higher = more pipes)
-var pipeSpawnNormal = 0.22; // set this value if changing the pipespawnrate of hard difficulty in function
-var pipeSpawnHard = 0.34; // set this value if changing the pipe spawn rate of normal difficulty in function
+var pipeSpawnNormal = 0.15; // set this value if changing the pipespawnrate of hard difficulty in function
+var pipeSpawnHard = 0.26; // set this value if changing the pipe spawn rate of normal difficulty in function
 var PIPE_GAP = 320 * (canvas.height / 1080); // Adjust this value to control the gap of the spawn pipes
 var gapSize = 500 * (canvas.height / 1080); // Consistent gap size
 
