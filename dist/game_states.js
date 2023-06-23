@@ -225,12 +225,9 @@ function restartGame(event) {
       skyboxSpeed = 2 / resolutionAdjust;
       secondSkyboxSpeed = 16 / resolutionAdjust;
       JUMP = 1.2 * secondResolutionAdjust
-      pipeStartSkip = 24;
       sfxButton.style.display = "block";
       musicButton.style.display = "block";
-      
-      
-      // Start the game
+      pipeStartSkip = 16;
       startGame();
     }
   }

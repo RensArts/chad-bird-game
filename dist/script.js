@@ -45,7 +45,7 @@ var speedHard = 9 / secondResolutionAdjust; // set this value if changing the sp
 var JUMP = 1.2 * secondResolutionAdjust;// Adjust the value of upward momentum
 var GRAVITY = 0.9 * secondResolutionAdjust; // Adjust this value to control the downward speed of the bird
 
-var pipeStartSkip = 24; // amount of pipes that won't be rendered at the start (2 = 1 pipe)
+var pipeStartSkip = 16; // amount of pipes that won't be rendered at the start (2 = 1 pipe)
 var pipeSpawnRate = 0.3; // set spawn rate for the pipes (higher = more pipes)
 var pipeSpawnNormal = 0.15; // set this value if changing the pipespawnrate of hard difficulty in function
 var pipeSpawnHard = 0.26; // set this value if changing the pipe spawn rate of normal difficulty in function
