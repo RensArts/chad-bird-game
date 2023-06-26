@@ -7,12 +7,17 @@ secondSkyboxImg.src = 'assets/second-background.png';
 var pipeImage = new Image();
 pipeImage.src = 'assets/pipeTexture.png';
 
-  
 var image = new Image();
 image.src = "assets/coin-box.png"; 
 
 var borderBox = new Image();
 borderBox.src = "assets/borderBox.png";  
+
+var groundImg = new Image();
+groundImg.src = 'assets/ground.png';
+
+var ceilingImg = new Image();
+ceilingImg.src = 'assets/ceiling.png';
 
 var ground = {
     x: 0,
@@ -30,16 +35,6 @@ var ground = {
     height: canvas.height * 100 / 1080, // Adjusted height
     speed: 0, // Adjust the speed of the ceiling movement
   };
-
-if (image.complete) {
-    // The image is already loaded, call drawCollectedCoins immediately
-    drawCollectedCoins();
-  } else {
-    // Wait for the image to load
-    image.addEventListener("load", function() {
-      drawCollectedCoins();
-    });
-  }
 
 // Draws ground and ceiling
 function drawSpikes() {
@@ -221,6 +216,16 @@ function updatePipes() {
         );
       }
     }
+  }
+
+  if (image.complete) {
+    // The image is already loaded, call drawCollectedCoins immediately
+    drawCollectedCoins();
+  } else {
+    // Wait for the image to load
+    image.addEventListener("load", function() {
+      drawCollectedCoins();
+    });
   }
 
 function drawCollectedCoins() {

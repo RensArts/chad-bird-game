@@ -33,22 +33,6 @@ var accumulatedTime = 0;
 //Updates the game state every frame.
 function update() {
 
-  var currentTime = performance.now();
-    var deltaTime = currentTime - lastUpdateTime;
-    lastUpdateTime = currentTime;
-    
-    // Accumulate the elapsed time
-    accumulatedTime += deltaTime;
-    
-    // Limit the accumulated time to a maximum value
-    var maxAccumulatedTime = fpsInterval * 2;
-    if (accumulatedTime > maxAccumulatedTime) {
-      accumulatedTime = maxAccumulatedTime;
-    }
-  
-    // Update the game state in fixed time steps
-    while (accumulatedTime >= fpsInterval) {
-
   handleVerticalMovement();
   
   
@@ -322,10 +306,6 @@ function update() {
       addPipe(); 
       frameCounter = 0; // Reset the frame counter
     }
-
-    // Subtract the fixed time step from the accumulated time
-    accumulatedTime -= fpsInterval;
-  }
 
   requestAnimationFrame(update);
   }

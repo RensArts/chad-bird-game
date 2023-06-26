@@ -50,6 +50,7 @@ function handleMoveUp() {
       isGhost = false;
       isInvincible = false;
       isSize = false;
+      drawSpikes();
       document.getElementById("startButton").removeEventListener("mousedown", moveUp);
   
       // Remove existing event listeners
@@ -96,6 +97,7 @@ function startGame() {
     // Hide the logo
     logo.style.display = "none";
     // Display "ready?" message for the first second
+    drawSpikes();
     update();
   }
 
@@ -116,7 +118,7 @@ function checkCollision() {
           PIPE_SPEED = 1.5 / secondResolutionAdjust;
           GROUND_SPEED = 1.5 / secondResolutionAdjust;
           skyboxSpeed = 1.5 / resolutionAdjust;
-          secondSkyboxSpeed = 12 / resolutionAdjust;
+          secondSkyboxSpeed = 8 / resolutionAdjust;
           JUMP = -1.6 * secondResolutionAdjust;
           isBirdFalling = true;
   
@@ -223,11 +225,12 @@ function restartGame(event) {
       gapSize = 500 * (canvas.height / 1080);
       GROUND_SPEED = 2.1 / secondResolutionAdjust
       skyboxSpeed = 2 / resolutionAdjust;
-      secondSkyboxSpeed = 16 / resolutionAdjust;
+      secondSkyboxSpeed = 8 / resolutionAdjust;
       JUMP = 1.2 * secondResolutionAdjust
       sfxButton.style.display = "block";
       musicButton.style.display = "block";
       pipeStartSkip = 16;
+      drawSpikes();
       startGame();
     }
   }
