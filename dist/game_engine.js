@@ -2,17 +2,12 @@ function adjustSpeed() {
   var targetFPS = 7.5; // Define your target FPS
   var minFPS = minimumFpsValue; // Minimum FPS value
   var targetSpeed = difficulty === 'hard' ? speedHard : speedNormal; // Define the base speed for the difficulty level
-
-  // Calculate the adjusted speed based on the current FPS
   var adjustedSpeed = targetSpeed * (targetFPS / Math.max(fps));
 
-  // Calculate the score-based speed adjustment
   var scoreBasedSpeedAdjustment = Math.floor(score / 50); // Increase speed by 10% for every 50 points
 
-  // Apply the score-based speed adjustment
   adjustedSpeed += (adjustedSpeed * 0.1 * scoreBasedSpeedAdjustment);
 
-  // Assign the adjusted speed value to the speed variable
   speed = adjustedSpeed;
 }
 
@@ -20,19 +15,14 @@ function adjustPipeSpawnRate() {
   var targetFPS = 7.5; // Define your target FPS
   var minFPS = minimumFpsValue; // Minimum FPS value
   var targetFrameRate = difficulty === 'hard' ? pipeSpawnHard : pipeSpawnNormal; // Define the base speed for the difficulty level
-
-  // Calculate the adjusted frame rate based on the current FPS
   var adjustedFrameRate = targetFrameRate // * (targetFPS / Math.max(fps, minFPS * 2.3));
-
-  // Calculate the score-based frame rate adjustment
   var scoreBasedFrameRateAdjustment = Math.floor(score / 50); // Increase frame rate by 10% for every 50 points
 
-  // Apply the score-based frame rate adjustment
   adjustedFrameRate += (adjustedFrameRate * 0.07 * scoreBasedFrameRateAdjustment);
 
-  // Assign the adjusted frame rate value to the pipeSpawnRate variable
   pipeSpawnRate = adjustedFrameRate;
 }
+
 let isPipesCleared = false;
 
 // Define variables for FPS control
@@ -44,20 +34,20 @@ var accumulatedTime = 0;
 function update() {
 
   var currentTime = performance.now();
-  var deltaTime = currentTime - lastUpdateTime;
-  lastUpdateTime = currentTime;
+    var deltaTime = currentTime - lastUpdateTime;
+    lastUpdateTime = currentTime;
+    
+    // Accumulate the elapsed time
+    accumulatedTime += deltaTime;
+    
+    // Limit the accumulated time to a maximum value
+    var maxAccumulatedTime = fpsInterval * 2;
+    if (accumulatedTime > maxAccumulatedTime) {
+      accumulatedTime = maxAccumulatedTime;
+    }
   
-  // Accumulate the elapsed time
-  accumulatedTime += deltaTime;
-  
-  // Limit the accumulated time to a maximum value
-  var maxAccumulatedTime = fpsInterval * 2;
-  if (accumulatedTime > maxAccumulatedTime) {
-    accumulatedTime = maxAccumulatedTime;
-  }
-
-  // Update the game state in fixed time steps
-  while (accumulatedTime >= fpsInterval) {
+    // Update the game state in fixed time steps
+    while (accumulatedTime >= fpsInterval) {
 
   handleVerticalMovement();
   
@@ -310,17 +300,13 @@ function update() {
   
     // Calculate frames per 100ms
     frameCount++;
-    if (elapsedTime >= 100 && !enableVerticalMovement) {
+    if (elapsedTime >= 100) {
       var framesPer100ms = frameCount / (elapsedTime / 100);
       fps = framesPer100ms.toFixed(1); // Convert framesPer100ms to a string with one decimal place
       frameCount = 0;
       elapsedTime = 0;
-      setInterval(function() {
-          adjustSpeed();
-      }, 1500); // 5000 milliseconds = 5 seconds
-      // console.log("fps: " + fps + " (update)")
-      // console.log("speed: " + speed + " (update)")
-      // console.log("pipe: " + pipeSpawnRate + " (update)")
+      adjustSpeed();
+      adjustPipeSpawnRate();
     }
   
     var minFPS = minimumFpsValue; // Minimum FPS value
@@ -333,15 +319,13 @@ function update() {
   
     // Check if it's time to add a new pipe
     if (frameCounter >= framesPerPipe && frameCounter >= minFramesPerPipe) {
-      addPipe();
+      addPipe(); 
       frameCounter = 0; // Reset the frame counter
     }
-
-    adjustPipeSpawnRate();
 
     // Subtract the fixed time step from the accumulated time
     accumulatedTime -= fpsInterval;
   }
-  
-    requestAnimationFrame(update);
+
+  requestAnimationFrame(update);
   }
