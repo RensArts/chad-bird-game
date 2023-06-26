@@ -58,7 +58,7 @@ window.onload = function() {
 document.getElementById("backButton").addEventListener("click", goBackToIndex);
 
 function goBackToIndex() {
-  window.location.href = "../dist/index.html";
+  window.location.href = "index.html";
 }
 
 // Get all purchase buttons on the page

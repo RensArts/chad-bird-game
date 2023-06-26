@@ -4,7 +4,7 @@ function adjustSpeed() {
   var targetSpeed = difficulty === 'hard' ? speedHard : speedNormal; // Define the base speed for the difficulty level
 
   // Calculate the adjusted speed based on the current FPS
-  var adjustedSpeed = targetSpeed * (targetFPS / Math.max(fps, minFPS));
+  var adjustedSpeed = targetSpeed * (targetFPS / Math.max(fps));
 
   // Calculate the score-based speed adjustment
   var scoreBasedSpeedAdjustment = Math.floor(score / 50); // Increase speed by 10% for every 50 points
@@ -22,7 +22,7 @@ function adjustPipeSpawnRate() {
   var targetFrameRate = difficulty === 'hard' ? pipeSpawnHard : pipeSpawnNormal; // Define the base speed for the difficulty level
 
   // Calculate the adjusted frame rate based on the current FPS
-  var adjustedFrameRate = targetFrameRate * (targetFPS / Math.max(fps, minFPS * 2.3));
+  var adjustedFrameRate = targetFrameRate // * (targetFPS / Math.max(fps, minFPS * 2.3));
 
   // Calculate the score-based frame rate adjustment
   var scoreBasedFrameRateAdjustment = Math.floor(score / 50); // Increase frame rate by 10% for every 50 points
@@ -35,8 +35,29 @@ function adjustPipeSpawnRate() {
 }
 let isPipesCleared = false;
 
+// Define variables for FPS control
+var fpsInterval = 1000 / 60; // Interval for 60 FPS (in milliseconds)
+var lastUpdateTime = performance.now();
+var accumulatedTime = 0;
+
 //Updates the game state every frame.
 function update() {
+
+  var currentTime = performance.now();
+  var deltaTime = currentTime - lastUpdateTime;
+  lastUpdateTime = currentTime;
+  
+  // Accumulate the elapsed time
+  accumulatedTime += deltaTime;
+  
+  // Limit the accumulated time to a maximum value
+  var maxAccumulatedTime = fpsInterval * 2;
+  if (accumulatedTime > maxAccumulatedTime) {
+    accumulatedTime = maxAccumulatedTime;
+  }
+
+  // Update the game state in fixed time steps
+  while (accumulatedTime >= fpsInterval) {
 
   handleVerticalMovement();
   
@@ -289,16 +310,17 @@ function update() {
   
     // Calculate frames per 100ms
     frameCount++;
-    if (elapsedTime >= 100) {
+    if (elapsedTime >= 100 && !enableVerticalMovement) {
       var framesPer100ms = frameCount / (elapsedTime / 100);
       fps = framesPer100ms.toFixed(1); // Convert framesPer100ms to a string with one decimal place
       frameCount = 0;
       elapsedTime = 0;
-      adjustSpeed();
-      adjustPipeSpawnRate();
-      console.log("fps: " + fps + " (update)")
-      console.log("speed: " + speed + " (update)")
-      console.log("pipe: " + pipeSpawnRate + " (update)")
+      setInterval(function() {
+          adjustSpeed();
+      }, 1500); // 5000 milliseconds = 5 seconds
+      // console.log("fps: " + fps + " (update)")
+      // console.log("speed: " + speed + " (update)")
+      // console.log("pipe: " + pipeSpawnRate + " (update)")
     }
   
     var minFPS = minimumFpsValue; // Minimum FPS value
@@ -314,8 +336,12 @@ function update() {
       addPipe();
       frameCounter = 0; // Reset the frame counter
     }
-  
-    
+
+    adjustPipeSpawnRate();
+
+    // Subtract the fixed time step from the accumulated time
+    accumulatedTime -= fpsInterval;
+  }
   
     requestAnimationFrame(update);
   }

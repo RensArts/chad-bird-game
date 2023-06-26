@@ -118,6 +118,8 @@ var resolutionButtons = document.querySelectorAll('.resolutionButton');
 resolutionButtons.forEach(function (button) {
   if (button.value === savedResolution) {
     button.classList.add('selected');
+  } else {
+    button.classList.add("0.5");
   }
   
   button.addEventListener('click', function () {
@@ -135,7 +137,7 @@ var touchButton = document.getElementById("touchButton");
 var mouseButton = document.getElementById("mouseButton");
 
 // Set the initial state of the "showFPS" button
-var showFPS = localStorage.getItem("showFPS") || "false";
+var showFPS = localStorage.getItem("showFPS") || "true";
 showFPSButton.setAttribute("data-value", showFPS);
 if (showFPS === "true") {
   showFPSButton.classList.add("selected");
@@ -144,7 +146,7 @@ if (showFPS === "true") {
 }
 
 // Set the initial state of the "pipeTexture" button
-var showTextures = localStorage.getItem("pipeTexture") || "false";
+var showTextures = localStorage.getItem("pipeTexture") || "true";
 pipeTextureButton.setAttribute("data-value", showTextures);
 if (showTextures === "true") {
   pipeTextureButton.classList.add("selected");
@@ -154,37 +156,6 @@ if (showTextures === "true") {
 
 // Set the initial state of the input buttons
 var chosenInput = localStorage.getItem("chosenInput") || "touch";
-if (chosenInput === "touch") {
-  touchButton.classList.add("selected");
-} else {
-  mouseButton.classList.add("selected");
-}
-
-var pipeTextureButton = document.getElementById("pipeTextureButton");
-var showFPSButton = document.getElementById("showFPSButton");
-var touchButton = document.getElementById("touchButton");
-var mouseButton = document.getElementById("mouseButton");
-
-// Set the initial state of the "showFPS" button
-var showFPS = localStorage.getItem("showFPS") || "false";
-showFPSButton.setAttribute("data-value", showFPS);
-if (showFPS === "true") {
-  showFPSButton.classList.add("selected");
-} else {
-  showFPSButton.classList.remove("selected");
-}
-
-// Set the initial state of the "pipeTexture" button
-var showTextures = localStorage.getItem("pipeTexture") || "false";
-pipeTextureButton.setAttribute("data-value", showTextures);
-if (showTextures === "true") {
-  pipeTextureButton.classList.add("selected");
-} else {
-  pipeTextureButton.classList.remove("selected");
-}
-
-// Set the initial state of the input buttons
-var chosenInput = localStorage.getItem("chosenInput") || "mouse";
 if (chosenInput === "touch") {
   touchButton.classList.add("selected");
 } else {
