@@ -24,6 +24,11 @@ const startSound = new Audio("assets/start-sound.mp3")
     reduceGapSound.play();
   }
 
+  function playLevelSound(){
+    var levelSound = document.getElementById("levelSound")
+    levelSound.play();
+  }
+
   // Function to play a coin sound
 function playCoinSound() {
   // Find an available coin sound

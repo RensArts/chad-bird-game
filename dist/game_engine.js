@@ -35,17 +35,6 @@ function update() {
 
   handleVerticalMovement();
   
-  
-    // Reset ground position when it goes off-screen
-  if (ground.x <= -ground.width) {
-    ground.x = 0;
-  }
-  
-  // Reset ceiling position when it goes off-screen
-  if (ceiling.x <= -ceiling.width) {
-    ceiling.x = 0;
-  }
-  
   // Reset skybox position when it goes off-screen
   if (skybox.x <= -skybox.width) {
     skybox.x = 0;
@@ -56,12 +45,6 @@ function update() {
     secondSkybox.x = 0;
   }
   
-    // Move the ground
-    ground.x -= groundSpeed;
-  
-    // Move the ceiling
-    ceiling.x -= groundSpeed;
-  
     // Move the skybox
     skybox.x -= skyboxSpeed;
   
@@ -69,7 +52,7 @@ function update() {
     secondSkybox.x -= secondSkyboxSpeed;
   
     // Check for collision with top border
-    if (bird.y < 10 / resolutionAdjust) {
+    if (bird.y < 0 / resolutionAdjust) {
       isGameOver = true; // Set the game over state
       drawBird();
       gameOver(); // Call the game over function
@@ -99,6 +82,8 @@ function update() {
     if (currentTime > starPowerUpEndTime) {
       // Power-up has expired, reset effects
       starSpeedMultiplier = 1;
+      secondSkyboxSpeed = 8;
+      skyboxSpeed = 2;
       isInvincible = false;
       clearInterval(powerUpCoinIntervalId); // Clear the current coin interval
     }
@@ -106,6 +91,10 @@ function update() {
       // Power-up has expired, reset effects
       isGhost = false;
       ghostSpeedMultiplier = 1;
+      secondSkyboxSpeed = 8;
+      skyboxSpeed = 2;
+      pipeSpawnNormal = 0.15;
+      pipeSpawnHard = 0.26;
     }
   
     if (currentTime > sizePowerUpEndTime) {
@@ -125,6 +114,8 @@ function update() {
       PIPE_GAP = 320 * (canvas.height / 1080);
       isReduceGap = false;
       reduceGapSpeedMultiplier = 1;
+      secondSkyboxSpeed = 8
+      skyboxSpeed = 2;
       HITBOX_BOTTOM = -10 * (canvas.height / 1080);
     }
   
@@ -135,46 +126,59 @@ function update() {
     HITBOX_BOTTOM = -80 * (canvas.height / 1080);
     }
   
-  
     if (isInvincible) {
-      speed = speed * starSpeedMultiplier;
+      speed = speed * starSpeedMultiplier - (fps / 20);
+      secondSkyboxSpeed = 16
+      skyboxSpeed = 4;
       pipeStartSkip = 0;
       pipes = [];
         ghosts = [];
         sizes = [];
         reduceGaps = [];
+        starts = [];
     }
   
     if (isGhost) {
-      speed = speed * ghostSpeedMultiplier;
+      speed = speed * ghostSpeedMultiplier - (fps / 20);
+      secondSkyboxSpeed = 14
+      skyboxSpeed = 3.5;
+      pipeSpawnNormal = 0.24;
+      pipeSpawnHard = 0.42;
         stars = [];
         sizes = [];
         reduceGaps = [];
+        ghosts = [];
     }
 
     if (isSize) {
       stars = [];
       ghosts = [];
       reduceGaps = [];
+      sizes= [];
     }
 
     if (isReduceGap){
       stars = [];
       ghosts = [];
       sizes = [];
+      reduceGaps = [];
     }
   
     if (isReduceGap && !isSize) {
       PIPE_GAP = 450 * (canvas.height / 1080);
-      speed = speed * reduceGapSpeedMultiplier;
+      speed = speed * reduceGapSpeedMultiplier - (0.25 / fps);
       HITBOX_BOTTOM = -80 * (canvas.height / 1080);
+      secondSkyboxSpeed = 6;
+      skyboxSpeed = 1.5
     }
   
     if (isReduceGap && isSize){
       PIPE_GAP = 450 * (canvas.height / 1080);
-      speed = speed * reduceGapSpeedMultiplier;
+      speed = speed * reduceGapSpeedMultiplier - (0.25 / fps);
       HITBOX_BOTTOM = -80 * (canvas.height / 1080);
       HITBOX_BOTTOM = -150 / secondResolutionAdjust * (canvas.height / 1080);
+      secondSkyboxSpeed = 6;
+      skyboxSpeed = 1.5;
       }
 
      // Clear canvas before drawing new elements each frame
@@ -235,7 +239,7 @@ function update() {
     updatePipes();
   
     // Draw floor and ceiling;
-    drawSpikes();
+    // drawSpikes();
   
     // Draw the score counter
     drawScore();
@@ -258,8 +262,11 @@ function update() {
     drawGoMessage();
     }
 
+    var level = score / 50;
+
     if (score > 0 && score % 50 === 0){
-      drawGameSpeedIncreaseMessage();
+      drawGameSpeedIncreaseMessage(level);
+      playLevelSound();
     }
 
     if (score > 0 && score % 50 === 0) {

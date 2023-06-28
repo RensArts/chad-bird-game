@@ -50,7 +50,6 @@ function handleMoveUp() {
       isGhost = false;
       isInvincible = false;
       isSize = false;
-      drawSpikes();
       document.getElementById("startButton").removeEventListener("mousedown", moveUp);
   
       // Remove existing event listeners
@@ -97,7 +96,6 @@ function startGame() {
     // Hide the logo
     logo.style.display = "none";
     // Display "ready?" message for the first second
-    drawSpikes();
     update();
   }
 
@@ -230,8 +228,12 @@ function restartGame(event) {
       sfxButton.style.display = "block";
       musicButton.style.display = "block";
       pipeStartSkip = 16;
-      drawSpikes();
+      pipeSpawnNormal = 0.15;
+      pipeSpawnHard = 0.26;
       startGame();
+      ghostSpeedMultiplier = 1;
+      starSpeedMultiplier = 1;
+      reduceGapSpeedMultiplier = 1;
     }
   }
 

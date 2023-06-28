@@ -13,40 +13,6 @@ image.src = "assets/coin-box.png";
 var borderBox = new Image();
 borderBox.src = "assets/borderBox.png";  
 
-var groundImg = new Image();
-groundImg.src = 'assets/ground.png';
-
-var ceilingImg = new Image();
-ceilingImg.src = 'assets/ceiling.png';
-
-var ground = {
-    x: 0,
-    y: canvas.height - (canvas.height * 100 / 1080), // Adjusted y-coordinate
-    width: canvas.width  + 1600 / resolutionAdjust,
-    height: canvas.height* 100 / 1080, // Adjusted height
-    speed: 0, // Adjust the speed of the ground movement
-  };
-  
-  // Define the ceiling object
-  var ceiling = {
-    x: 0,
-    y: 0,
-    width: canvas.width + 1600 / resolutionAdjust,
-    height: canvas.height * 100 / 1080, // Adjusted height
-    speed: 0, // Adjust the speed of the ceiling movement
-  };
-
-// Draws ground and ceiling
-function drawSpikes() {
-    // Draw the ceiling image
-    ctx.drawImage(ceilingImg, ceiling.x, ceiling.y, ceiling.width, ceiling.height);
-    ctx.drawImage(ceilingImg, ceiling.x + ceiling.width, ceiling.y, ceiling.width, ceiling.height);
-    
-    // Draw the ground image
-    ctx.drawImage(groundImg, ground.x, ground.y, ground.width, ground.height);
-    ctx.drawImage(groundImg, ground.x + ground.width, ground.y, ground.width, ground.height);
-    };
-
 var skybox = {
     x: 0,
     y: 0,
@@ -80,8 +46,8 @@ function drawReadyMessage() {
     ctx.font = "bolder " + Math.round(160 * (canvas.width / 2560)) + "px Arial";
     ctx.textAlign = "start";
     ctx.textBaseline = "middle";
-    ctx.fillText("READY", canvas.width / 2 - Math.round(245 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
-    ctx.strokeText("READY", canvas.width / 2 - Math.round(245 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
+    ctx.fillText("READY", canvas.width / 2 - Math.round(245 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
+    ctx.strokeText("READY", canvas.width / 2 - Math.round(245 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
   }
   
 function drawGoMessage() {
@@ -92,21 +58,23 @@ function drawGoMessage() {
       ctx.font = "bolder " + Math.round(220 * (canvas.width / 2560)) + "px Arial";
       ctx.textAlign = "start";
       ctx.textBaseline = "middle";
-      ctx.fillText("GO", canvas.width / 2 - Math.round(140 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
-      ctx.strokeText("GO", canvas.width / 2 - Math.round(140 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
+      ctx.fillText("GO", canvas.width / 2 - Math.round(140 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
+      ctx.strokeText("GO", canvas.width / 2 - Math.round(140 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
     }
   }
 
-  function drawGameSpeedIncreaseMessage() {
+  function drawGameSpeedIncreaseMessage(level) {
     ctx.fillStyle = "white";
     ctx.strokeStyle = "black";
     ctx.lineWidth = Math.round(6 * (canvas.width/ 2560));
-    ctx.font = "bolder " + Math.round(140 * (canvas.width / 2560)) + "px Arial";
+    ctx.font = "bolder " + Math.round(200 * (canvas.width / 2560)) + "px Arial";
     ctx.textAlign = "start";
     ctx.textBaseline = "middle";
-    ctx.fillText("Speed increased by 10%", canvas.width / 2 - Math.round(750 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
-    ctx.strokeText("Speed increased by 10%", canvas.width / 2 - Math.round(750 * (canvas.width / 2560)), canvas.height / 2 - Math.round(350 * (canvas.height / 1080)));
-  } 
+    
+    var message = "Level " + level;
+    ctx.fillText(message, canvas.width / 2 - Math.round(350 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
+    ctx.strokeText(message, canvas.width / 2 - Math.round(350 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
+  }
 
 function addPipe() {
     var gapPosition = getRandomInt(Math.ceil(canvas.height * 0.093), canvas.height - PIPE_GAP  - Math.ceil(canvas.height * 0.37));
@@ -132,8 +100,6 @@ function addPipe() {
       top: false,
       passed: false,
     });
-  
-    groundSpeed = GROUND_SPEED * speed;
   }
 
 function getRandomInt(min, max) {
