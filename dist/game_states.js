@@ -234,6 +234,7 @@ function restartGame(event) {
       ghostSpeedMultiplier = 1;
       starSpeedMultiplier = 1;
       reduceGapSpeedMultiplier = 1;
+      backgroundMusic.play();
     }
   }
 

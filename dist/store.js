@@ -3,6 +3,7 @@ const video = document.getElementById("storeVideo");
 
 // Create Audio objects for each sound
 const buttonSound = new Audio("assets/button-sound.mp3");
+const storeMusic = new Audio("assets/store-music.mp3");
 
 // Function to resize the video and canvas
 function resizeElements() {
@@ -23,6 +24,16 @@ window.onload = function() {
   resizeElements();
   video.src = "assets/hell.mp4";
   video.play();
+  
+  var isMusicOn = localStorage.getItem("isMusicOn") === "true";
+  
+  if (isMusicOn) {
+    storeMusic.volume = 1;
+  } else {
+    storeMusic.volume = 0;
+  }
+  
+  storeMusic.play(); // Play the store music
 
   // Check if there are purchased skins in local storage
   const purchasedSkins = JSON.parse(localStorage.getItem("purchasedSkins")) || [];

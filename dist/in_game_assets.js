@@ -270,17 +270,17 @@ function saveCollectedCoins(collectedCoins) {
     var text = score.toString(); // Convert the score to a string
   
     ctx.font = "bolder " + Math.ceil(canvas.width / 28) + "px Arial";
-    ctx.textAlign = "end";
+    ctx.textAlign = "start";
     ctx.textBaseline = "middle";
   
     // Set the stroke style (black border)
     ctx.strokeStyle = "black";
     ctx.lineWidth = Math.ceil(canvas.width / 220);
-    ctx.strokeText(text, canvas.width - Math.ceil(canvas.width / 2.1), Math.ceil(canvas.width / 55));
+    ctx.strokeText(text, canvas.width - Math.ceil(canvas.width / 2.015), Math.ceil(canvas.width / 55));
   
     // Set the fill style (white text)
     ctx.fillStyle = "white";
-    ctx.fillText(text, canvas.width - Math.ceil(canvas.width / 2.1), Math.ceil(canvas.width / 55));
+    ctx.fillText(text, canvas.width - Math.ceil(canvas.width / 2.015), Math.ceil(canvas.width / 55));
   }
   
   function checkScore() {
