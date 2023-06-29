@@ -39,29 +39,48 @@ function drawSecondSkybox() {
     ctx.drawImage(secondSkyboxImg, secondSkybox.x + secondSkybox.width, secondSkybox.y, secondSkybox.width, secondSkybox.height);
   }
 
-function drawReadyMessage() {
+  function drawReadyMessage() {
     ctx.fillStyle = "white";
     ctx.strokeStyle = "black";
-    ctx.lineWidth = Math.round(6 * (canvas.width/ 2560));
-    ctx.font = "bolder " + Math.round(160 * (canvas.width / 2560)) + "px Arial";
-    ctx.textAlign = "start";
+    ctx.lineWidth = Math.round(6 * (canvas.width / 2560));
+    var fontSize = Math.round(160 * (canvas.width / 2560));
+    var textXPercentage = 0.492; // Adjust this value to position the text horizontally
+    var textYPercentage = 0.25; // Adjust this value to position the text vertically
+  
+    ctx.font = "bolder " + fontSize + "px Arial";
+    ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("READY", canvas.width / 2 - Math.round(245 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
-    ctx.strokeText("READY", canvas.width / 2 - Math.round(245 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
+  
+    // Calculate the actual position based on canvas size
+    var textX = canvas.width * textXPercentage;
+    var textY = canvas.height * textYPercentage;
+  
+    ctx.fillText("READY", textX, textY);
+    ctx.strokeText("READY", textX, textY);
   }
   
-function drawGoMessage() {
+  function drawGoMessage() {
     if (!isGameOver) {
       ctx.fillStyle = "white";
       ctx.strokeStyle = "black";
       ctx.lineWidth = Math.round(6 * (canvas.width / 2560));
-      ctx.font = "bolder " + Math.round(220 * (canvas.width / 2560)) + "px Arial";
-      ctx.textAlign = "start";
+      var fontSize = Math.round(220 * (canvas.width / 2560));
+      var textXPercentage = 0.492; // Adjust this value to position the text horizontally
+      var textYPercentage = 0.25; // Adjust this value to position the text vertically
+  
+      ctx.font = "bolder " + fontSize + "px Arial";
+      ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("GO", canvas.width / 2 - Math.round(140 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
-      ctx.strokeText("GO", canvas.width / 2 - Math.round(140 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
+  
+      // Calculate the actual position based on canvas size
+      var textX = canvas.width * textXPercentage;
+      var textY = canvas.height * textYPercentage;
+  
+      ctx.fillText("GO", textX, textY);
+      ctx.strokeText("GO", textX, textY);
     }
   }
+  
 
   function drawGameSpeedIncreaseMessage(level) {
     ctx.fillStyle = "white";
@@ -220,8 +239,8 @@ function drawCollectedCoins() {
     var newHeight = Math.ceil(newWidth / aspectRatio);
   
     // Draw the image with the new width and height
-    var imageX = Math.ceil(widthScale * 20 / resolutionAdjust); // Adjust the x position as needed
-    var imageY = Math.ceil(heightScale * -9);
+    var imageX = Math.ceil(widthScale * 20 / secondResolutionAdjust); // Adjust the x position as needed
+    var imageY = Math.ceil(heightScale * -9 /secondResolutionAdjust);
     ctx.drawImage(image, imageX, imageY, newWidth, newHeight);
   
     var textX = Math.ceil(widthScale * 160 / secondResolutionAdjust); // Adjust the x position as needed
@@ -247,41 +266,50 @@ function saveCollectedCoins(collectedCoins) {
       ctx.fillStyle = "white";
       ctx.textAlign = "right";
       ctx.textBaseline = "top";
-      ctx.fillText(
-        text,
-        canvas.width - Math.ceil(canvas.width * resolutionAdjust / 100),
-        Math.ceil(canvas.width / 100)
-      );
+  
+      var textXPercentage = 0.98; // Adjust this value to position the text horizontally
+      var textYPercentage = 0.01; // Adjust this value to position the text vertically
+  
+      // Calculate the actual position based on canvas size
+      var textX = canvas.width * textXPercentage;
+      var textY = canvas.height * textYPercentage;
+  
+      ctx.fillText(text, textX, textY);
       ctx.strokeStyle = "black";
       ctx.lineWidth = Math.ceil(canvas.width / 1500);
-      ctx.strokeText(
-        text,
-        canvas.width - Math.ceil(canvas.width * resolutionAdjust / 100),
-        Math.ceil(canvas.width / 100)
-      );
+      ctx.strokeText(text, textX, textY);
     }
   }
-
+  
 
   function drawScore() {
     if (isGameOver) {
       return;
     }
-    var text = score.toString(); // Convert the score to a string
   
-    ctx.font = "bolder " + Math.ceil(canvas.width / 28) + "px Arial";
-    ctx.textAlign = "start";
+    var text = score.toString(); // Convert the score to a string
+    var fontSize = Math.ceil(canvas.width / 28);
+    var textXPercentage = 0.50; // Adjust this value to position the text horizontally
+    var textYPercentage = 0.05; // Adjust this value to position the text vertically
+  
+    ctx.font = "bolder " + fontSize + "px Arial";
+    ctx.textAlign = "end"; // Align the text to the right edge
     ctx.textBaseline = "middle";
+  
+    // Calculate the actual position based on canvas size
+    var textX = canvas.width * textXPercentage;
+    var textY = canvas.height * textYPercentage;
   
     // Set the stroke style (black border)
     ctx.strokeStyle = "black";
     ctx.lineWidth = Math.ceil(canvas.width / 220);
-    ctx.strokeText(text, canvas.width - Math.ceil(canvas.width / 2.015), Math.ceil(canvas.width / 55));
+    ctx.strokeText(text, textX, textY);
   
     // Set the fill style (white text)
     ctx.fillStyle = "white";
-    ctx.fillText(text, canvas.width - Math.ceil(canvas.width / 2.015), Math.ceil(canvas.width / 55));
+    ctx.fillText(text, textX, textY);
   }
+  
   
   function checkScore() {
     if (isGameOver) {

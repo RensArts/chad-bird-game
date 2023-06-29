@@ -42,11 +42,11 @@ function update() {
   
    // Move the skybox
 if (difficulty === "hard") {
-  skybox.x -= skyboxSpeed * 1.5; // Increase the speed for hard difficulty
-  secondSkybox.x -= secondSkyboxSpeed * 1.3; // Increase the speed for hard difficulty
+  skybox.x -= skyboxSpeed * 1.3 * (6 / fps); // Increase the speed for hard difficulty
+  secondSkybox.x -= secondSkyboxSpeed * 1.3 * (6 / fps); // Increase the speed for hard difficulty
 } else {
-  skybox.x -= skyboxSpeed;
-  secondSkybox.x -= secondSkyboxSpeed;
+  skybox.x -= skyboxSpeed * (6 / fps);
+  secondSkybox.x -= secondSkyboxSpeed * (6 / fps);
 }
   
     // Check for collision with top border

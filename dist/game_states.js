@@ -150,8 +150,9 @@ function gameOver() {
     // Calculate the position of the borderBox
     var borderBoxX = canvas.width / 2 - borderBoxWidth / 2;
     var borderBoxY = canvas.height / 1.81 - borderBoxHeight / 1.81;
-  
-    // Display game over message, score, and highscore
+
+    if (score > 0){
+       // Display game over message, score, and highscore
     ctx.drawImage(borderBox, borderBoxX, borderBoxY, borderBoxWidth, borderBoxHeight);
     ctx.fillStyle = "white";
     ctx.strokeStyle = "black"; // Set the border color
@@ -169,6 +170,9 @@ function gameOver() {
     ctx.fillText(collectedCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (100 * (canvas.height / 1080)));
     ctx.fillText(`${difficulty}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (190 * (canvas.height / 1080)));
     // Disable the button temporarily using a timer
+    }
+  
+   
   var buttonEnabled = false;
   setTimeout(function() {
       buttonEnabled = true;
