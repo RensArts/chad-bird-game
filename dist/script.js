@@ -35,8 +35,8 @@ var HITBOX_LEFT = 140 * (canvas.width / 2560);
 var COIN_HITBOX = 0;
 
 var PIPE_SPEED = 2 / secondResolutionAdjust; //Adjust the speed of the pipes
-var skyboxSpeed = 2 / resolutionAdjust; // Adjust the speed of the skybox
-var secondSkyboxSpeed = 8 / resolutionAdjust; // Adjust the speed of the second skybox
+var skyboxSpeed = 4 / resolutionAdjust; // Adjust the speed of the skybox
+var secondSkyboxSpeed = 15 / resolutionAdjust; // Adjust the speed of the second skybox
 var speed = 7 / secondResolutionAdjust; // Variable to increment speed in function Update();
 var speedNormal = 7 / secondResolutionAdjust; // set this value if changing the speed of normal difficulty in function
 var speedHard = 9 / secondResolutionAdjust; // set this value if changing the speed of hard difficulty in function

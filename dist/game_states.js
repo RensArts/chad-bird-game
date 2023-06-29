@@ -113,10 +113,9 @@ function checkCollision() {
         // Check if bird overlaps vertically with top or bottom pipe
         if (bird.y < p.y + HITBOX_TOP + p.height && bird.y + HITBOX_BOTTOM + bird.height > p.y) {
           GRAVITY = 1.2 * secondResolutionAdjust;
-          PIPE_SPEED = 1.5 / secondResolutionAdjust;
-          GROUND_SPEED = 1.5 / secondResolutionAdjust;
-          skyboxSpeed = 1.5 / resolutionAdjust;
-          secondSkyboxSpeed = 8 / resolutionAdjust;
+          PIPE_SPEED = 1.8 / secondResolutionAdjust;
+          skyboxSpeed = 1 / resolutionAdjust;
+          secondSkyboxSpeed = -2 / resolutionAdjust;
           JUMP = -1.6 * secondResolutionAdjust;
           isBirdFalling = true;
   
@@ -221,9 +220,8 @@ function restartGame(event) {
       PIPE_SPEED = 2 / secondResolutionAdjust
       PIPE_GAP = 320 * (canvas.width / 2560);
       gapSize = 500 * (canvas.height / 1080);
-      GROUND_SPEED = 2.1 / secondResolutionAdjust
-      skyboxSpeed = 2 / resolutionAdjust;
-      secondSkyboxSpeed = 8 / resolutionAdjust;
+      skyboxSpeed = 4 / resolutionAdjust;
+      secondSkyboxSpeed = 15 / resolutionAdjust;
       JUMP = 1.2 * secondResolutionAdjust
       sfxButton.style.display = "block";
       musicButton.style.display = "block";

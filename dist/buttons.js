@@ -39,7 +39,6 @@ document.getElementById('hardButton').addEventListener('click', function() {
   setDifficulty('hard');
 });
 
-
 // Creates the button to turn the music on or off
 function createMusicButton() {
     var button = document.createElement("button");

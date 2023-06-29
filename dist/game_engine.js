@@ -25,11 +25,6 @@ function adjustPipeSpawnRate() {
 
 let isPipesCleared = false;
 
-// Define variables for FPS control
-var fpsInterval = 1000 / 60; // Interval for 60 FPS (in milliseconds)
-var lastUpdateTime = performance.now();
-var accumulatedTime = 0;
-
 //Updates the game state every frame.
 function update() {
 
@@ -45,11 +40,14 @@ function update() {
     secondSkybox.x = 0;
   }
   
-    // Move the skybox
-    skybox.x -= skyboxSpeed;
-  
-    // Move the skybox
-    secondSkybox.x -= secondSkyboxSpeed;
+   // Move the skybox
+if (difficulty === "hard") {
+  skybox.x -= skyboxSpeed * 1.5; // Increase the speed for hard difficulty
+  secondSkybox.x -= secondSkyboxSpeed * 1.3; // Increase the speed for hard difficulty
+} else {
+  skybox.x -= skyboxSpeed;
+  secondSkybox.x -= secondSkyboxSpeed;
+}
   
     // Check for collision with top border
     if (bird.y < 0 / resolutionAdjust) {
@@ -82,8 +80,8 @@ function update() {
     if (currentTime > starPowerUpEndTime) {
       // Power-up has expired, reset effects
       starSpeedMultiplier = 1;
-      secondSkyboxSpeed = 8;
-      skyboxSpeed = 2;
+      secondSkyboxSpeed = 15 / resolutionAdjust;
+      skyboxSpeed = 4 / resolutionAdjust;
       isInvincible = false;
       clearInterval(powerUpCoinIntervalId); // Clear the current coin interval
     }
@@ -91,8 +89,8 @@ function update() {
       // Power-up has expired, reset effects
       isGhost = false;
       ghostSpeedMultiplier = 1;
-      secondSkyboxSpeed = 8;
-      skyboxSpeed = 2;
+      secondSkyboxSpeed = 15 / resolutionAdjust;
+      skyboxSpeed = 4 / resolutionAdjust;
       pipeSpawnNormal = 0.15;
       pipeSpawnHard = 0.26;
     }
@@ -114,8 +112,8 @@ function update() {
       PIPE_GAP = 320 * (canvas.height / 1080);
       isReduceGap = false;
       reduceGapSpeedMultiplier = 1;
-      secondSkyboxSpeed = 8
-      skyboxSpeed = 2;
+      secondSkyboxSpeed = 15 / resolutionAdjust;
+      skyboxSpeed = 4 / resolutionAdjust;
       HITBOX_BOTTOM = -10 * (canvas.height / 1080);
     }
   
@@ -128,8 +126,8 @@ function update() {
   
     if (isInvincible) {
       speed = speed * starSpeedMultiplier - (fps / 20);
-      secondSkyboxSpeed = 16
-      skyboxSpeed = 4;
+      secondSkyboxSpeed = 28 / resolutionAdjust;
+      skyboxSpeed = 7 / resolutionAdjust;
       pipeStartSkip = 0;
       pipes = [];
         ghosts = [];
@@ -140,10 +138,10 @@ function update() {
   
     if (isGhost) {
       speed = speed * ghostSpeedMultiplier - (fps / 20);
-      secondSkyboxSpeed = 14
-      skyboxSpeed = 3.5;
-      pipeSpawnNormal = 0.24;
-      pipeSpawnHard = 0.42;
+      secondSkyboxSpeed = 21 / resolutionAdjust;
+      skyboxSpeed = 6 / resolutionAdjust;
+      pipeSpawnNormal = 0.22;
+      pipeSpawnHard = 0.38;
         stars = [];
         sizes = [];
         reduceGaps = [];
@@ -168,8 +166,8 @@ function update() {
       PIPE_GAP = 450 * (canvas.height / 1080);
       speed = speed * reduceGapSpeedMultiplier - (0.25 / fps);
       HITBOX_BOTTOM = -80 * (canvas.height / 1080);
-      secondSkyboxSpeed = 6;
-      skyboxSpeed = 1.5
+      secondSkyboxSpeed = 13 / resolutionAdjust;
+      skyboxSpeed = 3.5 / resolutionAdjust;
     }
   
     if (isReduceGap && isSize){
@@ -177,8 +175,8 @@ function update() {
       speed = speed * reduceGapSpeedMultiplier - (0.25 / fps);
       HITBOX_BOTTOM = -80 * (canvas.height / 1080);
       HITBOX_BOTTOM = -150 / secondResolutionAdjust * (canvas.height / 1080);
-      secondSkyboxSpeed = 6;
-      skyboxSpeed = 1.5;
+      secondSkyboxSpeed = 13 / resolutionAdjust;
+      skyboxSpeed = 3.5 / resolutionAdjust;
       }
 
      // Clear canvas before drawing new elements each frame
@@ -238,9 +236,6 @@ function update() {
     //Draw and move pipes
     updatePipes();
   
-    // Draw floor and ceiling;
-    // drawSpikes();
-  
     // Draw the score counter
     drawScore();
   
@@ -263,6 +258,9 @@ function update() {
     }
 
     var level = score / 50;
+    var skyboxSpeedAdjustment = 0.11 * level;
+    skyboxSpeed += skyboxSpeed * skyboxSpeedAdjustment;
+    secondSkyboxSpeed += secondSkyboxSpeed * skyboxSpeedAdjustment;
 
     if (score > 0 && score % 50 === 0){
       drawGameSpeedIncreaseMessage(level);
