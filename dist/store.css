@@ -116,14 +116,14 @@ body {
 #backButton {
   position: absolute;
   z-index: 3;
-  bottom: 3%;
-  right: 2%;
-  width: 110px;
-  height: 110px;
+  bottom: 1%;
+  right: 0.5%;
+  width: 10%;
+  height: 10%;
   background-color: #4CAF50;
   border: none;
   color: white;
-  font-size: 35px;
+  font-size: 3vw;
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.2s;
@@ -176,16 +176,16 @@ body {
   position: fixed;
   width: 15%;
   height: auto;
-  top: 85%;
-  left: 43%;
+  top: 86%;
+  left: -1%;
 }
 
 #coinCount {
   position: fixed;
   width: 15%;
   height: auto;
-  top: 87%;
-  left: 50%;
+  top: 89%;
+  left: 6%;
   font-family: Arial, sans-serif;
   font-weight: bolder;
   font-size: 4vw;
