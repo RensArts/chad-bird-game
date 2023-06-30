@@ -81,9 +81,8 @@ function handleMoveUp() {
 function startGame() {
     isGameOver = false;
     bird.y = Math.round(400 * (canvas.height / 1080)); // Reset the bird's position
-    pipes = []; // Clear the pipes array
-    coins = []; // Clear the coins array
-    stars = []; // Clear the stars array
+    pipes = []; 
+    coins = []; 
     ghosts = [];
     sizes = [];
     reduceGaps = [];
@@ -92,10 +91,8 @@ function startGame() {
     clearInterval(starIntervalId);
     clearInterval(ghostIntervalId);
     clearInterval(coinIntervalId);
-    score = 0; // Reset the score
-    // Hide the logo
+    score = 0; 
     logo.style.display = "none";
-    // Display "ready?" message for the first second
     update();
   }
 
@@ -151,7 +148,6 @@ function gameOver() {
     var borderBoxX = canvas.width / 2 - borderBoxWidth / 2;
     var borderBoxY = canvas.height / 1.81 - borderBoxHeight / 1.81;
 
-    if (score > 0){
        // Display game over message, score, and highscore
     ctx.drawImage(borderBox, borderBoxX, borderBoxY, borderBoxWidth, borderBoxHeight);
     ctx.fillStyle = "white";
@@ -170,9 +166,7 @@ function gameOver() {
     ctx.fillText(collectedCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (100 * (canvas.height / 1080)));
     ctx.fillText(`${difficulty}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (190 * (canvas.height / 1080)));
     // Disable the button temporarily using a timer
-    }
   
-   
   var buttonEnabled = false;
   setTimeout(function() {
       buttonEnabled = true;
@@ -232,11 +226,11 @@ function restartGame(event) {
       pipeStartSkip = 16;
       pipeSpawnNormal = 0.15;
       pipeSpawnHard = 0.26;
-      startGame();
       ghostSpeedMultiplier = 1;
       starSpeedMultiplier = 1;
       reduceGapSpeedMultiplier = 1;
       backgroundMusic.play();
+      startGame();
     }
   }
 

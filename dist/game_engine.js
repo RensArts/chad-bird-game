@@ -23,12 +23,22 @@ function adjustPipeSpawnRate() {
   pipeSpawnRate = adjustedFrameRate;
 }
 
+function adjustSkyboxSpeed() {
+  if (difficulty === "hard") {
+    skybox.x -= skyboxSpeed * 1.3 * (6 / fps); // Increase the speed for hard difficulty
+    secondSkybox.x -= secondSkyboxSpeed * 1.3 * (6 / fps); // Increase the speed for hard difficulty
+    } else {
+    skybox.x -= skyboxSpeed * (6 / fps);
+    secondSkybox.x -= secondSkyboxSpeed * (6 / fps);
+    }
+}
+
 let isPipesCleared = false;
 
 //Updates the game state every frame.
 function update() {
 
-  handleVerticalMovement();
+  adjustSkyboxSpeed();
   
   // Reset skybox position when it goes off-screen
   if (skybox.x <= -skybox.width) {
@@ -39,15 +49,8 @@ function update() {
   if (secondSkybox.x <= -secondSkybox.width) {
     secondSkybox.x = 0;
   }
-  
-   // Move the skybox
-if (difficulty === "hard") {
-  skybox.x -= skyboxSpeed * 1.3 * (6 / fps); // Increase the speed for hard difficulty
-  secondSkybox.x -= secondSkyboxSpeed * 1.3 * (6 / fps); // Increase the speed for hard difficulty
-} else {
-  skybox.x -= skyboxSpeed * (6 / fps);
-  secondSkybox.x -= secondSkyboxSpeed * (6 / fps);
-}
+
+  handleVerticalMovement();
   
     // Check for collision with top border
     if (bird.y < 0 / resolutionAdjust) {
@@ -140,7 +143,7 @@ if (difficulty === "hard") {
       speed = speed * ghostSpeedMultiplier - (fps / 20);
       secondSkyboxSpeed = 21 / resolutionAdjust;
       skyboxSpeed = 6 / resolutionAdjust;
-      pipeSpawnNormal = 0.22;
+      pipeSpawnNormal = 0.20;
       pipeSpawnHard = 0.38;
         stars = [];
         sizes = [];
@@ -250,11 +253,6 @@ if (difficulty === "hard") {
     drawReadyMessage();
     drawAnimatedBird();
     isMovingUp = false;
-    }
-  
-    // Draw the message afte vertical movement starts
-    if (enableVerticalMovement && score < 1 && isGameStarted){
-    drawGoMessage();
     }
 
     var level = score / 50;

@@ -58,29 +58,6 @@ function drawSecondSkybox() {
     ctx.fillText("READY", textX, textY);
     ctx.strokeText("READY", textX, textY);
   }
-  
-  function drawGoMessage() {
-    if (!isGameOver) {
-      ctx.fillStyle = "white";
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = Math.round(6 * (canvas.width / 2560));
-      var fontSize = Math.round(220 * (canvas.width / 2560));
-      var textXPercentage = 0.492; // Adjust this value to position the text horizontally
-      var textYPercentage = 0.25; // Adjust this value to position the text vertically
-  
-      ctx.font = "bolder " + fontSize + "px Arial";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-  
-      // Calculate the actual position based on canvas size
-      var textX = canvas.width * textXPercentage;
-      var textY = canvas.height * textYPercentage;
-  
-      ctx.fillText("GO", textX, textY);
-      ctx.strokeText("GO", textX, textY);
-    }
-  }
-  
 
   function drawGameSpeedIncreaseMessage(level) {
     ctx.fillStyle = "white";
