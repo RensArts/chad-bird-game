@@ -141,6 +141,7 @@ function createMusicButton() {
       sizeSound.volume = volume;
       reduceGapSound.volume = volume;
       starSound.volume = volume;
+      levelSound.volume = volume;
     }
   
     // Append the button to the body element
