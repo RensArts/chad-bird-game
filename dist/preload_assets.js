@@ -2,6 +2,7 @@ function preload() {
   // Show the splash screen
   showSplashScreen();
   startButton.style.display = "none";
+  backgroundMusic.pause();
 
   // Load the skybox image
   skyboxImg = new Image();
@@ -44,7 +45,7 @@ function preload() {
   reduceGapImage.src = 'assets/reduceGap.png';
 
   // Load the audio elements for game sounds
-  coinSound = new Audio ('assets/coin.sound.mp3');
+  coinSound = new Audio ('assets/coin-sound.mp3');
   levelSound = new Audio('assets/level-sound.mp3');
   backgroundMusic = new Audio('assets/background-music.mp3');
   storeMusic = new Audio('assets/store-music.mp3');
@@ -56,7 +57,7 @@ function preload() {
   
   // Check if all the assets are loaded
   var assetsLoaded = 0;
-  var totalAssets = 13; 
+  var totalAssets = 19; 
 
   function checkAllAssetsLoaded() {
     assetsLoaded++;
@@ -96,6 +97,7 @@ function preload() {
   reduceGapImage.addEventListener('load', checkAllAssetsLoaded);
 
   // Check if the audio elements are loaded
+  coinSound.addEventListener('loadeddata', checkAllAssetsLoaded);
   levelSound.addEventListener('loadeddata', checkAllAssetsLoaded);
   backgroundMusic.addEventListener('loadeddata', checkAllAssetsLoaded);
   storeMusic.addEventListener('loadeddata', checkAllAssetsLoaded);

@@ -92,10 +92,8 @@
     for (var i = 0; i < stars.length; i++) {
       var star = stars[i];
       star.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
-  
       // Draw the coin image
       ctx.drawImage(starImage, star.x - star.radius, star.y - star.radius, star.radius * COIN_SIZE, star.radius * COIN_SIZE);
-  
       // Check if the bird collects the coin
       if (bird.x + COIN_HITBOX + bird.width > star.x - star.radius &&
           bird.x < COIN_HITBOX + star.x + star.radius &&

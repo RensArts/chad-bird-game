@@ -88,6 +88,7 @@ function update() {
       isInvincible = false;
       clearInterval(powerUpCoinIntervalId); // Clear the current coin interval
     }
+    
     if (currentTime > ghostPowerUpEndTime) {
       // Power-up has expired, reset effects
       isGhost = false;

@@ -289,3 +289,7 @@ function saveCollectedCoins(collectedCoins) {
       }
     }
   }
+
+  function saveHighscore(score, difficulty) {
+    localStorage.setItem(`highscore_${difficulty}`, score);
+  }

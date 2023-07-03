@@ -6,8 +6,6 @@ const startSound = new Audio("assets/start-sound.mp3")
 document.addEventListener("visibilitychange", function() {
   if (document.hidden) {
     backgroundMusic.pause();
-  } else {
-    backgroundMusic.play();
   }
 });
 
@@ -43,9 +41,23 @@ function playCoinSound() {
   if (!coinSound) {
     coinSound = new Audio("assets/coin-sound.mp3");
     coinSounds.push(coinSound);
+    if (isInvincible && flapSound.volume == 0){
+      coinSound.volume = 0;
+    }
   }
-
   coinSound.play();
+}
+
+function initializeFlapSounds() {
+  for (var i = 0; i < 5; i++) {
+    flapSounds.push(flapSound);
+  }
+}
+
+function initializeCoinSounds() {
+  for (var i = 0; i < 5; i++) {
+    coinSounds.push(coinSound);
+  }
 }
 
 // Function to play a flap sound

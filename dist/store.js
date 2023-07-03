@@ -5,6 +5,13 @@ const video = document.getElementById("storeVideo");
 const buttonSound = new Audio("assets/button-sound.mp3");
 const storeMusic = new Audio("assets/store-music.mp3");
 
+// Pause the music when the document becomes hidden
+document.addEventListener("visibilitychange", function() {
+  if (document.hidden) {
+    storeMusic.pause();
+  }
+});
+
 // Function to resize the video and canvas
 function resizeElements() {
   // Resize the video

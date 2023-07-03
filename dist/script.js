@@ -58,7 +58,7 @@ var groundSpeed = 0; // Track the speed of the ground movement
 
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
 var powerUpCoinSpawnRate = 300; // Spawn rate of coins during power-up (in milliseconds)
-var minStarSpawn = 8000; // Minimum spawn rate in milliseconds (20 seconds)
+var minStarSpawn = 9000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxStarSpawn = 35000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxGhostSpawn = 30000; // Maximum spawn rate in milliseconds (40 seconds)
@@ -67,10 +67,10 @@ var maxSizeSpawn = 32000; // Maximum spawn rate in milliseconds (40 seconds)
 var minReduceGapSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxReduceGapSpawn = 35000; // Maximum spawn rate in milliseconds (40 seconds)
 
-var starPowerUpDuration = 5000; // Duration of power-ups in milliseconds 
-var ghostPowerUpDuration = 5000;  // Duration of power-ups in milliseconds
+var starPowerUpDuration = 3000; // Duration of power-ups in milliseconds 
+var ghostPowerUpDuration = 6000;  // Duration of power-ups in milliseconds
 var sizePowerUpDuration = 10000; // Duration of power-ups in milliseconds
-var reduceGapPowerUpDuration = 5000; // duration of the power up
+var reduceGapPowerUpDuration = 7000; // duration of the power up
 
 var starSpeedMultiplier = 1; // Initial speed multiplier
 var ghostSpeedMultiplier = 1;
@@ -115,9 +115,6 @@ window.onload = function() {
     assetsLoaded = true;
   }
 
-  createMusicButton();
-  createSfxButton();
-
   const video = document.getElementById("gameVideo");
   video.src = "assets/hell.mp4";
   video.muted = true; // Mute the video
@@ -126,24 +123,10 @@ window.onload = function() {
   video.onloadeddata = function() {
     video.play();
     drawCollectedCoins();
+    createMusicButton();
+    createSfxButton();
   };
 };
-
-function saveHighscore(score, difficulty) {
-  localStorage.setItem(`highscore_${difficulty}`, score);
-}
-
-function initializeFlapSounds() {
-  for (var i = 0; i < 5; i++) {
-    flapSounds.push(flapSound);
-  }
-}
-
-function initializeCoinSounds() {
-  for (var i = 0; i < 5; i++) {
-    coinSounds.push(coinSound);
-  }
-}
 
 
 
