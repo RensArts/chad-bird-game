@@ -58,8 +58,8 @@ var groundSpeed = 0; // Track the speed of the ground movement
 
 var AMOUNT_OF_COINS = 3000; // Adjust the amount of coins spawned
 var powerUpCoinSpawnRate = 300; // Spawn rate of coins during power-up (in milliseconds)
-var minStarSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxStarSpawn = 25000; // Maximum spawn rate in milliseconds (40 seconds)
+var minStarSpawn = 8000; // Minimum spawn rate in milliseconds (20 seconds)
+var maxStarSpawn = 35000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxGhostSpawn = 30000; // Maximum spawn rate in milliseconds (40 seconds)
 var minSizeSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
@@ -104,20 +104,28 @@ var elapsedTime = 0; // set counter for game speed update interval
 
 var logo = document.getElementById("logo");
 
+// Create a flag to track whether the assets have been loaded
+var assetsLoaded = false;
+
 // Load in the buttons and background. Start background animation.
 window.onload = function() {
-  drawCollectedCoins();
+
+  if (!assetsLoaded) {
+    preload();
+    assetsLoaded = true;
+  }
+
   createMusicButton();
   createSfxButton();
-  
+
   const video = document.getElementById("gameVideo");
   video.src = "assets/hell.mp4";
   video.muted = true; // Mute the video
   video.preload = "auto"; // Preload the video
 
   video.onloadeddata = function() {
-    // The video has finished preloading, you can proceed with other game setup here
     video.play();
+    drawCollectedCoins();
   };
 };
 
@@ -127,14 +135,12 @@ function saveHighscore(score, difficulty) {
 
 function initializeFlapSounds() {
   for (var i = 0; i < 5; i++) {
-    var flapSound = new Audio("assets/flap.mp3");
     flapSounds.push(flapSound);
   }
 }
 
 function initializeCoinSounds() {
   for (var i = 0; i < 5; i++) {
-    var coinSound = new Audio("assets/coin-sound.mp3");
     coinSounds.push(coinSound);
   }
 }

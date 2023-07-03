@@ -1,18 +1,3 @@
-var skyboxImg = new Image();
-skyboxImg.src = 'assets/skybox.png'; 
-
-var secondSkyboxImg = new Image();
-secondSkyboxImg.src = 'assets/second-background.png';
-
-var pipeImage = new Image();
-pipeImage.src = 'assets/pipeTexture.png';
-
-var image = new Image();
-image.src = "assets/coin-box.png"; 
-
-var borderBox = new Image();
-borderBox.src = "assets/borderBox.png";  
-
 var skybox = {
     x: 0,
     y: 0,
@@ -40,23 +25,26 @@ function drawSecondSkybox() {
   }
 
   function drawReadyMessage() {
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = Math.round(6 * (canvas.width / 2560));
-    var fontSize = Math.round(160 * (canvas.width / 2560));
-    var textXPercentage = 0.492; // Adjust this value to position the text horizontally
-    var textYPercentage = 0.25; // Adjust this value to position the text vertically
+  ctx.fillStyle = "white";
+  ctx.strokeStyle = "black";
   
-    ctx.font = "bolder " + fontSize + "px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+  var lineWidthPercentage = 0.00234; // Adjust this value to set the line width as a percentage
+  var fontSizePercentage = 0.0625; // Adjust this value to set the font size as a percentage
   
-    // Calculate the actual position based on canvas size
-    var textX = canvas.width * textXPercentage;
-    var textY = canvas.height * textYPercentage;
+  var lineWidth = canvas.width * lineWidthPercentage;
+  var fontSize = canvas.width * fontSizePercentage;
   
-    ctx.fillText("READY", textX, textY);
-    ctx.strokeText("READY", textX, textY);
+  ctx.lineWidth = lineWidth;
+  ctx.font = fontSize + "px sans-serif";
+  
+  var textXPercentage = 0.395; // Adjust this value to position the text horizontally
+  var textYPercentage = 0.25; // Adjust this value to position the text vertically
+  
+  var textX = canvas.width * textXPercentage;
+  var textY = canvas.height * textYPercentage;
+  
+  ctx.fillText("Ready?", textX, textY);
+  ctx.strokeText("Ready?", textX, textY);
   }
 
   function drawGameSpeedIncreaseMessage(level) {

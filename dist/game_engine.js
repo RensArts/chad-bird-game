@@ -15,7 +15,7 @@ function adjustPipeSpawnRate() {
   var targetFPS = 7.5; // Define your target FPS
   var minFPS = minimumFpsValue; // Minimum FPS value
   var targetFrameRate = difficulty === 'hard' ? pipeSpawnHard : pipeSpawnNormal; // Define the base speed for the difficulty level
-  var adjustedFrameRate = targetFrameRate // * (targetFPS / Math.max(fps, minFPS * 2.3));
+  var adjustedFrameRate = targetFrameRate
   var scoreBasedFrameRateAdjustment = Math.floor(score / 50); // Increase frame rate by 10% for every 50 points
 
   adjustedFrameRate += (adjustedFrameRate * 0.07 * scoreBasedFrameRateAdjustment);
@@ -128,41 +128,37 @@ function update() {
     }
   
     if (isInvincible) {
-      speed = speed * starSpeedMultiplier - (fps / 20);
+      speed = speed * starSpeedMultiplier - (fps / 30);
       secondSkyboxSpeed = 28 / resolutionAdjust;
       skyboxSpeed = 7 / resolutionAdjust;
       pipeStartSkip = 0;
       pipes = [];
-        ghosts = [];
-        sizes = [];
-        reduceGaps = [];
-        starts = [];
+      ghosts = [];
+      sizes = [];
+      reduceGaps = [];
     }
   
     if (isGhost) {
-      speed = speed * ghostSpeedMultiplier - (fps / 20);
+      speed = speed * ghostSpeedMultiplier - (fps / 30);
       secondSkyboxSpeed = 21 / resolutionAdjust;
       skyboxSpeed = 6 / resolutionAdjust;
-      pipeSpawnNormal = 0.20;
-      pipeSpawnHard = 0.38;
+      pipeSpawnNormal = 0.22;
+      pipeSpawnHard = 0.42;
         stars = [];
         sizes = [];
         reduceGaps = [];
-        ghosts = [];
     }
 
     if (isSize) {
       stars = [];
       ghosts = [];
       reduceGaps = [];
-      sizes= [];
     }
 
     if (isReduceGap){
       stars = [];
       ghosts = [];
       sizes = [];
-      reduceGaps = [];
     }
   
     if (isReduceGap && !isSize) {

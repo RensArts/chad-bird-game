@@ -74,7 +74,7 @@ function handleMoveUp() {
     if (isGameStarted && pipes.length > 0 && speed > 0 && enableVerticalMovement && isMovingUp) {
       // Play the flap sound
       playFlapSound();
-      document.getElementById("backgroundMusic").play();
+      backgroundMusic.play();
     }
   }
 

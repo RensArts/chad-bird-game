@@ -2,30 +2,32 @@
 const buttonSound = new Audio("assets/button-sound.mp3");
 const startSound = new Audio("assets/start-sound.mp3")
 
+// Pause the music when the document becomes hidden
+document.addEventListener("visibilitychange", function() {
+  if (document.hidden) {
+    backgroundMusic.pause();
+  } else {
+    backgroundMusic.play();
+  }
+});
 
-  
   function playStarSound(){
-    var starSound = document.getElementById("starSound")
     starSound.play();
   }
   
   function playGhostSound(){
-    var ghostSound = document.getElementById("ghostSound")
     ghostSound.play();
   }
   
   function playSizeSound(){
-    var sizeSound = document.getElementById("sizeSound")
     sizeSound.play();
   }
 
   function playReduceGapSound(){
-    var reduceGapSound = document.getElementById("reduceGapSound")
     reduceGapSound.play();
   }
 
   function playLevelSound(){
-    var levelSound = document.getElementById("levelSound")
     levelSound.play();
   }
 
@@ -65,7 +67,6 @@ function playFlapSound() {
 
 function playDeathSound() {
   if (isGameOver) {
-    var deathSound = document.getElementById("deathSound");
     deathSound.play();
   }
 }

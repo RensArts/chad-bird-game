@@ -72,7 +72,6 @@
       coin.x -= PIPE_SPEED * (speed + COIN_SPEED); // Move the coin with the pipes
   
       // Draw the coin image
-      var coinImage = document.getElementById("coinImage"); // Get the coin image element
       ctx.drawImage(coinImage, coin.x - coin.radius, coin.y - coin.radius, coin.radius * COIN_SIZE, coin.radius * COIN_SIZE);
       // Check if the bird collects the coin
       if (bird.x + COIN_HITBOX + bird.width > coin.x - coin.radius &&
@@ -95,7 +94,6 @@
       star.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
   
       // Draw the coin image
-      var starImage = document.getElementById("starImage"); // Get the coin image element
       ctx.drawImage(starImage, star.x - star.radius, star.y - star.radius, star.radius * COIN_SIZE, star.radius * COIN_SIZE);
   
       // Check if the bird collects the coin
@@ -126,7 +124,6 @@
       ghost.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
   
       // Draw the coin image
-      var ghostImage = document.getElementById("ghostImage"); // Get the coin image element
       ctx.drawImage(ghostImage, ghost.x - ghost.radius, ghost.y - ghost.radius, ghost.radius * COIN_SIZE, ghost.radius * COIN_SIZE);
   
       // Check if the bird collects the coin
@@ -153,7 +150,6 @@
       size.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
   
       // Draw the coin image
-      var sizeImage = document.getElementById("sizeImage"); // Get the coin image element
       ctx.drawImage(sizeImage, size.x - size.radius, size.y - size.radius, size.radius * COIN_SIZE, size.radius * COIN_SIZE);
   
       // Check if the bird collects the coin
@@ -179,7 +175,6 @@
       reduceGap.x -= PIPE_SPEED * (speed + STAR_SPEED); // Move the coin with the pipes
   
       // Draw the coin image
-      var reduceGapImage = document.getElementById("reduceGapImage"); // Get the coin image element
       ctx.drawImage(reduceGapImage, reduceGap.x - reduceGap.radius, reduceGap.y - reduceGap.radius, reduceGap.radius * COIN_SIZE, reduceGap.radius * COIN_SIZE);
   
       // Check if the bird collects the coin

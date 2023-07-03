@@ -204,10 +204,15 @@ function setInputOption(event) {
   // Add or remove event listeners based on the chosen input
   if (chosenInput === "touch") {
     document.removeEventListener("mousedown", moveUp);
+    document.removeEventListener("mouseup", moveDown)
     document.addEventListener("touchstart", touchMoveUp);
+    document.addEventListener("touchend", moveDown)
+    
   } else if (chosenInput === "mouse") {
     document.removeEventListener("touchstart", touchMoveUp);
+    document.removeEventListener("touchend", moveDown)
     document.addEventListener("mousedown", moveUp);
+    document.addEventListener("mouseup", moveDown)
   }
 }
 

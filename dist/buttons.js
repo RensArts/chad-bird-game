@@ -81,9 +81,6 @@ function createMusicButton() {
     document.body.appendChild(button);
   }
   
-  
-  
-  
   // Creates the button to turn the sound effects on or off
   function createSfxButton() {
     var button = document.createElement("button");
