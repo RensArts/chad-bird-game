@@ -195,9 +195,9 @@ function drawAnimatedBird() {
 
   // Change bird.y position based on isBirdUp
   if (isBirdUp) {
-    bird.y -= 6 * (canvas.width / 2560);
+    bird.y -= 3.5 * (canvas.width / 2560);
   } else {
-    bird.y += 6 * (canvas.width / 2560);
+    bird.y += 3 * (canvas.width / 2560);
   }
 }
 
