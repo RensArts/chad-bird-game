@@ -55,7 +55,7 @@ function drawSecondSkybox() {
     ctx.textAlign = "start";
     ctx.textBaseline = "middle";
     
-    var message = "Level " + level;
+    var message = "Level " + (level);
     ctx.fillText(message, canvas.width / 2 - Math.round(350 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
     ctx.strokeText(message, canvas.width / 2 - Math.round(350 * (canvas.width / 2560)), canvas.height / 2 - Math.round(250 * (canvas.height / 1080)));
   }

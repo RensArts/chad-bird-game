@@ -105,20 +105,7 @@ function update() {
       pipeSpawnNormal = 0.15;
       pipeSpawnHard = 0.26;
     }
-  
-    if (currentTime > sizePowerUpEndTime) {
-      // Power-up has expired, reset effects
-      HITBOX_RIGHT = -40 * (canvas.width / 2560);
-      HITBOX_TOP = -75 * (canvas.height / 1080); 
-      HITBOX_BOTTOM = -10 * (canvas.height / 1080); 
-      HITBOX_LEFT = 140 * (canvas.width / 2560); 
-      birdUp.width = 250 * (canvas.width * resolutionAdjust / 2560);
-      birdUp.height = 250 * (canvas.height * resolutionAdjust / 1080);
-      birdDown.width = 250 * (canvas.width * resolutionAdjust / 2560);
-      birdDown.height = 250 * (canvas.height * resolutionAdjust / 1080);
-      isSize = false;
-    }
-  
+
     if (currentTime > reduceGapPowerUpEndTime && !isSize) {
       PIPE_GAP = 320 * (canvas.height / 1080);
       isReduceGap = false;
@@ -135,8 +122,21 @@ function update() {
     HITBOX_BOTTOM = -80 * (canvas.height / 1080);
     }
   
+    if (currentTime > sizePowerUpEndTime) {
+      // Power-up has expired, reset effects
+      HITBOX_RIGHT = -40 * (canvas.width / 2560);
+      HITBOX_TOP = -75 * (canvas.height / 1080); 
+      HITBOX_BOTTOM = -10 * (canvas.height / 1080); 
+      HITBOX_LEFT = 140 * (canvas.width / 2560); 
+      birdUp.width = 250 * (canvas.width * resolutionAdjust / 2560);
+      birdUp.height = 250 * (canvas.height * resolutionAdjust / 1080);
+      birdDown.width = 250 * (canvas.width * resolutionAdjust / 2560);
+      birdDown.height = 250 * (canvas.height * resolutionAdjust / 1080);
+      isSize = false;
+    }
+  
     if (isInvincible) {
-      speed = speed * starSpeedMultiplier - (fps / 27);
+      speed = speed * starSpeedMultiplier;
       secondSkyboxSpeed = 28 / resolutionAdjust;
       skyboxSpeed = 7 / resolutionAdjust;
       pipeStartSkip = 0;
@@ -147,11 +147,12 @@ function update() {
     }
   
     if (isGhost) {
-      speed = speed * ghostSpeedMultiplier - (fps / 27);
+      speed = speed * ghostSpeedMultiplier;
       secondSkyboxSpeed = 21 / resolutionAdjust;
       skyboxSpeed = 6 / resolutionAdjust;
       pipeSpawnNormal = 0.22;
       pipeSpawnHard = 0.42;
+      wasGhost = true;
         stars = [];
         sizes = [];
         reduceGaps = [];
@@ -171,7 +172,7 @@ function update() {
   
     if (isReduceGap && !isSize) {
       PIPE_GAP = 450 * (canvas.height / 1080);
-      speed = speed * reduceGapSpeedMultiplier - (0.25 / fps);
+      speed = speed * reduceGapSpeedMultiplier;
       HITBOX_BOTTOM = -80 * (canvas.height / 1080);
       secondSkyboxSpeed = 13 / resolutionAdjust;
       skyboxSpeed = 3.5 / resolutionAdjust;
@@ -179,7 +180,7 @@ function update() {
   
     if (isReduceGap && isSize){
       PIPE_GAP = 450 * (canvas.height / 1080);
-      speed = speed * reduceGapSpeedMultiplier - (0.25 / fps);
+      speed = speed * reduceGapSpeedMultiplier;
       HITBOX_BOTTOM = -80 * (canvas.height / 1080);
       HITBOX_BOTTOM = -150 / secondResolutionAdjust * (canvas.height / 1080);
       secondSkyboxSpeed = 13 / resolutionAdjust;
@@ -267,6 +268,8 @@ function update() {
     if (score > 0 && score % 50 === 0){
       drawGameSpeedIncreaseMessage(level);
       playLevelSound();
+      adjustSpeed();
+      adjustPipeSpawnRate();
     }
 
     if (score > 0 && score % 50 === 0) {
@@ -285,6 +288,22 @@ function update() {
     var currentTime = performance.now();
     var deltaTime = currentTime - lastTime;
     lastTime = currentTime;
+    
+    if (!enableVerticalMovement){
+        adjustSpeed();
+        adjustPipeSpawnRate();
+      }
+      if (isInvincible || isGhost || isReduceGap){
+        adjustSpeed();
+        adjustPipeSpawnRate();
+      }
+
+    var wasGhost = true;
+
+      if (wasGhost) {
+        adjustPipeSpawnRate();
+        wasGhost = false;
+      }
   
     // Accumulate the elapsed time
     elapsedTime += deltaTime;
@@ -296,11 +315,9 @@ function update() {
       fps = framesPer100ms.toFixed(1); // Convert framesPer100ms to a string with one decimal place
       frameCount = 0;
       elapsedTime = 0;
-      adjustSpeed();
-      adjustPipeSpawnRate();
-      console.log("speed" + speed)
-      console.log("speed pipe" + pipeSpawnRate)
+      // console.log("speed" + speed)
     }
+  
   
     var minFPS = minimumFpsValue; // Minimum FPS value
   

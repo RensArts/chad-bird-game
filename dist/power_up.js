@@ -103,7 +103,7 @@
         // Apply power-up effects
         isInvincible = true;
         starPowerUpEndTime = Date.now() + starPowerUpDuration;
-        starSpeedMultiplier = 1.18;
+        starSpeedMultiplier = 2.5;
         clearInterval(powerUpCoinIntervalId); // Clear the current coin interval
         powerUpCoinIntervalId = setInterval(addCoin, powerUpCoinSpawnRate); // Set a new coin interval with power-up spawn rate
         // Set a new star interval with a random spawn rate
@@ -131,7 +131,7 @@
           bird.y < COIN_HITBOX + ghost.y + ghost.radius) {
         ghosts.splice(i, 1); // Remove the collected coin from the array
         isGhost = true;
-        ghostSpeedMultiplier = 1.13;
+        ghostSpeedMultiplier = 1.45;
         ghostPowerUpEndTime = Date.now() + ghostPowerUpDuration;
         // Apply power-up effects
         ghostSound.play();
@@ -183,7 +183,7 @@
         reduceGaps.splice(i, 1); // Remove the collected coin from the array
         isReduceGap = true;
         reduceGapPowerUpEndTime = Date.now() + reduceGapPowerUpDuration;
-        reduceGapSpeedMultiplier = 0.99;
+        reduceGapSpeedMultiplier = 0.83;
         // Apply power-up effects
         reduceGapSound.play();
         clearInterval(reduceGapIntervalId);
