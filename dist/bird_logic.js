@@ -135,6 +135,7 @@ var bird = {
 
   // Set up event listeners
 document.addEventListener("mouseup", moveDown);
+document.addEventListener("touchend", moveDown);
 document.getElementById("startButton").addEventListener("mousedown", moveUp);
 
 

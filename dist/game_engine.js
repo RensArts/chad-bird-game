@@ -3,6 +3,7 @@ function adjustSpeed() {
   var minFPS = minimumFpsValue; // Minimum FPS value
   var targetSpeed = difficulty === 'hard' ? speedHard : speedNormal; // Define the base speed for the difficulty level
   var adjustedSpeed = targetSpeed * (targetFPS / Math.max(fps));
+  adjustSpeed = adjustSpeed - adjustSpeed + adjustSpeed
 
   var scoreBasedSpeedAdjustment = Math.floor(score / 50); // Increase speed by 10% for every 50 points
 
@@ -129,7 +130,7 @@ function update() {
     }
   
     if (isInvincible) {
-      speed = speed * starSpeedMultiplier - (fps / 30);
+      speed = speed * starSpeedMultiplier - (fps / 27);
       secondSkyboxSpeed = 28 / resolutionAdjust;
       skyboxSpeed = 7 / resolutionAdjust;
       pipeStartSkip = 0;
@@ -140,7 +141,7 @@ function update() {
     }
   
     if (isGhost) {
-      speed = speed * ghostSpeedMultiplier - (fps / 30);
+      speed = speed * ghostSpeedMultiplier - (fps / 27);
       secondSkyboxSpeed = 21 / resolutionAdjust;
       skyboxSpeed = 6 / resolutionAdjust;
       pipeSpawnNormal = 0.22;
