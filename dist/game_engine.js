@@ -152,7 +152,6 @@ function update() {
       skyboxSpeed = 6 / resolutionAdjust;
       pipeSpawnNormal = 0.22;
       pipeSpawnHard = 0.42;
-      wasGhost = true;
         stars = [];
         sizes = [];
         reduceGaps = [];
@@ -269,7 +268,6 @@ function update() {
       drawGameSpeedIncreaseMessage(level);
       playLevelSound();
       adjustSpeed();
-      adjustPipeSpawnRate();
     }
 
     if (score > 0 && score % 50 === 0) {
@@ -291,18 +289,9 @@ function update() {
     
     if (!enableVerticalMovement){
         adjustSpeed();
-        adjustPipeSpawnRate();
       }
       if (isInvincible || isGhost || isReduceGap){
         adjustSpeed();
-        adjustPipeSpawnRate();
-      }
-
-    var wasGhost = true;
-
-      if (wasGhost) {
-        adjustPipeSpawnRate();
-        wasGhost = false;
       }
   
     // Accumulate the elapsed time
@@ -315,6 +304,7 @@ function update() {
       fps = framesPer100ms.toFixed(1); // Convert framesPer100ms to a string with one decimal place
       frameCount = 0;
       elapsedTime = 0;
+      adjustPipeSpawnRate();
       // console.log("speed" + speed)
     }
   
