@@ -4,9 +4,9 @@ function adjustSpeed() {
   var targetSpeed = difficulty === 'hard' ? speedHard : speedNormal; // Define the base speed for the difficulty level
   var adjustedSpeed = targetSpeed * (targetFPS / Math.max(fps));
   
-  var scoreBasedSpeedAdjustment = Math.floor(score / 5); // Increase speed by 10% for every 50 points
+  var scoreBasedSpeedAdjustment = Math.floor(score / 50); // Increase speed by 10% for every 50 points
   
-  var maxSpeedChange = adjustedSpeed * 0.1; // Maximum 10% speed change per frame
+  var maxSpeedChange = adjustedSpeed * 2.4; // Maximum 10% speed change per frame
   var maxAdjustedSpeed = targetSpeed + maxSpeedChange + scoreBasedSpeedAdjustment;
   var minAdjustedSpeed = targetSpeed - maxSpeedChange + scoreBasedSpeedAdjustment;
   
@@ -23,7 +23,7 @@ function adjustPipeSpawnRate() {
   var minFPS = minimumFpsValue; // Minimum FPS value
   var targetFrameRate = difficulty === 'hard' ? pipeSpawnHard : pipeSpawnNormal; // Define the base speed for the difficulty level
   var adjustedFrameRate = targetFrameRate
-  var scoreBasedFrameRateAdjustment = Math.floor(score / 5); // Increase frame rate by 10% for every 50 points
+  var scoreBasedFrameRateAdjustment = Math.floor(score / 50); // Increase frame rate by 10% for every 50 points
 
   adjustedFrameRate += (adjustedFrameRate * 0.1 * scoreBasedFrameRateAdjustment);
 
