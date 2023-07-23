@@ -41,10 +41,83 @@ function adjustSkyboxSpeed() {
 }
 
 let isPipesCleared = false;
+let stableFpsCounter = 0;
+
+const hideLoadingElement = () => {
+  const loadingElement = document.getElementById('loading-element');
+  loadingElement.style.display = 'none';
+};
+
+function waitForStableFPS(fps, threshold) {
+  return new Promise((resolve) => {
+    let stable = false;
+
+    const showLoadingElement = () => {
+      const loadingElement = document.getElementById('loading-element');
+      loadingElement.style.display = 'block';
+    };
+
+    const checkFPS = () => {
+      if ((fps * 10) >= threshold) {
+        stableFpsCounter++;
+        if (stableFpsCounter >= 100) {
+          stable = true;
+          console.log("Fps is stable");
+          hideLoadingElement();
+          resolve();
+          location.reload();
+        }
+      } else {
+        stableFpsCounter--;
+        setTimeout(checkFPS, 100);
+        showLoadingElement();
+        reloadPage();
+        console.log("current counter value: " + stableFpsCounter)
+      }
+    };
+
+    timer = setTimeout(() => {
+      isFirstLaunch = 0;
+      localStorage.setItem("isFirstLaunch", isFirstLaunch.toString());
+      location.reload();
+    }, 10000);
+    
+    checkFPS();
+  });
+}
+
+var thresholdIsSet = false;
+let threshold = 0;
 
 //Updates the game state every frame.
 function update() {
 
+  function defineThreshold() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+          const newThreshold = (fps * 10 - 20)
+          resolve(newThreshold);
+      }, 5000);
+    });
+   }
+  
+  if (isFirstLaunch === 0) {
+    defineThreshold().then((newThreshold) => {
+      if (threshold === 0 && !thresholdIsSet){
+        threshold = newThreshold;
+        thresholdIsSet = true;
+      }
+    });
+  }
+
+  console.log("fps: " + (fps * 10))
+  console.log ("fps threshold: " + threshold)
+
+  if (threshold > 1 && isFirstLaunch === 0) {
+   waitForStableFPS(fps, threshold).then(() => {
+   });
+  }
+  
   adjustSkyboxSpeed();
   
   // Reset skybox position when it goes off-screen
@@ -73,14 +146,20 @@ function update() {
     
     // Check for collision with bottom border
     if (bird.y + bird.height > canvas.height + 80 / resolutionAdjust) {
-      deathSound.play();
       gameOver();
-      return;
+      if (userStartedGame && score > 1){
+        deathSound.play();
+      }
+      if (userStartedGame){
+        return;
+      }
     }
 
     // Check for collision with pipes
     if (checkCollision()) {
-      deathSound.play()
+      if (userStartedGame){
+        deathSound.play()
+      }
       backgroundMusic.pause()
       isGameOver = true; // Set the game over state
   }  
@@ -201,7 +280,7 @@ function update() {
         return;
         
       } 
-       if (isGameStarted) {
+      if (isGameStarted && userStartedGame) {
         // Hide the logo and buttons once the game starts
         logo.style.display = "none";
         sfxButton.style.display = "none";
@@ -244,19 +323,26 @@ function update() {
     updatePipes();
   
     // Draw the score counter
-    drawScore();
-  
+    if (userStartedGame){
+      drawScore();
+    }
+    
+    // Place the video above the game canvas upon game launch
+    placeVideoAboveCanvas();
+
     // Call the drawFPS function
     drawFPS();
-  
+    
     // Draw the coin counter
     drawCollectedCoins();
     
     // Draw the message before vertical movement starts and start flying animation
     if (!enableVerticalMovement && isGameStarted){
-    drawReadyMessage();
     drawAnimatedBird();
     isMovingUp = false;
+    if (userStartedGame){
+      drawReadyMessage();
+      }
     }
 
     var level = score / 50;
@@ -290,7 +376,7 @@ function update() {
     if (!enableVerticalMovement){
         adjustSpeed();
       }
-      if (isInvincible || isGhost || isReduceGap){
+      if (isInvincible || isGhost || isReduceGap || !userStartedGame){
         adjustSpeed();
       }
   

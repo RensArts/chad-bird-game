@@ -44,7 +44,12 @@ var speedHard = 9 / secondResolutionAdjust; // set this value if changing the sp
 var JUMP = 1.2 * secondResolutionAdjust;// Adjust the value of upward momentum
 var GRAVITY = 0.9 * secondResolutionAdjust; // Adjust this value to control the downward speed of the bird
 
-var pipeStartSkip = 16; // amount of pipes that won't be rendered at the start (2 = 1 pipe)
+if (userStartedGame){
+  var pipeStartSkip = 16; // amount of pipes that won't be rendered at the start (2 = 1 pipe)
+}
+if (!userStartedGame){
+  var pipeStartSkip = 0;
+}
 var pipeSpawnRate = 0.3; // set spawn rate for the pipes (higher = more pipes)
 var pipeSpawnNormal = 0.15; // set this value if changing the pipespawnrate of hard difficulty in function
 var pipeSpawnHard = 0.26; // set this value if changing the pipe spawn rate of normal difficulty in function
@@ -106,10 +111,10 @@ var logo = document.getElementById("logo");
 
 // Create a flag to track whether the assets have been loaded
 var assetsLoaded = false;
+var userStartedGame = false;
+var isFirstLaunch = 0;
 
-// Load in the buttons and background. Start background animation.
 window.onload = function() {
-
   if (!assetsLoaded) {
     preload();
     assetsLoaded = true;
@@ -125,8 +130,34 @@ window.onload = function() {
     drawCollectedCoins();
     createMusicButton();
     createSfxButton();
+
+    isFirstLaunch = parseInt(localStorage.getItem("isFirstLaunch"));
+    console.log("Retrieved isFirstLaunch from localStorage:", isFirstLaunch);
+
+    if (isFirstLaunch === 1){
+      pipeStartSkip = 16;
+      userStartedGame = true;
+      hideLoadingElement();
+    }
+
+    if (isNaN(isFirstLaunch) || isFirstLaunch === 0) {
+      handleMoveUp();
+      userStartedGame = false;
+      isFirstLaunch = 1;
+      localStorage.setItem("isFirstLaunch", isFirstLaunch.toString());
+      console.log("Updated isFirstLaunch in localStorage:", isFirstLaunch);
+    }
+
+    if (!settingsApplied) {
+      applySettings();
+      settingsApplied = true;
+    }    
   };
 };
+
+
+
+
 
 
 

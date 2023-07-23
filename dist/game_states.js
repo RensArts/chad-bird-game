@@ -22,12 +22,22 @@ mouseButton.addEventListener("click", function(event) {
     startButtonPressed = false; // Reset the start button flag to prevent game start
   });
   
-  // Add event listener to start the game only when the start button is clicked
-document.addEventListener("click", function(event) {
-    if (event.target.id === "startButton" && startButtonPressed) {
-      canStartGame = true; // Set the game start condition
-      startButtonPressed = false; // Reset the start button flag
-      handleMoveUp(); // Start the game
+  document.addEventListener("click", function(event) {
+    if (event.target.id === "startButton") {
+      if (!startButtonPressed) {
+        startButtonPressed = true; // Set the start button flag
+        canStartGame = false; // Prevent game start until clicked again
+      } else {
+        if (!userStartedGame){
+          applySettings();
+          location.reload();
+        }
+        startButton.innerText = "Start"; // Change the button text to "Play"
+        canStartGame = true; // Set the game start condition
+        startButtonPressed = false; // Reset the start button flag
+        handleMoveUp(); // Start the game
+        userStartedGame = true;
+      }
     } else {
       canStartGame = false; // Prevent game start
     }
@@ -43,15 +53,17 @@ function handleMoveUp() {
     if (!isGameStarted && canStartGame) {
       isGameStarted = true;
       startVerticalMovementTimeout();
-      buttonSound.play();
-      startSound.play();
+      if (userStartedGame){
+        startSound.play();
+      }
       startGame();
       pipes = [];
       isGhost = false;
       isInvincible = false;
       isSize = false;
-      document.getElementById("startButton").removeEventListener("mousedown", moveUp);
-  
+      if (userStartedGame){
+        document.getElementById("startButton").removeEventListener("mousedown", moveUp);
+      }
       // Remove existing event listeners
       document.removeEventListener("mousedown", moveUp);
       document.removeEventListener("touchstart", touchMoveUp);
@@ -92,7 +104,6 @@ function startGame() {
     clearInterval(ghostIntervalId);
     clearInterval(coinIntervalId);
     score = 0; 
-    logo.style.display = "none";
     update();
   }
 
@@ -102,6 +113,9 @@ function checkCollision() {
     }
     if (isGhost) {
       return false; // No collision when being a ghost
+    }
+    if (!userStartedGame){
+      return true;
     }
     for (var i = 0; i < pipes.length; i++) {
       var p = pipes[i];
@@ -135,44 +149,48 @@ function gameOver() {
   
     // Implement the logic for the game over state
     saveCollectedCoins(collectedCoins);
-    playDeathSound();
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
+
     document.removeEventListener("mousedown", restartGame);
-  
+
     // Calculate the width and height of the borderBox
     var borderBoxWidth = 900 * (canvas.width / 2560);
     var borderBoxHeight = 590 * (canvas.height / 1080);
-  
-    // Calculate the position of the borderBox
+
+    // Calculate the position of the borderBox 
     var borderBoxX = canvas.width / 2 - borderBoxWidth / 2;
     var borderBoxY = canvas.height / 1.81 - borderBoxHeight / 1.81;
 
-       // Display game over message, score, and highscore
-    ctx.drawImage(borderBox, borderBoxX, borderBoxY, borderBoxWidth, borderBoxHeight);
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "black"; // Set the border color
-    ctx.lineWidth = Math.round(8 * (canvas.width / 2560)); // Set the border width
-    ctx.font = `bolder ${Math.round(80 * (canvas.width / 2560))}px Helvetica`;
+   // Display game over message, score, and highscore
+   ctx.drawImage(borderBox, borderBoxX, borderBoxY, borderBoxWidth, borderBoxHeight);
+   ctx.fillStyle = "white";
+   ctx.strokeStyle = "black"; // Set the border color
+   ctx.lineWidth = Math.round(8 * (canvas.width / 2560)); // Set the border width
+   ctx.font = `bolder ${Math.round(80 * (canvas.width / 2560))}px Helvetica`;
+
+   ctx.strokeText(score, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (160 * (canvas.height / 1080)));
+   ctx.strokeText(matchCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (75 * (canvas.height / 1080)));
+   ctx.strokeText(`${previousHighscore}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (15 * (canvas.height / 1080)));
+   ctx.strokeText(collectedCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (100 * (canvas.height / 1080)));
+   ctx.strokeText(`${difficulty}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (190 * (canvas.height / 1080)));
+   ctx.fillText(score, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (160 * (canvas.height / 1080)));
+   ctx.fillText(matchCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (75 * (canvas.height / 1080)));
+   ctx.fillText(`${previousHighscore}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (15 * (canvas.height / 1080)));
+   ctx.fillText(collectedCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (100 * (canvas.height / 1080)));
+   ctx.fillText(`${difficulty}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (190 * (canvas.height / 1080)));
   
-    ctx.strokeText(score, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (160 * (canvas.height / 1080)));
-    ctx.strokeText(matchCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (75 * (canvas.height / 1080)));
-    ctx.strokeText(`${previousHighscore}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (15 * (canvas.height / 1080)));
-    ctx.strokeText(collectedCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (100 * (canvas.height / 1080)));
-    ctx.strokeText(`${difficulty}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (190 * (canvas.height / 1080)));
-    ctx.fillText(score, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (160 * (canvas.height / 1080)));
-    ctx.fillText(matchCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 - (75 * (canvas.height / 1080)));
-    ctx.fillText(`${previousHighscore}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (15 * (canvas.height / 1080)));
-    ctx.fillText(collectedCoins, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (100 * (canvas.height / 1080)));
-    ctx.fillText(`${difficulty}`, canvas.width / 2 + (60 * (canvas.width / 2560)), canvas.height / 2 + (190 * (canvas.height / 1080)));
-    // Disable the button temporarily using a timer
-  
+  // Disable the button temporarily using a timer
   var buttonEnabled = false;
   setTimeout(function() {
       buttonEnabled = true;
-      document.removeEventListener("touchstart", touchMoveUp);
-      document.removeEventListener("mousedown", moveUp);
-      document.addEventListener("mousedown", restartGame); // Press to continue to main menu
+      
+      if (userStartedGame){
+        document.addEventListener("mousedown", restartGame);
+        document.removeEventListener("touchstart", touchMoveUp);
+        document.removeEventListener("mousedown", moveUp);
+      }
+
       document.getElementById("startButton").addEventListener("mousedown", moveUp);
       ctx.font = `bolder ${Math.round(70 * (canvas.width / 2560))}px Helvetica`;
       ctx.fillStyle = "white";
@@ -180,7 +198,7 @@ function gameOver() {
       ctx.lineWidth = Math.round(8 * (canvas.width / 2560)); // Set the border width
       ctx.strokeText("Tap screen to restart", canvas.width / 2 - (340 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
       ctx.fillText("Tap screen to restart", canvas.width / 2 - (340 * (canvas.width / 2560)), canvas.height / 2 + (400 * (canvas.height / 1080)));
-    }, 200); // Change the duration (in milliseconds) to your desired delay
+    }, 400); // Change the duration (in milliseconds) to your desired delay
   }
 
 function restartGame(event) {

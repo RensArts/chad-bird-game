@@ -26,13 +26,15 @@ document.addEventListener("visibilitychange", function() {
   }
 
   function playLevelSound(){
-    levelSound.play();
-  }
+    if (userStartedGame){
+      levelSound.play();
+    }
+   }
 
   // Function to play a coin sound
 function playCoinSound() {
   // Find an available coin sound
-  if (isSfxOn)
+  if (isSfxOn && userStartedGame)
   var coinSound = coinSounds.find(function(sound) {
     return sound.paused || sound.ended;
   });
@@ -68,7 +70,7 @@ function playFlapSound() {
   });
 
   // If all sounds are in use, create a new one
-  if (!flapSound) {
+  if (!flapSound && userStartedGame) {
     flapSound = new Audio("assets/flap.mp3");
     flapSounds.push(flapSound);
   }
@@ -77,10 +79,11 @@ function playFlapSound() {
   flapSound.play();
 }
 
+
 function playDeathSound() {
-  if (isGameOver) {
+  
     deathSound.play();
-  }
+  
 }
 
   

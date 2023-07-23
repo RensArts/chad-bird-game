@@ -133,11 +133,11 @@ var bird = {
     }
   }
 
-  // Set up event listeners
+// Set up event listeners
 document.addEventListener("mouseup", moveDown);
-document.addEventListener("touchend", moveDown);
+document.addEventListener("touchend", touchEnd);
 document.getElementById("startButton").addEventListener("mousedown", moveUp);
-
+document.getElementById("startButton").addEventListener("touchstart", touchMoveUp);
 
 // Function to move the bird up when a mouse button is pressed
 function moveUp(event) {
@@ -155,7 +155,7 @@ function touchMoveUp(event) {
 
 // Function to move the bird down when a touch event ends
 function touchEnd(event) {
-  if (event.target === "touchend") {
+  if (event.type === "touchend") {
     isMovingUp = false;
   }
 }
@@ -196,7 +196,7 @@ function drawAnimatedBird() {
 
   // Change bird.y position based on isBirdUp
   if (isBirdUp) {
-    bird.y -= 3.5 * (canvas.width / 2560);
+    bird.y -= 3 * (canvas.width / 2560);
   } else {
     bird.y += 3 * (canvas.width / 2560);
   }
@@ -218,7 +218,7 @@ var drawTimeout = null;
 
 // Call this function to enable vertical movement after a timeout
 function enableVerticalMovementAfterTimeout() {
-  enableVerticalMovement = true;
+    enableVerticalMovement = true;
 }
 
 // Call this function when you want to start the timeout
@@ -229,9 +229,11 @@ function startVerticalMovementTimeout() {
 
 // Draw the animated bird based on up or down position
 function drawDeathAnimation() {
-  let birdImage = isBirdFalling ? birdUpImg : birdDownImg;
+    let birdImage = isBirdFalling ? birdUpImg : birdDownImg;
   ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
-}
+ }
+
+  
 
 // Function to switch between the two bird images
 function switchDeathAnimationImages() {

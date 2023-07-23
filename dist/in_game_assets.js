@@ -1,3 +1,20 @@
+function placeVideoAboveCanvas() {
+  const video = document.getElementById("gameVideo");
+
+  // Set the video position and dimensions
+  video.style.position = "absolute";
+  video.style.top = "0";
+  video.style.left = "0";
+  video.style.width = "100%";
+  video.style.height = "100%";
+  video.style.objectFit = "cover";
+  if (!userStartedGame){
+    video.style.zIndex = "1";
+  } else {
+    video.style.zIndex = "0";
+  }
+}
+
 var skybox = {
     x: 0,
     y: 0,

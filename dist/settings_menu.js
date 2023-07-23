@@ -9,7 +9,6 @@ var ctx = canvas.getContext("2d");
 
 // Function to open the settings window
 function openSettingsWindow() {
-  isInSettingsMenu = true;
   // Create the modal overlay
   var overlay = document.createElement("div");
   overlay.className = "overlay";
@@ -64,17 +63,6 @@ function applySettings() {
     default:
       break;
   }
-
-  // Reload the page to apply the new resolution
-  location.reload();
-}
-
-// Function to close the settings window
-function closeSettingsWindow() {
-  var overlay = document.querySelector(".overlay");
-  var settingsMenu = document.getElementById("settingsMenu");
-  settingsMenu.classList.add("hidden");
-  overlay.classList.add("hidden")
   location.reload();
 }
 
@@ -115,11 +103,14 @@ if (savedResolution) {
 
 // Update the checked state of the buttons
 var resolutionButtons = document.querySelectorAll('.resolutionButton');
+var defaultResolution = "0.5"; // Default resolution value
+
 resolutionButtons.forEach(function (button) {
   if (button.value === savedResolution) {
     button.classList.add('selected');
-  } else {
-    button.classList.add("0.5");
+  } else if (!savedResolution && button.value === defaultResolution) {
+    button.classList.add('selected');
+    localStorage.setItem("resolution", defaultResolution); // Save default resolution to local storage
   }
   
   button.addEventListener('click', function () {
@@ -130,6 +121,7 @@ resolutionButtons.forEach(function (button) {
     button.classList.add('selected');
   });
 });
+
 
 var pipeTextureButton = document.getElementById("pipeTextureButton");
 var showFPSButton = document.getElementById("showFPSButton");
@@ -210,7 +202,6 @@ function setInputOption(event) {
     
   } else if (chosenInput === "mouse") {
     document.removeEventListener("touchstart", touchMoveUp);
-    document.removeEventListener("touchend", moveDown)
     document.addEventListener("mousedown", moveUp);
     document.addEventListener("mouseup", moveDown)
   }
