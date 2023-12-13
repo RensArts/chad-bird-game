@@ -188,11 +188,15 @@ function update() {
     if (currentTime > ghostPowerUpEndTime) {
       // Power-up has expired, reset effects
       isGhost = false;
+      ghostResetTimer = true;
       ghostSpeedMultiplier = 1;
       secondSkyboxSpeed = 15 / resolutionAdjust;
       skyboxSpeed = 4 / resolutionAdjust;
       pipeSpawnNormal = 0.15;
       pipeSpawnHard = 0.26;
+      setTimeout(function () {
+        ghostResetTimer = false;
+    }, 3000);
     }
 
     if (currentTime > reduceGapPowerUpEndTime && !isSize) {

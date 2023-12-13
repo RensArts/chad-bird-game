@@ -114,6 +114,9 @@ function checkCollision() {
     if (isGhost) {
       return false; // No collision when being a ghost
     }
+    if (ghostResetTimer === true) {
+      return false;
+    }
     if (!userStartedGame){
       return true;
     }

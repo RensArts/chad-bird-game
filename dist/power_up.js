@@ -131,6 +131,7 @@
           bird.y < COIN_HITBOX + ghost.y + ghost.radius) {
         ghosts.splice(i, 1); // Remove the collected coin from the array
         isGhost = true;
+        powerUpResetTimer = true;
         ghostSpeedMultiplier = 1.45;
         ghostPowerUpEndTime = Date.now() + ghostPowerUpDuration;
         // Apply power-up effects
