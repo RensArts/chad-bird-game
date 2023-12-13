@@ -143,9 +143,6 @@ window.onload = function() {
     if (isNaN(isFirstLaunch) || isFirstLaunch === 0) {
       handleMoveUp();
       userStartedGame = false;
-      isFirstLaunch = 1;
-      localStorage.setItem("isFirstLaunch", isFirstLaunch.toString());
-      console.log("Updated isFirstLaunch in localStorage:", isFirstLaunch);
     }
 
     if (!settingsApplied) {

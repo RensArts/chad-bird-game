@@ -60,12 +60,15 @@ function waitForStableFPS(fps, threshold) {
     const checkFPS = () => {
       if ((fps * 10) >= threshold) {
         stableFpsCounter++;
-        if (stableFpsCounter >= 100) {
+        if (stableFpsCounter >= 500) {
           stable = true;
           console.log("Fps is stable");
           hideLoadingElement();
           resolve();
           location.reload();
+          isFirstLaunch = 1;
+          localStorage.setItem("isFirstLaunch", isFirstLaunch.toString());
+          console.log("Updated isFirstLaunch in localStorage:", isFirstLaunch);
         }
       } else {
         stableFpsCounter--;
@@ -75,6 +78,8 @@ function waitForStableFPS(fps, threshold) {
         console.log("current counter value: " + stableFpsCounter)
       }
     };
+
+    console.log("fps counter: " + stableFpsCounter)
 
     timer = setTimeout(() => {
       isFirstLaunch = 0;
@@ -91,6 +96,11 @@ let threshold = 0;
 
 //Updates the game state every frame.
 function update() {
+
+  // Reset first launch to true to engage loading
+  // isFirstLaunch = 0;
+  //     localStorage.setItem("isFirstLaunch", isFirstLaunch.toString());
+  //     console.log("Updated isFirstLaunch in localStorage:", isFirstLaunch);
 
   function defineThreshold() {
     return new Promise((resolve) => {
@@ -351,7 +361,8 @@ function update() {
     secondSkyboxSpeed += secondSkyboxSpeed * skyboxSpeedAdjustment;
 
     if (score > 0 && score % 50 === 0){
-      drawGameSpeedIncreaseMessage(level);
+      var displayLevel = Math.floor(level) + 1;
+      drawGameSpeedIncreaseMessage(displayLevel);
       playLevelSound();
       adjustSpeed();
     }
