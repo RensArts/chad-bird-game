@@ -82,10 +82,10 @@ function waitForStableFPS(fps, threshold) {
     console.log("fps counter: " + stableFpsCounter)
 
     timer = setTimeout(() => {
-      isFirstLaunch = 0;
+      isFirstLaunch = 1;
       localStorage.setItem("isFirstLaunch", isFirstLaunch.toString());
       location.reload();
-    }, 10000);
+    }, 15000);
     
     checkFPS();
   });
@@ -97,7 +97,7 @@ let threshold = 0;
 //Updates the game state every frame.
 function update() {
 
-  // Reset first launch to true to engage loading
+  //Reset first launch to true to engage loading
   // isFirstLaunch = 0;
   //     localStorage.setItem("isFirstLaunch", isFirstLaunch.toString());
   //     console.log("Updated isFirstLaunch in localStorage:", isFirstLaunch);
@@ -188,14 +188,13 @@ function update() {
     if (currentTime > ghostPowerUpEndTime) {
       // Power-up has expired, reset effects
       isGhost = false;
-      ghostResetTimer = true;
       ghostSpeedMultiplier = 1;
       secondSkyboxSpeed = 15 / resolutionAdjust;
       skyboxSpeed = 4 / resolutionAdjust;
       pipeSpawnNormal = 0.15;
       pipeSpawnHard = 0.26;
       setTimeout(function () {
-        ghostResetTimer = false;
+        powerUpResetTimer = false;
     }, 3000);
     }
 

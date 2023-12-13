@@ -83,9 +83,9 @@ var reduceGapSpeedMultiplier = 1;
 
 var isInvincible = false; // Initial invincibility state
 var isGhost = false; // Initial ghost state
-var powerUpResetTimer = false; // Set small time out before collision is active
+var powerUpResetTimer = false; // Set small time out before collision is detected again
 var isSize = false; // Initial size state
-var isReduceGap = false; // initial gap size state .
+var isReduceGap = false; // initial gap size state
 
 var starPowerUpEndTime = 0; // Time when the current power-up will end
 var ghostPowerUpEndTime = 0; // Time when the current power-up will end
