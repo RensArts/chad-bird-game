@@ -66,7 +66,7 @@ var powerUpCoinSpawnRate = 300; // Spawn rate of coins during power-up (in milli
 var minStarSpawn = 9000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxStarSpawn = 35000; // Maximum spawn rate in milliseconds (40 seconds)
 var minGhostSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
-var maxGhostSpawn = 10000; // Maximum spawn rate in milliseconds (40 seconds)
+var maxGhostSpawn = 30000; // Maximum spawn rate in milliseconds (40 seconds)
 var minSizeSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
 var maxSizeSpawn = 32000; // Maximum spawn rate in milliseconds (40 seconds)
 var minReduceGapSpawn = 10000; // Minimum spawn rate in milliseconds (20 seconds)
@@ -83,9 +83,9 @@ var reduceGapSpeedMultiplier = 1;
 
 var isInvincible = false; // Initial invincibility state
 var isGhost = false; // Initial ghost state
-var ghostResetTimer = false; // Set small time out before collision is active again
+var powerUpResetTimer = false; // Set small time out before collision is active
 var isSize = false; // Initial size state
-var isReduceGap = false; // initial gap size state
+var isReduceGap = false; // initial gap size state .
 
 var starPowerUpEndTime = 0; // Time when the current power-up will end
 var ghostPowerUpEndTime = 0; // Time when the current power-up will end
